@@ -1,11 +1,17 @@
-import { libWrapper } from "./shim.js";
-import { BorderFrame } from "./BorderControl.js";
-let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
+import { debug, log, warn, i18n } from "./lib/lib";
+import CONSTANTS from "./constants";
 
-let fontFamilies = {};
-CONFIG.fontFamilies.forEach((i) => (fontFamilies[`${i}`] = i));
+export const registerSettings = function () {
+	game.settings.registerMenu(CONSTANTS.MODULE_NAME, "resetAllSettings", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.reset.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.reset.hint`,
+		icon: "fas fa-coins",
+		type: ResetSettingsDialog,
+		restricted: true
+	});
 
-Hooks.once("init", async function () {
+	// =====================================================================
+
 	game.settings.register("Border-Control", "removeBorders", {
 		name: "Remove Borders",
 		hint: "Remove the border from specific tokens",
@@ -318,13 +324,57 @@ Hooks.once("init", async function () {
 		config: true
 	});
 
-	libWrapper.register("Border-Control", "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
-	libWrapper.register("Border-Control", "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
-	if (!game.settings.get("Border-Control", "disableRefreshTarget")) {
-		libWrapper.register("Border-Control", "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
-	}
-	libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
-	libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
+	// ========================================================================
 
-	libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
-});
+	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean
+	});
+
+	const settings = defaultSettings();
+	for (const [name, data] of Object.entries(settings)) {
+		game.settings.register(CONSTANTS.MODULE_NAME, name, <any>data);
+	}
+
+	// for (const [name, data] of Object.entries(otherSettings)) {
+	//     game.settings.register(CONSTANTS.MODULE_NAME, name, data);
+	// }
+};
+
+class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object, any> {
+	constructor(...args) {
+		//@ts-ignore
+		super(...args);
+		//@ts-ignore
+		return new Dialog({
+			title: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.title`),
+			content:
+				'<p style="margin-bottom:1rem;">' +
+				game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.content`) +
+				"</p>",
+			buttons: {
+				confirm: {
+					icon: '<i class="fas fa-check"></i>',
+					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.confirm`),
+					callback: async () => {
+						await applyDefaultSettings();
+						window.location.reload();
+					}
+				},
+				cancel: {
+					icon: '<i class="fas fa-times"></i>',
+					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.cancel`)
+				}
+			},
+			default: "cancel"
+		});
+	}
+
+	async _updateObject(event: Event, formData?: object): Promise<any> {
+		// do nothing
+	}
+}

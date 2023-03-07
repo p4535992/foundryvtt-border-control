@@ -1,0 +1,100 @@
+{
+	"Border-Control.setting.removeBorders.name": "Remove Borders",
+	"Border-Control.setting.removeBorders.hint": "Remove the border from specific tokens",
+
+	"Border-Control.setting.healthGradient.name": "HP Gradient",
+	"Border-Control.setting.healthGradient.hint": " ",
+
+	"Border-Control.setting.tempHPgradient.name": "Gradient TempHP Enable",
+	"Border-Control.setting.tempHPgradient.hint": " ",
+
+	"Border-Control.setting.healthGradientA.name": "HP Gradient Start",
+	"Border-Control.setting.healthGradientA.hint": " ",
+
+	"Border-Control.setting.healthGradientB.name": "HP Gradient End",
+	"Border-Control.setting.healthGradientB.hint": " ",
+
+	"Border-Control.setting.healthGradientC.name": "HP Gradient TempHP",
+	"Border-Control.setting.healthGradientC.hint": " ",
+
+	"Border-Control.setting.stepLevel.name": "Gradient Step Level",
+	"Border-Control.setting.stepLevel.hint": "How many individual colors are part of the gradient",
+
+	"Border-Control.setting.borderWidthname": "Border Width",
+	"Border-Control.setting.borderWidth.hint": "Override border width",
+
+	"Border-Control.setting.borderOffset.name": "Border Offset",
+	"Border-Control.setting.borderOffset.hint": "Customize border offset",
+
+	"Border-Control.setting.targetSize.name": "Target Size Multiplier",
+	"Border-Control.setting.targetSize.hint": " ",
+
+	"Border-Control.setting.internatTarget.name": "Internal Target",
+	"Border-Control.setting.internatTarget.hint": "Target reticule inside  token borders",
+
+	"Border-Control.setting.circleBorders.name": "Circular Borders",
+	"Border-Control.setting.circleBorders.hint": " ",
+
+	"Border-Control.setting.enableHud.name": "Border HUD element",
+	"Border-Control.setting.enableHud.hint": "Add Token HUD element to disable/enable borders",
+
+	"Border-Control.setting.hudPos.name": "Border Control HUD Position",
+	"Border-Control.setting.hudPos.hint": " ",
+
+	"Border-Control.setting.circularNameplate.name": "Circular Nameplates",
+	"Border-Control.setting.circularNameplate.hint": "Requires a refresh",
+
+	"Border-Control.setting.circularNameplateRadius.name": "Circular Nameplates Radius",
+	"Border-Control.setting.circularNameplateRadius.hint": "Requires a refresh",
+
+	"Border-Control.setting.nameplateOffset.name": "Nameplate Y Offset",
+	"Border-Control.setting.nameplateOffset.hint": "Requires a refresh",
+
+	"Border-Control.setting.plateFont.name": "Nameplate Font",
+	"Border-Control.setting.plateFont.hint": "Requires a refresh",
+
+	"Border-Control.setting.sizeMultiplie.name": "Nameplate Font Size",
+	"Border-Control.setting.sizeMultiplie.hint": "Requires a refresh",
+
+	"Border-Control.setting.plateConsistency.name": "Nameplate Consistency",
+	"Border-Control.setting.plateConsistency.hint": "Attempts to keep nameplates the same size across different grid sizes",
+
+	"Border-Control.setting.controlledColor.name": "Color: Controlled",
+	"Border-Control.setting.controlledColor.hint": " ",
+
+	"Border-Control.setting.controlledColorEx.name": "Color: Controlled External",
+	"Border-Control.setting.controlledColorEx.hint": " ",
+
+	"Border-Control.setting.hostileColor.name": "Color: Hostile",
+	"Border-Control.setting.hostileColor.hint": " ",
+
+	"Border-Control.setting.hostileColorEx.name": "Color: Hostile External",
+	"Border-Control.setting.hostileColorEx.hint": " ",
+
+	"Border-Control.setting.friendlyColor.name": "Color: Friendly",
+	"Border-Control.setting.friendlyColor.hint": " ",
+
+	"Border-Control.setting.friendlyColorEx.name": "Color: Friendly External",
+	"Border-Control.setting.friendlyColorEx.hint": " ",
+
+	"Border-Control.setting.neutralColor.name": "Color: Neutral",
+	"Border-Control.setting.neutralColor.hint": " ",
+
+	"Border-Control.setting.neutralColorEx.name": "Color: Neutral External",
+	"Border-Control.setting.neutralColorEx.hint": " ",
+
+	"Border-Control.setting.partyColor.name": "Color: Party",
+	"Border-Control.setting.partyColor.hint": " ",
+
+	"Border-Control.setting.partyColorEx.name": "Color: Party External",
+	"Border-Control.setting.partyColorEx.hint": " ",
+
+	"Border-Control.setting.targetColor.name": "Color: Target",
+	"Border-Control.setting.targetColor.hint": " ",
+
+	"Border-Control.setting.targetColorEx.name": "Color: Target External",
+	"Border-Control.setting.targetColorEx.hint": " ",
+
+	"Border-Control.setting.disableRefreshTarget.name": "Disable the refresh target feature",
+	"Border-Control.setting.disableRefreshTarget.hint": "Use other module like Better Target, Smart Target, ecc. for apply design to target"
+}
