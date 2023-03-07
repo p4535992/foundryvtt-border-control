@@ -1,4 +1,5 @@
 import { BorderFrame } from "./BorderControl";
+import CONSTANTS from "./constants";
 
 export class BCconfig {
 	symbaroum: any;
@@ -7,13 +8,13 @@ export class BCconfig {
 	pf1: any;
 	swade: any;
 
-	stepLevel: string;
+	stepLevel: number;
 	endColor: number[];
 	startColor: number[];
 	tempColor: number[];
 	colorArray: number[];
 	tempArray: number[];
-	currentSystem: string;
+	currentSystem: any;
 
 	constructor() {
 		this.symbaroum = {
@@ -47,21 +48,29 @@ export class BCconfig {
 			temp: undefined
 		};
 
-		this.stepLevel = game.settings.get("Border-Control", "stepLevel");
+		this.stepLevel = <number>game.settings.get(CONSTANTS.MODULE_NAME, "stepLevel");
 		//@ts-ignore
-		this.endColor = Color.from(game.settings.get("Border-Control", "healthGradientA")).rgb;
+		this.endColor = <number[]>Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientA")).rgb;
 		//@ts-ignore
-		this.startColor = Color.from(game.settings.get("Border-Control", "healthGradientB")).rgb;
+		this.startColor = <number[]>Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientB")).rgb;
 		//@ts-ignore
-		this.tempColor = Color.from(game.settings.get("Border-Control", "healthGradientC")).rgb;
+		this.tempColor = Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientC")).rgb;
 		this.colorArray = BorderFrame.interpolateColors(
-			`rgb(${this.startColor[0] * 255}, ${this.startColor[1] * 255}, ${this.startColor[2] * 255})`,
-			`rgb(${this.endColor[0] * 255}, ${this.endColor[1] * 255}, ${this.endColor[2] * 255})`,
+			`rgb(${<number>this.startColor[0] * 255}, ${<number>this.startColor[1] * 255}, ${
+				<number>this.startColor[2] * 255
+			})`,
+			`rgb(${<number>this.endColor[0] * 255}, ${<number>this.endColor[1] * 255}, ${
+				<number>this.endColor[2] * 255
+			})`,
 			this.stepLevel
 		);
 		this.tempArray = BorderFrame.interpolateColors(
-			`rgb(${this.endColor[0] * 255}, ${this.endColor[1] * 255}, ${this.endColor[2] * 255})`,
-			`rgb(${this.tempColor[0] * 255}, ${this.tempColor[1] * 255}, ${this.tempColor[2] * 255})`,
+			`rgb(${<number>this.endColor[0] * 255}, ${<number>this.endColor[1] * 255}, ${
+				<number>this.endColor[2] * 255
+			})`,
+			`rgb(${<number>this.tempColor[0] * 255}, ${<number>this.tempColor[1] * 255}, ${
+				<number>this.tempColor[2] * 255
+			})`,
 			this.stepLevel
 		);
 

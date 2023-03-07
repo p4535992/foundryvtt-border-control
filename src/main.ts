@@ -75,7 +75,7 @@ Hooks.once("ready", () => {
 
 // Add any additional hooks if necessary
 
-export interface TokenFactionsModuleData {
+export interface BorderControlModuleData {
 	api: typeof API;
 	socket: any;
 }
@@ -85,7 +85,7 @@ export interface TokenFactionsModuleData {
  * @param api to set to game module.
  */
 export function setApi(api: typeof API): void {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as TokenFactionsModuleData;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as BorderControlModuleData;
 	data.api = api;
 }
 
@@ -94,7 +94,7 @@ export function setApi(api: typeof API): void {
  * @returns Api from games module.
  */
 export function getApi(): typeof API {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as TokenFactionsModuleData;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as BorderControlModuleData;
 	return data.api;
 }
 
@@ -103,7 +103,7 @@ export function getApi(): typeof API {
  * @param socket to set to game module.
  */
 export function setSocket(socket: any): void {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as TokenFactionsModuleData;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as BorderControlModuleData;
 	data.socket = socket;
 }
 
@@ -112,6 +112,6 @@ export function setSocket(socket: any): void {
  * @returns Socket from games module.
  */
 export function getSocket() {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as TokenFactionsModuleData;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as BorderControlModuleData;
 	return data.socket;
 }

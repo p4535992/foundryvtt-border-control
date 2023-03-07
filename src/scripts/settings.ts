@@ -1,7 +1,14 @@
 import { debug, log, warn, i18n } from "./lib/lib";
 import CONSTANTS from "./constants";
 
+let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
+
+let fontFamilies = {};
+
 export const registerSettings = function () {
+	//@ts-ignore
+	CONFIG.fontFamilies.forEach((i) => (fontFamilies[`${i}`] = i));
+
 	game.settings.registerMenu(CONSTANTS.MODULE_NAME, "resetAllSettings", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.reset.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.reset.hint`,
@@ -17,7 +24,7 @@ export const registerSettings = function () {
 		hint: "Remove the border from specific tokens",
 		scope: "world",
 		type: String,
-		choices: {
+		choices: <any>{
 			0: "None",
 			1: "Non Owned",
 			2: "All"
@@ -151,7 +158,7 @@ export const registerSettings = function () {
 		scope: "world",
 		type: String,
 		default: ".right",
-		choices: {
+		choices: <any>{
 			".right": "Right",
 			".left": "Left"
 		},
@@ -202,7 +209,7 @@ export const registerSettings = function () {
 		hint: "Requires a refresh",
 		scope: "world",
 		type: String,
-		choices: fontFamilies,
+		choices: <any>fontFamilies,
 		default: "signika",
 		config: true
 	});
@@ -334,15 +341,6 @@ export const registerSettings = function () {
 		default: false,
 		type: Boolean
 	});
-
-	const settings = defaultSettings();
-	for (const [name, data] of Object.entries(settings)) {
-		game.settings.register(CONSTANTS.MODULE_NAME, name, <any>data);
-	}
-
-	// for (const [name, data] of Object.entries(otherSettings)) {
-	//     game.settings.register(CONSTANTS.MODULE_NAME, name, data);
-	// }
 };
 
 class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object, any> {
@@ -361,8 +359,14 @@ class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object
 					icon: '<i class="fas fa-check"></i>',
 					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.confirm`),
 					callback: async () => {
-						await applyDefaultSettings();
-						window.location.reload();
+						const worldSettings = game.settings.storage
+							?.get("world")
+							?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_NAME}.`));
+						for (let setting of worldSettings) {
+							console.log(`Reset setting '${setting.key}'`);
+							await setting.delete();
+						}
+						//window.location.reload();
 					}
 				},
 				cancel: {

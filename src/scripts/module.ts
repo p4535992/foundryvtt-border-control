@@ -5,13 +5,7 @@ import API from "./api";
 import { BCconfig } from "./BCconfig";
 import { BorderFrame } from "./BorderControl";
 
-let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
-
-let fontFamilies = {};
-//@ts-ignore
-CONFIG.fontFamilies.forEach((i) => (fontFamilies[`${i}`] = i));
-
-let BCC;
+export let BCC: BCconfig;
 
 export const initHooks = async () => {
 	// Hooks.once("socketlib.ready", registerSocket);
@@ -94,16 +88,19 @@ export const initHooks = async () => {
 	libWrapper.register("Border-Control", "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
 	//@ts-ignore
 	libWrapper.register("Border-Control", "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
+
 	if (!game.settings.get("Border-Control", "disableRefreshTarget")) {
 		//@ts-ignore
 		libWrapper.register("Border-Control", "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+
+		//@ts-ignore
+		libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
 	}
+
 	//@ts-ignore
 	libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
 	//@ts-ignore
 	libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
-	//@ts-ignore
-	libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
 };
 
 export const setupHooks = async (): Promise<void> => {
@@ -118,7 +115,7 @@ export const readyHooks = () => {
 	});
 
 	Hooks.on("createToken", (data) => {
-		let token = canvas.tokens.get(data.id);
+		let token = <Token>canvas.tokens?.get(data.id);
 		if (!token.owner) {
 			token.cursor = "default";
 		}
