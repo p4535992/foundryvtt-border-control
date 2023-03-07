@@ -1,36 +1,33 @@
 {
-  "id": "Border-Control",
-  "title": "Border Control",
-  "description": "Control your tokens borders. Player side configuration of the tokens borders, color and scale. Can prevent borders from showing on player clients for non-owned tokens; no longer hide your mimics behind tiles! Increased accessability for those with visibility impairments",
-  "version": "This is auto replaced",
-  "library": "false",
-  "manifestPlusVersion": "1.0.0",
-  "compatibility": {
-    "minimum": "10",
-    "verified": "10"
-  },
-  "authors": [
-    {
-      "name": "Kandashi",
-      "url": "https://github.com/Kandashi",
-      "discord": "Kandashi (He/Him)#6698"
-    }
-  ],
-  "esmodules": [
-    "/scripts/BorderControl.js",
-    "/scripts/settings.js"
-  ],
-  "url": "This is auto replaced",
-  "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
-  "media": [
-    {
-      "type": "screenshot",
-      "url": "https://raw.githubusercontent.com/kandashi/Border-Control/master/Border_Control_Screeshot.PNG"
-    },
-    {
-      "type": "cover",
-      "url": "https://raw.githubusercontent.com/kandashi/Border-Control/master/Border%20Control.png"
-    }
-  ]
+	"id": "Border-Control",
+	"title": "Border Control",
+	"description": "Control your tokens borders. Player side configuration of the tokens borders, color and scale. Can prevent borders from showing on player clients for non-owned tokens; no longer hide your mimics behind tiles! Increased accessability for those with visibility impairments",
+	"version": "This is auto replaced",
+	"library": "false",
+	"manifestPlusVersion": "1.0.0",
+	"compatibility": {
+		"minimum": "10",
+		"verified": "10"
+	},
+	"authors": [
+		{
+			"name": "Kandashi",
+			"url": "https://github.com/Kandashi",
+			"discord": "Kandashi (He/Him)#6698"
+		}
+	],
+	"esmodules": ["/scripts/BorderControl.js", "/scripts/settings.js"],
+	"url": "This is auto replaced",
+	"manifest": "This is auto replaced",
+	"download": "This is auto replaced",
+	"media": [
+		{
+			"type": "screenshot",
+			"url": "https://raw.githubusercontent.com/kandashi/Border-Control/master/Border_Control_Screeshot.PNG"
+		},
+		{
+			"type": "cover",
+			"url": "https://raw.githubusercontent.com/kandashi/Border-Control/master/Border%20Control.png"
+		}
+	]
 }
