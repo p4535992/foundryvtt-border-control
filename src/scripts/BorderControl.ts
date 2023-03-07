@@ -313,6 +313,14 @@ export class BorderFrame {
 					temp: "actor.system.attributes.hp.temp"
 				};
 			}
+			default: {
+				return {
+					value: "actor.system.attributes.hp.value",
+					max: "actor.system.attributes.hp.max",
+					tempMax: "actor.system.attributes.hp.tempmax",
+					temp: "actor.system.attributes.hp.temp"
+				};
+			}
 		}
 	}
 
@@ -402,6 +410,7 @@ export class BorderFrame {
 				bar.visible = true;
 				bar.alpha = 0.5;
 				token.bars.visible = token._canViewMode(token.document.displayBars);
+				return token.bars.visible;
 			});
 		}
 	}
