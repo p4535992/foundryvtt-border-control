@@ -2,7 +2,7 @@ import { BCconfig } from "./BCconfig";
 import { BorderControlGraphic } from "./BorderControlModels";
 import CONSTANTS from "./constants";
 import { i18n } from "./lib/lib";
-import { BCC } from "./module";
+import { BCCBASE } from "./module";
 
 export class BorderFrame {
 	static BORDER_CONTROL_FLAGS = {
@@ -434,18 +434,19 @@ export class BorderFrame {
 
 	static newBorder() {
 		const token = <any>this;
-		if (!BCC) {
-			// BCC = new BCconfig();
-			return;
-		}
-
 		token.border?.clear();
 
-		let borderColor  = <BorderControlGraphic | null>token._getBorderColor();
+		let BCC = new BCconfig();
+		if (!BCCBASE) {
+			// BCC = new BCconfig();
+			BCC = BCCBASE;
+		}
+
+		let borderColor = <BorderControlGraphic | null>token._getBorderColor();
 		if (!borderColor) {
 			return;
 		}
-		
+
 		switch (game.settings.get(CONSTANTS.MODULE_NAME, "removeBorders")) {
 			case "0": {
 				break;
@@ -469,84 +470,121 @@ export class BorderFrame {
 		) {
 			return;
 		}
-		let t = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
+
 		token.border?.position.set(token.document.x, token.document.y);
 
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder") && token.controlled) {
+		let t = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
+		const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
+		//@ts-ignore
+		if (game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder") && token._controlled) {
 			t = t * 2;
 		}
 		const sB = game.settings.get(CONSTANTS.MODULE_NAME, "scaleBorder");
 		const bS = game.settings.get(CONSTANTS.MODULE_NAME, "borderGridScale");
-		const nBS = bS ? <number>canvas.dimensions?.size / 100 : 1;
+		const nBS = bS ? (<Canvas.Dimensions>canvas.dimensions)?.size / 100 : 1;
+		//@ts-ignore
+		const sX = sB ? token.document.texture.scaleX : 1;
+		//@ts-ignore
+		const sY = sB ? token.document.texture.scaleY : 1;
+		const sW = sB ? (token.w - token.w * sX) / 2 : 0;
+		const sH = sB ? (token.h - token.h * sY) / 2 : 0;
 
-		const s = sB ? <number>(<unknown>token.scale) : 1;
-		const sW = sB ? (token.w - token.w * s) / 2 : 0;
-		const sH = sB ? (token.h - token.h * s) / 2 : 0;
+		const s = sX;
+		// const s: any = sB ? token.scale : 1;
+		// const sW = sB ? (token.w - token.w * s) / 2 : 0;
+		// const sH = sB ? (token.h - token.h * s) / 2 : 0;
 
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "healthGradient")) {
-			const systemPath = BCC.currentSystem;
-			const stepLevel = BCC.stepLevel;
+			const systemPath = BCCBASE.currentSystem;
+			const stepLevel = BCCBASE.stepLevel;
 			const hpMax = getProperty(token, systemPath.max) + (getProperty(token, systemPath.tempMax) ?? 0);
 			const hpValue = getProperty(token, systemPath.value);
 			const hpDecimal = parseInt(String(BorderFrame.clamp((hpValue / hpMax) * stepLevel, stepLevel, 1))) || 1;
-			const color = BorderFrame.rgbToHex(BCC.colorArray[hpDecimal - 1]);
+			const color = BorderFrame.rgbToHex(BCCBASE.colorArray[hpDecimal - 1]);
 			borderColor.INT = parseInt(color.substr(1), 16);
 			if (game.settings.get(CONSTANTS.MODULE_NAME, "tempHPgradient") && getProperty(token, systemPath.temp) > 0) {
 				const tempValue = getProperty(token, systemPath.temp);
 				const tempDecimal = parseInt(
 					String(BorderFrame.clamp((tempValue / (hpMax / 2)) * stepLevel, stepLevel, 1))
 				);
-				const tempEx = BorderFrame.rgbToHex(BCC.tempArray[tempDecimal - 1]);
+				const tempEx = BorderFrame.rgbToHex(BCCBASE.tempArray[tempDecimal - 1]);
 				borderColor.EX = parseInt(tempEx.substr(1), 16);
 			}
 		}
+
+		const textureINT = borderColor.TEXTURE_INT || PIXI.Texture.EMPTY; //await PIXI.Texture.fromURL(<string>token.document.texture.src) || PIXI.Texture.EMPTY;
+		const textureEX = borderColor.TEXTURE_EX || PIXI.Texture.EMPTY;
+
 		// Draw Hex border for size 1 tokens on a hex grid
 		const gt = CONST.GRID_TYPES;
 		const hexTypes = [gt.HEXEVENQ, gt.HEXEVENR, gt.HEXODDQ, gt.HEXODDR];
+
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "circleBorders")) {
-			const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
+			// const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
 			const h = Math.round(t / 2);
 			const o = Math.round(h / 2);
+
+			//@ts-ignore
 			token.border
 				//@ts-ignore
 				.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+				// .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + t + p);
 				.drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
+
+			//@ts-ignore
 			token.border
 				//@ts-ignore
 				.lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+				// .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
 				.drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-		} else if (hexTypes.includes(<any>canvas.grid?.type) && token.width === 1 && token.height === 1) {
-			const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
+		}
+		//@ts-ignore
+		else if (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1) {
+			// const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
 			const q = Math.round(p / 2);
 			//@ts-ignore
 			const polygon = canvas.grid?.grid?.getPolygon(
 				-1.5 - q + sW,
 				-1.5 - q + sH,
-				(token.w + 2) * s + p,
-				(token.h + 2) * s + p
+				(token.w + 2) * sX + p,
+				(token.h + 2) * sY + p
 			);
 			//@ts-ignore
+			// const polygon = canvas.grid?.grid?.getPolygon(
+			// 	-1.5 - q + sW,
+			// 	-1.5 - q + sH,
+			// 	(token.w + 2) * s + p,
+			// 	(token.h + 2) * s + p
+			// );
+
+			//@ts-ignore
 			token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
+
 			//@ts-ignore
 			token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
 		}
 
 		// Otherwise Draw Square border
 		else {
-			const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
+			// const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
 			const q = Math.round(p / 2);
 			const h = Math.round(t / 2);
 			const o = Math.round(h / 2);
+
+			//@ts-ignore
 			token.border
 				//@ts-ignore
 				.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+				// .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
 				.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
+
+			//@ts-ignore
 			token.border
 				//@ts-ignore
 				.lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+				// .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
 				.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 		}
-		return;
 	}
 
 	public static newBorderColor(hover: boolean): BorderControlGraphic {
@@ -665,35 +703,35 @@ export class BorderFrame {
 		};
 
 		let borderColor = new BorderControlGraphic();
-		if (token.controlled) {
-			return overrides.CONTROLLED;
-		} else if (
-			(hover ?? token.hover) ||
-			//@ts-ignore
-			canvas.tokens?._highlight ||
-			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
-		) {
-			const disPath = CONST.TOKEN_DISPOSITIONS;
+		// if (token.controlled) {
+		// 	return overrides.CONTROLLED;
+		// } else if (
+		// 	(hover ?? token.hover) ||
+		// 	//@ts-ignore
+		// 	canvas.tokens?._highlight ||
+		// 	game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+		// ) {
+		const disPath = CONST.TOKEN_DISPOSITIONS;
 
-			//@ts-ignore
-			const d = parseInt(token.document.disposition);
-			//@ts-ignore
-			if (!game.user?.isGM && token.owner) {
-				borderColor = overrides.CONTROLLED;
-			}
-			//@ts-ignore
-			else if (token.actor?.hasPlayerOwner) {
-				borderColor = overrides.PARTY;
-			} else if (d === disPath.FRIENDLY) {
-				borderColor = overrides.FRIENDLY;
-			} else if (d === disPath.NEUTRAL) {
-				borderColor = overrides.NEUTRAL;
-			} else {
-				borderColor = overrides.HOSTILE;
-			}
-		} else {
-			// borderColor = null;
+		//@ts-ignore
+		const d = parseInt(token.document.disposition);
+		//@ts-ignore
+		if (!game.user?.isGM && token.owner) {
+			borderColor = overrides.CONTROLLED;
 		}
+		//@ts-ignore
+		else if (token.actor?.hasPlayerOwner) {
+			borderColor = overrides.PARTY;
+		} else if (d === disPath.FRIENDLY) {
+			borderColor = overrides.FRIENDLY;
+		} else if (d === disPath.NEUTRAL) {
+			borderColor = overrides.NEUTRAL;
+		} else {
+			borderColor = overrides.HOSTILE;
+		}
+		// } else {
+		// 	// borderColor = null;
+		// }
 		/*
 		if (colorFrom === "token-disposition") {
 			if (token.controlled) {
@@ -754,14 +792,15 @@ export class BorderFrame {
 
 	static newTarget(reticule) {
 		const token = <any>this;
-		const multiplier = <number>game.settings.get(CONSTANTS.MODULE_NAME, "targetSize");
-		const INT = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColor")).substr(1), 16);
-		const EX = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColorEx")).substr(1), 16);
-
 		token.target.clear();
+
 		if (!token.targeted.size) {
 			return;
 		}
+
+		const multiplier = <number>game.settings.get(CONSTANTS.MODULE_NAME, "targetSize");
+		const INT = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColor")).substr(1), 16);
+		const EX = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColorEx")).substr(1), 16);
 
 		// Determine whether the current user has target and any other users
 		const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
@@ -915,11 +954,11 @@ export class BorderFrame {
 		const l = <number>canvas.dimensions?.size * size; // Side length.
 		const { h, w } = token;
 		const lineStyle = { color: lineColor, alpha, width, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.BEVEL };
-		
+
 		color ??= <BorderControlGraphic | null>token._getBorderColor({ hover: true });
 
 		m *= l * -1;
-		
+
 		token.target
 			//@ts-ignore
 			.beginFill(Color.from(color.INT), alpha)

@@ -5,7 +5,7 @@ import API from "./api";
 import { BCconfig } from "./BCconfig";
 import { BorderFrame } from "./BorderControl";
 
-export let BCC: BCconfig;
+export let BCCBASE: BCconfig;
 
 export const initHooks = async () => {
 	// Hooks.once("socketlib.ready", registerSocket);
@@ -94,7 +94,12 @@ export const initHooks = async () => {
 		//@ts-ignore
 		libWrapper.register("Border-Control", "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
 		//@ts-ignore
-		libWrapper.register("Border-Control", "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
+		libWrapper.register(
+			"Border-Control",
+			"Token.prototype._getBorderColor",
+			BorderFrame.newBorderColor,
+			"OVERRIDE"
+		);
 
 		if (!game.settings.get("Border-Control", "disableRefreshTarget")) {
 			//@ts-ignore
@@ -116,7 +121,7 @@ export const setupHooks = async (): Promise<void> => {
 };
 
 export const readyHooks = () => {
-	BCC = new BCconfig();
+	BCCBASE = new BCconfig();
 
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "borderControlEnabled")) {
 		Hooks.on("renderTokenHUD", (app, html, data) => {
@@ -131,10 +136,10 @@ export const readyHooks = () => {
 		});
 
 		// Removed for conflict with others modules ?
-		// canvas.tokens?.placeables.forEach((t) => {
-		// 	if (!t.owner) {
-		// 		t.cursor = "default";
-		// 	}
-		// });
+		canvas.tokens?.placeables.forEach((t) => {
+			if (!t.owner) {
+				t.cursor = "default";
+			}
+		});
 	}
 };
