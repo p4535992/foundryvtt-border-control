@@ -3,6 +3,33 @@ import CONSTANTS from "./constants";
 import { BCC } from "./module";
 
 export class BorderFrame {
+	static BORDER_CONTROL_FLAGS = {
+		BORDER_DRAW_FRAME: "borderDrawFrame", //'draw-frame',
+		BORDER_DISABLE: "noBorder", // "borderDisable", // 'disable'
+		BORDER_NO_BORDER: "noBorder", // noBorder
+		BORDER_CUSTOM_COLOR_INT: "borderCustomColorInt",
+		BORDER_CUSTOM_COLOR_EXT: "borderCustomColorExt",
+		BORDER_CUSTOM_FRAME_OPACITY: "borderCustomFrameOpacity",
+		BORDER_CUSTOM_BASE_OPACITY: "borderCustomBaseOpacity"
+	};
+
+	static dispositionKey = (token) => {
+		const dispositionValue = parseInt(String(token.document.disposition), 10);
+		let disposition;
+		if (token.actor && token.actor.hasPlayerOwner && token.actor.type === "character") {
+			disposition = "party-member";
+		} else if (token.actor && token.actor.hasPlayerOwner) {
+			disposition = "party-npc";
+		} else if (dispositionValue === 1) {
+			disposition = "friendly-npc";
+		} else if (dispositionValue === 0) {
+			disposition = "neutral-npc";
+		} else if (dispositionValue === -1) {
+			disposition = "hostile-npc";
+		}
+		return disposition;
+	};
+
 	static defaultColors;
 
 	static dispositions;
@@ -30,29 +57,389 @@ export class BorderFrame {
 		BorderFrame.dispositions = Object.keys(BorderFrame.defaultColors);
 	}
 
+	static renderTokenConfig = async function (config, html) {
+		const tokenDocument = config.object as TokenDocument;
+		if (!game.user?.isGM) {
+			return;
+		}
+		if (!html) {
+			return;
+		}
+		const factionDisableValue = config.object.getFlag(
+			CONSTANTS.MODULE_NAME,
+			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE
+		)
+			? "checked"
+			: "";
+
+		const currentCustomColorTokenInt =
+			config.object.getFlag(
+				CONSTANTS.MODULE_NAME,
+				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+			) || "#000000";
+
+		const currentCustomColorTokenExt =
+			config.object.getFlag(
+				CONSTANTS.MODULE_NAME,
+				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+			) || "#000000";
+
+		const currentCustomColorTokenFrameOpacity =
+			config.object.getFlag(
+				CONSTANTS.MODULE_NAME,
+				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+			) || 0.5;
+
+		const currentCustomColorTokenBaseOpacity =
+			config.object.getFlag(
+				CONSTANTS.MODULE_NAME,
+				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+			) || 0.5;
+
+		// Expand the width
+		config.position.width = 540;
+		config.setPosition(config.position);
+
+		const nav = html.find(`nav.sheet-tabs.tabs[data-group="main"]`);
+		nav.append(
+			$(`
+			<a class="item" data-tab="bordercontrol">
+        <i class="fas fa-user-circle"></i>
+				${i18n("Border-Control.label.bordercontrol")}
+			</a>
+		`)
+		);
+
+		const formConfig = `
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.bordercontrolCustomDisable")}</label>
+        <input type="checkbox"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
+          data-dtype="Boolean" ${factionDisableValue}>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenInt")}</label>
+        <input type="color"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          data-dtype="String" value="${currentCustomColorTokenInt}"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenExt")}</label>
+        <input type="color"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          data-dtype="String" value="${currentCustomColorTokenExt}"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenFrameOpacity")}</label>
+        <input type="number"
+          min="0" max="1" step="0.1"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${
+			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+		}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
+          data-dtype="Number" value="${currentCustomColorTokenFrameOpacity}"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenBaseOpacity")}</label>
+        <input type="number"
+          min="0" max="1" step="0.1"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${
+			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+		}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
+          data-dtype="Number" value="${currentCustomColorTokenBaseOpacity}"></input>
+      </div>
+    `;
+
+		nav.parent()
+			.find("footer")
+			.before(
+				$(`
+			<div class="tab" data-tab="bordercontrol">
+				${formConfig}
+			</div>
+		`)
+			);
+
+		nav.parent()
+			.find('.tab[data-tab="bordercontrol"] input[type="checkbox"][data-edit]')
+			.change(config._onChangeInput.bind(config));
+		// nav
+		//   .parent()
+		//   .find('.tab[data-tab="bordercontrol"] input[type="color"][data-edit]')
+		//   .change(config._onChangeInput.bind(config));
+	};
+
+	// START NEW MANAGE
+
 	static AddBorderToggle(app, html, data) {
 		if (!game.user?.isGM) {
 			return;
 		}
-		if (!game.settings.get(CONSTANTS.MODULE_NAME, "enableHud")) {
+		if (!game.settings.get(CONSTANTS.MODULE_NAME, "hudEnable")) {
 			return;
 		}
-		const buttonPos = game.settings.get(CONSTANTS.MODULE_NAME, "hudPos");
-		const noBorder = <boolean>app.object.document.flags[CONSTANTS.MODULE_NAME]?.noBorder;
-		const borderButton = `<div class="control-icon border ${noBorder ? "active" : ""}" 
-			title="Toggle Border"> <i class="fas fa-border-style"></i></div>`;
-		let Pos = html.find(buttonPos);
-		Pos.append(borderButton);
-		html.find(".border").click(this.ToggleBorder.bind(app));
+		if (!app?.object?.document) {
+			return;
+		}
+
+		const borderControlDisableFlag = app.object.document.getFlag(
+			CONSTANTS.MODULE_NAME,
+			BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+		);
+
+		const borderButton = `
+    <div class="control-icon borderControlBorder
+      ${borderControlDisableFlag ? "active" : ""}"
+      title="Toggle Border Controller"> <i class="fas fa-border-style"></i>
+    </div>`;
+
+		const settingHudColClass = <string>game.settings.get(CONSTANTS.MODULE_NAME, "hudColumn") ?? "right";
+		const settingHudTopBottomClass = <string>game.settings.get(CONSTANTS.MODULE_NAME, "hudTopBottom") ?? "bottom";
+
+		const buttonPos = "." + settingHudColClass.toLowerCase();
+
+		const col = html.find(buttonPos);
+		if (settingHudTopBottomClass.toLowerCase() === "top") {
+			col.prepend(borderButton);
+		} else {
+			col.append(borderButton);
+		}
+
+		html.find(".borderControlBorder").click(this.ToggleBorder.bind(app));
+		html.find(".borderControlBorder").contextmenu(this.ToggleCustomBorder.bind(app));
 	}
 
 	static async ToggleBorder(event) {
 		//@ts-ignore
-		const token: Token = this.object;
-		const border = token.document.getFlag(CONSTANTS.MODULE_NAME, "noBorder");
-		await token.document.setFlag(CONSTANTS.MODULE_NAME, "noBorder", !border);
-		event.currentTarget.classList.toggle("active", !border);
+		const borderIsDisabled = this.object.document.getFlag(
+			CONSTANTS.MODULE_NAME,
+			BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+		);
+
+		for (const token of <Token[]>canvas.tokens?.controlled) {
+			//@ts-ignore
+			await token.document.setFlag(
+				CONSTANTS.MODULE_NAME,
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE,
+				!borderIsDisabled
+			);
+			if (borderIsDisabled) {
+				await token.document.unsetFlag(
+					CONSTANTS.MODULE_NAME,
+					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+				);
+				await token.document.unsetFlag(
+					CONSTANTS.MODULE_NAME,
+					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+				);
+				await token.document.unsetFlag(
+					CONSTANTS.MODULE_NAME,
+					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+				);
+				await token.document.unsetFlag(
+					CONSTANTS.MODULE_NAME,
+					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+				);
+			}
+		}
+
+		event.currentTarget.classList.toggle("active", !borderIsDisabled);
 	}
+
+	static async ToggleCustomBorder(event) {
+		//@ts-ignore
+		const tokenTmp = <Token>this.object;
+
+		const currentCustomColorTokenInt =
+			tokenTmp.document.getFlag(
+				CONSTANTS.MODULE_NAME,
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+			) || "#000000";
+
+		const currentCustomColorTokenExt =
+			tokenTmp.document.getFlag(
+				CONSTANTS.MODULE_NAME,
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+			) || "#000000";
+
+		const currentCustomColorTokenFrameOpacity =
+			tokenTmp.document.getFlag(
+				CONSTANTS.MODULE_NAME,
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+			) || 0.5;
+
+		const currentCustomColorTokenBaseOpacity =
+			tokenTmp.document.getFlag(
+				CONSTANTS.MODULE_NAME,
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+			) || 0.5;
+
+		const dialogContent = `
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.factionsCustomColorTokenInt")}</label>
+        <input type="color"
+          value="${currentCustomColorTokenInt}"
+          data-edit="Border-Control.currentCustomColorTokenInt"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.factionsCustomColorTokenExt")}</label>
+        <input type="color"
+          value="${currentCustomColorTokenExt}"
+          data-edit="Border-Control.currentCustomColorTokenExt"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.factionsCustomColorTokenFrameOpacity")}</label>
+        <input type="number"
+          min="0" max="1" step="0.1"
+          value="${currentCustomColorTokenFrameOpacity}"
+          data-edit="Border-Control.currentCustomColorTokenFrameOpacity"></input>
+      </div>
+      <div class="form-group">
+        <label>${i18n("Border-Control.label.factionsCustomColorTokenBaseOpacity")}</label>
+        <input type="number"
+          min="0" max="1" step="0.1"
+          value="${currentCustomColorTokenBaseOpacity}"
+          data-edit="Border-Control.currentCustomColorTokenBaseOpacity"></input>
+      </div>
+      `;
+
+		const d = new Dialog({
+			title: i18n("Border-Control.label.chooseCustomColorToken"),
+			content: dialogContent,
+			buttons: {
+				yes: {
+					label: i18n("Border-Control.label.applyCustomColor"),
+					//@ts-ignore
+					callback: async (html: JQuery<HTMLElement>) => {
+						const newCurrentCustomColorTokenInt = <string>(
+							$(
+								<HTMLElement>(
+									html.find(`input[data-edit='Border-Control.currentCustomColorTokenInt']`)[0]
+								)
+							).val()
+						);
+						const newCurrentCustomColorTokenExt = <string>(
+							$(
+								<HTMLElement>(
+									html.find(`input[data-edit='Border-Control.currentCustomColorTokenExt']`)[0]
+								)
+							).val()
+						);
+						const newCurrentCustomColorTokenFrameOpacity = <string>(
+							$(
+								<HTMLElement>(
+									html.find(
+										`input[data-edit='Border-Control.currentCustomColorTokenFrameOpacity']`
+									)[0]
+								)
+							).val()
+						);
+						const newCurrentCustomColorTokenBaseOpacity = <string>(
+							$(
+								<HTMLElement>(
+									html.find(`input[data-edit='Border-Control.currentCustomColorTokenBaseOpacity']`)[0]
+								)
+							).val()
+						);
+						for (const token of <Token[]>canvas.tokens?.controlled) {
+							token.document.setFlag(
+								CONSTANTS.MODULE_NAME,
+								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_INT,
+								newCurrentCustomColorTokenInt
+							);
+							token.document.setFlag(
+								CONSTANTS.MODULE_NAME,
+								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_EXT,
+								newCurrentCustomColorTokenExt
+							);
+							token.document.setFlag(
+								CONSTANTS.MODULE_NAME,
+								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_FRAME_OPACITY,
+								newCurrentCustomColorTokenFrameOpacity
+							);
+							token.document.setFlag(
+								CONSTANTS.MODULE_NAME,
+								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_BASE_OPACITY,
+								newCurrentCustomColorTokenBaseOpacity
+							);
+						}
+					}
+				},
+				no: {
+					label: i18n("Border-Control.label.doNothing"),
+					callback: (html) => {
+						// Do nothing
+					}
+				}
+			},
+			default: "no"
+		});
+		d.render(true);
+	}
+
+	private static clamp(value, max, min) {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	private static componentToHex(c) {
+		const hex = c.toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
+	}
+
+	private static rgbToHex(A) {
+		if (A[0] === undefined || A[1] === undefined || A[2] === undefined) console.error("RGB color invalid");
+		return (
+			"#" + BorderFrame.componentToHex(A[0]) + BorderFrame.componentToHex(A[1]) + BorderFrame.componentToHex(A[2])
+		);
+	}
+
+	private static hexToRgb(hex) {
+		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result
+			? {
+					r: parseInt(<string>result[1], 16),
+					g: parseInt(<string>result[2], 16),
+					b: parseInt(<string>result[3], 16)
+			  }
+			: null;
+	}
+
+	private static interpolateColor(color1, color2, factor): number[] {
+		if (arguments.length < 3) {
+			factor = 0.5;
+		}
+		const result = color1.slice();
+		for (let i = 0; i < 3; i++) {
+			result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+		}
+		return result;
+	}
+
+	// My function to interpolate between two colors completely, returning an array
+	private static interpolateColors(color1, color2, steps): number[] {
+		const stepFactor = 1 / (steps - 1);
+		const interpolatedColorArray: number[][] = [];
+
+		color1 = color1.match(/\d+/g).map(Number);
+		color2 = color2.match(/\d+/g).map(Number);
+
+		for (let i = 0; i < steps; i++) {
+			interpolatedColorArray.push(BorderFrame.interpolateColor(color1, color2, stepFactor * i));
+		}
+
+		return interpolatedColorArray;
+	}
+
+	// static refreshAll() {
+	// 	canvas.tokens?.placeables.forEach((t) => t.draw());
+	// }
+
+	// ADDED
+
 	static newBorder() {
 		const token = <any>this;
 		if (!BCC) {
@@ -162,59 +549,181 @@ export class BorderFrame {
 		return;
 	}
 
-	static clamp(value, max, min) {
-		return Math.min(Math.max(value, min), max);
-	}
-	static newBorderColor(hover: boolean) {
+	public static newBorderColor(hover: boolean): BorderControlGraphic {
 		const token = <any>this;
+
+		const colorFrom = game.settings.get(CONSTANTS.MODULE_NAME, "color-from");
+		let color;
+		let icon;
+		if (colorFrom === "token-disposition") {
+			const disposition = TokenFactions.dispositionKey(token);
+			if (disposition) {
+				color = TokenFactions.defaultColors[disposition];
+			}
+		} else if (colorFrom === "actor-folder-color") {
+			if (token.actor && token.actor.folder && token.actor.folder) {
+				//@ts-ignore
+				color = token.actor.folder.color;
+				//@ts-ignore
+				icon = token.actor.folder.icon;
+			}
+		} else {
+			// colorFrom === 'custom-disposition'
+			// TODO PUT SOME NEW FLAG ON THE TOKEN
+			const disposition = TokenFactions.dispositionKey(token);
+			if (disposition) {
+				color = <string>game.settings.get(CONSTANTS.MODULE_NAME, `custom-${disposition}-color`);
+			}
+		}
+
+		const currentCustomColorTokenInt = <string>(
+			token.document.getFlag(CONSTANTS.MODULE_NAME, TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_INT)
+		);
+		const currentCustomColorTokenExt = <string>(
+			token.document.getFlag(CONSTANTS.MODULE_NAME, TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_EXT)
+		);
+
+		if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
+			return {
+				INT: parseInt(String(currentCustomColorTokenInt).substr(1), 16),
+				EX: parseInt(String(currentCustomColorTokenExt).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(currentCustomColorTokenInt),
+				EX_S: String(currentCustomColorTokenExt)
+			} as FactionGraphic;
+		}
+
 		const overrides = {
 			CONTROLLED: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColor")).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColorEx")).substr(1), 16)
-			},
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColorEx")).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColor")),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColorEx"))
+			} as FactionGraphic,
 			FRIENDLY: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColor")).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx")).substr(1), 16)
-			},
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx")).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColor")),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx"))
+			} as FactionGraphic,
 			NEUTRAL: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColor")).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx")).substr(1), 16)
-			},
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx")).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColor")),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx"))
+			} as FactionGraphic,
 			HOSTILE: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColor")).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx")).substr(1), 16)
-			},
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx")).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColor")),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx"))
+			} as FactionGraphic,
 			PARTY: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx")).substr(1), 16)
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx")).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx"))
+			} as FactionGraphic,
+			ACTOR_FOLDER_COLOR: {
+				INT: parseInt(String(color).substr(1), 16),
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
+				ICON: icon ? String(icon) : "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(color),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx"))
+			},
+			CUSTOM_DISPOSITION: {
+				INT: parseInt(String(color).substr(1), 16),
+				EX: parseInt(
+					String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx")).substr(1),
+					16
+				),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(color),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx"))
 			}
 		};
 
-		if (token.controlled) {
-			return overrides.CONTROLLED;
-		} else if (
-			(hover ?? token.hover) ||
-			//@ts-ignore
-			canvas.tokens?._highlight ||
-			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
-		) {
-			let disPath = CONST.TOKEN_DISPOSITIONS;
-
-			let d = parseInt(token.document.disposition);
-			if (!game.user?.isGM && token.owner) {
+		let borderColor = new BorderColorGraphic();
+		if (colorFrom === "token-disposition") {
+			if (token.controlled) {
 				return overrides.CONTROLLED;
-			} else if (token.actor?.hasPlayerOwner) {
-				return overrides.PARTY;
-			} else if (d === disPath.FRIENDLY) {
-				return overrides.FRIENDLY;
-			} else if (d === disPath.NEUTRAL) {
-				return overrides.NEUTRAL;
+			} else if (
+				(hover ?? token.hover) ||
+				//@ts-ignore
+				canvas.tokens?._highlight ||
+				game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+			) {
+				const disPath = CONST.TOKEN_DISPOSITIONS;
+
+				//@ts-ignore
+				const d = parseInt(token.document.disposition);
+				//@ts-ignore
+				if (!game.user?.isGM && token.owner) {
+					borderColor = overrides.CONTROLLED;
+				}
+				//@ts-ignore
+				else if (token.actor?.hasPlayerOwner) {
+					borderColor = overrides.PARTY;
+				} else if (d === disPath.FRIENDLY) {
+					borderColor = overrides.FRIENDLY;
+				} else if (d === disPath.NEUTRAL) {
+					borderColor = overrides.NEUTRAL;
+				} else {
+					borderColor = overrides.HOSTILE;
+				}
+				//}
+				//else return null;
 			} else {
-				return overrides.HOSTILE;
+				const disPath = CONST.TOKEN_DISPOSITIONS;
+
+				//@ts-ignore
+				const d = parseInt(token.document.disposition);
+				//@ts-ignore
+				if (!game.user?.isGM && token.owner) {
+					borderColor = overrides.CONTROLLED;
+				}
+				//@ts-ignore
+				else if (token.actor?.hasPlayerOwner) {
+					borderColor = overrides.PARTY;
+				} else if (d === disPath.FRIENDLY) {
+					borderColor = overrides.FRIENDLY;
+				} else if (d === disPath.NEUTRAL) {
+					borderColor = overrides.NEUTRAL;
+				} else {
+					borderColor = overrides.HOSTILE;
+				}
+				//}
+				//else return null;
 			}
+		} else if (colorFrom === "actor-folder-color") {
+			borderColor = overrides.ACTOR_FOLDER_COLOR;
 		} else {
-			return null;
+			// colorFrom === 'custom-disposition'
+			borderColor = overrides.CUSTOM_DISPOSITION;
 		}
+
+		return borderColor;
 	}
 
 	static newTarget(reticule) {
@@ -244,55 +753,6 @@ export class BorderFrame {
 			//@ts-ignore
 			token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
 		}
-	}
-
-	static componentToHex(c) {
-		var hex = c.toString(16);
-		return hex.length == 1 ? "0" + hex : hex;
-	}
-
-	static rgbToHex(A) {
-		if (A[0] === undefined || A[1] === undefined || A[2] === undefined) console.error("RGB color invalid");
-		return (
-			"#" + BorderFrame.componentToHex(A[0]) + BorderFrame.componentToHex(A[1]) + BorderFrame.componentToHex(A[2])
-		);
-	}
-
-	static hexToRgb(hex) {
-		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-		return result
-			? {
-					r: parseInt(<string>result[1], 16),
-					g: parseInt(<string>result[2], 16),
-					b: parseInt(<string>result[3], 16)
-			  }
-			: null;
-	}
-
-	static interpolateColor(color1, color2, factor) {
-		if (arguments.length < 3) {
-			factor = 0.5;
-		}
-		var result = color1.slice();
-		for (var i = 0; i < 3; i++) {
-			result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-		}
-		return result;
-	}
-
-	// My function to interpolate between two colors completely, returning an array
-	static interpolateColors(color1, color2, steps): number[] {
-		var stepFactor = 1 / (steps - 1);
-		var interpolatedColorArray: number[] = [];
-
-		color1 = color1.match(/\d+/g).map(Number);
-		color2 = color2.match(/\d+/g).map(Number);
-
-		for (var i = 0; i < steps; i++) {
-			interpolatedColorArray.push(BorderFrame.interpolateColor(color1, color2, stepFactor * i));
-		}
-
-		return interpolatedColorArray;
 	}
 
 	static getActorHpPath() {
@@ -386,10 +846,6 @@ export class BorderFrame {
 			name.position.set(token.w / 2, token.h + bOff + yOff + offSet);
 			return name;
 		}
-	}
-
-	static refreshAll() {
-		canvas.tokens?.placeables.forEach((t) => t.draw());
 	}
 
 	static drawBars(wrapped, ...args) {
