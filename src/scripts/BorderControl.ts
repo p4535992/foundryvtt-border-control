@@ -1,12 +1,14 @@
 import { BCconfig } from "./BCconfig";
+import { BorderControlGraphic } from "./BorderControlModels";
 import CONSTANTS from "./constants";
+import { i18n } from "./lib/lib";
 import { BCC } from "./module";
 
 export class BorderFrame {
 	static BORDER_CONTROL_FLAGS = {
 		BORDER_DRAW_FRAME: "borderDrawFrame", //'draw-frame',
 		BORDER_DISABLE: "noBorder", // "borderDisable", // 'disable'
-		BORDER_NO_BORDER: "noBorder", // noBorder
+		// BORDER_NO_BORDER: "noBorder", // noBorder
 		BORDER_CUSTOM_COLOR_INT: "borderCustomColorInt",
 		BORDER_CUSTOM_COLOR_EXT: "borderCustomColorExt",
 		BORDER_CUSTOM_FRAME_OPACITY: "borderCustomFrameOpacity",
@@ -67,34 +69,28 @@ export class BorderFrame {
 		}
 		const factionDisableValue = config.object.getFlag(
 			CONSTANTS.MODULE_NAME,
-			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE
+			BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
 		)
 			? "checked"
 			: "";
 
 		const currentCustomColorTokenInt =
-			config.object.getFlag(
-				CONSTANTS.MODULE_NAME,
-				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
-			) || "#000000";
+			config.object.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT) ||
+			"#000000";
 
 		const currentCustomColorTokenExt =
-			config.object.getFlag(
-				CONSTANTS.MODULE_NAME,
-				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
-			) || "#000000";
+			config.object.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT) ||
+			"#000000";
 
 		const currentCustomColorTokenFrameOpacity =
 			config.object.getFlag(
 				CONSTANTS.MODULE_NAME,
-				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
 			) || 0.5;
 
 		const currentCustomColorTokenBaseOpacity =
-			config.object.getFlag(
-				CONSTANTS.MODULE_NAME,
-				TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
-			) || 0.5;
+			config.object.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY) ||
+			0.5;
 
 		// Expand the width
 		config.position.width = 540;
@@ -114,42 +110,38 @@ export class BorderFrame {
       <div class="form-group">
         <label>${i18n("Border-Control.label.bordercontrolCustomDisable")}</label>
         <input type="checkbox"
-          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
-          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
           data-dtype="Boolean" ${factionDisableValue}>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenInt")}</label>
         <input type="color"
-          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
-          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
           data-dtype="String" value="${currentCustomColorTokenInt}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenExt")}</label>
         <input type="color"
-          data-edit="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
-          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           data-dtype="String" value="${currentCustomColorTokenExt}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
-          data-edit="flags.${CONSTANTS.MODULE_NAME}.${
-			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
-		}"
-          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
           data-dtype="Number" value="${currentCustomColorTokenFrameOpacity}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
-          data-edit="flags.${CONSTANTS.MODULE_NAME}.${
-			TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
-		}"
-          name="flags.${CONSTANTS.MODULE_NAME}.${TokenFactions.TOKEN_BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
+          data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
+          name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
           data-dtype="Number" value="${currentCustomColorTokenBaseOpacity}"></input>
       </div>
     `;
@@ -348,22 +340,22 @@ export class BorderFrame {
 						for (const token of <Token[]>canvas.tokens?.controlled) {
 							token.document.setFlag(
 								CONSTANTS.MODULE_NAME,
-								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_INT,
+								BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT,
 								newCurrentCustomColorTokenInt
 							);
 							token.document.setFlag(
 								CONSTANTS.MODULE_NAME,
-								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_EXT,
+								BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT,
 								newCurrentCustomColorTokenExt
 							);
 							token.document.setFlag(
 								CONSTANTS.MODULE_NAME,
-								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_FRAME_OPACITY,
+								BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY,
 								newCurrentCustomColorTokenFrameOpacity
 							);
 							token.document.setFlag(
 								CONSTANTS.MODULE_NAME,
-								TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_BASE_OPACITY,
+								BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY,
 								newCurrentCustomColorTokenBaseOpacity
 							);
 						}
@@ -420,7 +412,7 @@ export class BorderFrame {
 	}
 
 	// My function to interpolate between two colors completely, returning an array
-	private static interpolateColors(color1, color2, steps): number[] {
+	static interpolateColors(color1, color2, steps): number[][] {
 		const stepFactor = 1 / (steps - 1);
 		const interpolatedColorArray: number[][] = [];
 
@@ -443,8 +435,8 @@ export class BorderFrame {
 	static newBorder() {
 		const token = <any>this;
 		if (!BCC) {
-			//@ts-ignore
-			BCC = new BCconfig();
+			// BCC = new BCconfig();
+			return;
 		}
 
 		token.border?.clear();
@@ -472,7 +464,7 @@ export class BorderFrame {
 			}
 		}
 
-		if (token.document.flags[CONSTANTS.MODULE_NAME]?.noBorder) {
+		if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}.${this.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`)) {
 			return;
 		}
 		let t = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
@@ -556,9 +548,9 @@ export class BorderFrame {
 		let color;
 		let icon;
 		if (colorFrom === "token-disposition") {
-			const disposition = TokenFactions.dispositionKey(token);
+			const disposition = BorderFrame.dispositionKey(token);
 			if (disposition) {
-				color = TokenFactions.defaultColors[disposition];
+				color = BorderFrame.defaultColors[disposition];
 			}
 		} else if (colorFrom === "actor-folder-color") {
 			if (token.actor && token.actor.folder && token.actor.folder) {
@@ -570,17 +562,17 @@ export class BorderFrame {
 		} else {
 			// colorFrom === 'custom-disposition'
 			// TODO PUT SOME NEW FLAG ON THE TOKEN
-			const disposition = TokenFactions.dispositionKey(token);
+			const disposition = BorderFrame.dispositionKey(token);
 			if (disposition) {
 				color = <string>game.settings.get(CONSTANTS.MODULE_NAME, `custom-${disposition}-color`);
 			}
 		}
 
 		const currentCustomColorTokenInt = <string>(
-			token.document.getFlag(CONSTANTS.MODULE_NAME, TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_INT)
+			token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT)
 		);
 		const currentCustomColorTokenExt = <string>(
-			token.document.getFlag(CONSTANTS.MODULE_NAME, TokenFactions.TOKEN_FACTIONS_FLAGS.FACTION_CUSTOM_COLOR_EXT)
+			token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT)
 		);
 
 		if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
@@ -592,7 +584,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(currentCustomColorTokenInt),
 				EX_S: String(currentCustomColorTokenExt)
-			} as FactionGraphic;
+			} as BorderControlGraphic;
 		}
 
 		const overrides = {
@@ -604,7 +596,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColorEx"))
-			} as FactionGraphic,
+			} as BorderControlGraphic,
 			FRIENDLY: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColor")).substr(1), 16),
 				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx")).substr(1), 16),
@@ -613,7 +605,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx"))
-			} as FactionGraphic,
+			} as BorderControlGraphic,
 			NEUTRAL: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColor")).substr(1), 16),
 				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx")).substr(1), 16),
@@ -622,7 +614,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx"))
-			} as FactionGraphic,
+			} as BorderControlGraphic,
 			HOSTILE: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColor")).substr(1), 16),
 				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx")).substr(1), 16),
@@ -631,7 +623,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx"))
-			} as FactionGraphic,
+			} as BorderControlGraphic,
 			PARTY: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")).substr(1), 16),
 				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx")).substr(1), 16),
@@ -640,7 +632,7 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx"))
-			} as FactionGraphic,
+			} as BorderControlGraphic,
 			ACTOR_FOLDER_COLOR: {
 				INT: parseInt(String(color).substr(1), 16),
 				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
@@ -664,7 +656,7 @@ export class BorderFrame {
 			}
 		};
 
-		let borderColor = new BorderColorGraphic();
+		let borderColor = new BorderControlGraphic();
 		if (colorFrom === "token-disposition") {
 			if (token.controlled) {
 				return overrides.CONTROLLED;

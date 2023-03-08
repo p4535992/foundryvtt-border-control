@@ -12,8 +12,8 @@ export class BCconfig {
 	endColor: number[];
 	startColor: number[];
 	tempColor: number[];
-	colorArray: number[];
-	tempArray: number[];
+	colorArray: number[][];
+	tempArray: number[][];
 	currentSystem: any;
 
 	constructor() {
