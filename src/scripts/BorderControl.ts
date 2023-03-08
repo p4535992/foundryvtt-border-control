@@ -67,7 +67,7 @@ export class BorderFrame {
 		if (!html) {
 			return;
 		}
-		const factionDisableValue = config.object.getFlag(
+		const borderControlDisableValue = config.object.getFlag(
 			CONSTANTS.MODULE_NAME,
 			BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
 		)
@@ -101,35 +101,35 @@ export class BorderFrame {
 			$(`
 			<a class="item" data-tab="bordercontrol">
         <i class="fas fa-user-circle"></i>
-				${i18n("Border-Control.label.bordercontrol")}
+				${i18n("Border-Control.label.borderControl")}
 			</a>
 		`)
 		);
 
 		const formConfig = `
       <div class="form-group">
-        <label>${i18n("Border-Control.label.bordercontrolCustomDisable")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomDisable")}</label>
         <input type="checkbox"
           data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
           name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
-          data-dtype="Boolean" ${factionDisableValue}>
+          data-dtype="Boolean" ${borderControlDisableValue}>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenInt")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
         <input type="color"
           data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
           name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
           data-dtype="String" value="${currentCustomColorTokenInt}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenExt")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
         <input type="color"
           data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           name="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           data-dtype="String" value="${currentCustomColorTokenExt}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenFrameOpacity")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
@@ -137,7 +137,7 @@ export class BorderFrame {
           data-dtype="Number" value="${currentCustomColorTokenFrameOpacity}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.bordercontrolCustomColorTokenBaseOpacity")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           data-edit="flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
@@ -272,26 +272,26 @@ export class BorderFrame {
 
 		const dialogContent = `
       <div class="form-group">
-        <label>${i18n("Border-Control.label.factionsCustomColorTokenInt")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
         <input type="color"
           value="${currentCustomColorTokenInt}"
           data-edit="Border-Control.currentCustomColorTokenInt"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.factionsCustomColorTokenExt")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
         <input type="color"
           value="${currentCustomColorTokenExt}"
           data-edit="Border-Control.currentCustomColorTokenExt"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.factionsCustomColorTokenFrameOpacity")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           value="${currentCustomColorTokenFrameOpacity}"
           data-edit="Border-Control.currentCustomColorTokenFrameOpacity"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.factionsCustomColorTokenBaseOpacity")}</label>
+        <label>${i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           value="${currentCustomColorTokenBaseOpacity}"
@@ -441,14 +441,11 @@ export class BorderFrame {
 
 		token.border?.clear();
 
-		let borderColorBase = <number | null>token._getBorderColor();
-		if (!borderColorBase) {
+		let borderColor  = <BorderControlGraphic | null>token._getBorderColor();
+		if (!borderColor) {
 			return;
 		}
-		let borderColor = {
-			INT: borderColorBase,
-			EX: parseInt(String("#000000").substr(1), 16)
-		};
+		
 		switch (game.settings.get(CONSTANTS.MODULE_NAME, "removeBorders")) {
 			case "0": {
 				break;
@@ -464,7 +461,12 @@ export class BorderFrame {
 			}
 		}
 
-		if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}.${this.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`)) {
+		if (
+			getProperty(
+				token.document,
+				`flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`
+			)
+		) {
 			return;
 		}
 		let t = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
@@ -506,10 +508,12 @@ export class BorderFrame {
 			const h = Math.round(t / 2);
 			const o = Math.round(h / 2);
 			token.border
-				.lineStyle(t * nBS, borderColor.EX, 0.8)
+				//@ts-ignore
+				.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
 				.drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
 			token.border
-				.lineStyle(h * nBS, borderColor.INT, 1.0)
+				//@ts-ignore
+				.lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
 				.drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
 		} else if (hexTypes.includes(<any>canvas.grid?.type) && token.width === 1 && token.height === 1) {
 			const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
@@ -521,8 +525,10 @@ export class BorderFrame {
 				(token.w + 2) * s + p,
 				(token.h + 2) * s + p
 			);
-			token.border.lineStyle(t * nBS, borderColor.EX, 0.8).drawPolygon(polygon);
-			token.border.lineStyle((t * nBS) / 2, borderColor.INT, 1.0).drawPolygon(polygon);
+			//@ts-ignore
+			token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
+			//@ts-ignore
+			token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
 		}
 
 		// Otherwise Draw Square border
@@ -532,10 +538,12 @@ export class BorderFrame {
 			const h = Math.round(t / 2);
 			const o = Math.round(h / 2);
 			token.border
-				.lineStyle(t * nBS, borderColor.EX, 0.8)
+				//@ts-ignore
+				.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
 				.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 			token.border
-				.lineStyle(h * nBS, borderColor.INT, 1.0)
+				//@ts-ignore
+				.lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
 				.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 		}
 		return;
@@ -543,7 +551,7 @@ export class BorderFrame {
 
 	public static newBorderColor(hover: boolean): BorderControlGraphic {
 		const token = <any>this;
-
+		/*
 		const colorFrom = game.settings.get(CONSTANTS.MODULE_NAME, "color-from");
 		let color;
 		let icon;
@@ -567,7 +575,7 @@ export class BorderFrame {
 				color = <string>game.settings.get(CONSTANTS.MODULE_NAME, `custom-${disposition}-color`);
 			}
 		}
-
+		*/
 		const currentCustomColorTokenInt = <string>(
 			token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT)
 		);
@@ -632,31 +640,61 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx"))
-			} as BorderControlGraphic,
-			ACTOR_FOLDER_COLOR: {
-				INT: parseInt(String(color).substr(1), 16),
-				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
-				ICON: icon ? String(icon) : "",
-				TEXTURE_INT: PIXI.Texture.EMPTY,
-				TEXTURE_EX: PIXI.Texture.EMPTY,
-				INT_S: String(color),
-				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx"))
-			},
-			CUSTOM_DISPOSITION: {
-				INT: parseInt(String(color).substr(1), 16),
-				EX: parseInt(
-					String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx")).substr(1),
-					16
-				),
-				ICON: "",
-				TEXTURE_INT: PIXI.Texture.EMPTY,
-				TEXTURE_EX: PIXI.Texture.EMPTY,
-				INT_S: String(color),
-				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx"))
-			}
+			} as BorderControlGraphic
+			// ACTOR_FOLDER_COLOR: {
+			// 	INT: parseInt(String(color).substr(1), 16),
+			// 	EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
+			// 	ICON: icon ? String(icon) : "",
+			// 	TEXTURE_INT: PIXI.Texture.EMPTY,
+			// 	TEXTURE_EX: PIXI.Texture.EMPTY,
+			// 	INT_S: String(color),
+			// 	EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx"))
+			// },
+			// CUSTOM_DISPOSITION: {
+			// 	INT: parseInt(String(color).substr(1), 16),
+			// 	EX: parseInt(
+			// 		String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx")).substr(1),
+			// 		16
+			// 	),
+			// 	ICON: "",
+			// 	TEXTURE_INT: PIXI.Texture.EMPTY,
+			// 	TEXTURE_EX: PIXI.Texture.EMPTY,
+			// 	INT_S: String(color),
+			// 	EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx"))
+			// }
 		};
 
 		let borderColor = new BorderControlGraphic();
+		if (token.controlled) {
+			return overrides.CONTROLLED;
+		} else if (
+			(hover ?? token.hover) ||
+			//@ts-ignore
+			canvas.tokens?._highlight ||
+			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+		) {
+			const disPath = CONST.TOKEN_DISPOSITIONS;
+
+			//@ts-ignore
+			const d = parseInt(token.document.disposition);
+			//@ts-ignore
+			if (!game.user?.isGM && token.owner) {
+				borderColor = overrides.CONTROLLED;
+			}
+			//@ts-ignore
+			else if (token.actor?.hasPlayerOwner) {
+				borderColor = overrides.PARTY;
+			} else if (d === disPath.FRIENDLY) {
+				borderColor = overrides.FRIENDLY;
+			} else if (d === disPath.NEUTRAL) {
+				borderColor = overrides.NEUTRAL;
+			} else {
+				borderColor = overrides.HOSTILE;
+			}
+		} else {
+			// borderColor = null;
+		}
+		/*
 		if (colorFrom === "token-disposition") {
 			if (token.controlled) {
 				return overrides.CONTROLLED;
@@ -684,8 +722,6 @@ export class BorderFrame {
 				} else {
 					borderColor = overrides.HOSTILE;
 				}
-				//}
-				//else return null;
 			} else {
 				const disPath = CONST.TOKEN_DISPOSITIONS;
 
@@ -705,8 +741,6 @@ export class BorderFrame {
 				} else {
 					borderColor = overrides.HOSTILE;
 				}
-				//}
-				//else return null;
 			}
 		} else if (colorFrom === "actor-folder-color") {
 			borderColor = overrides.ACTOR_FOLDER_COLOR;
@@ -714,7 +748,7 @@ export class BorderFrame {
 			// colorFrom === 'custom-disposition'
 			borderColor = overrides.CUSTOM_DISPOSITION;
 		}
-
+		*/
 		return borderColor;
 	}
 
@@ -874,20 +908,21 @@ export class BorderFrame {
 		margin: m = 0,
 		alpha = 1,
 		size = 0.15,
-		color = <any>null,
+		color = <BorderControlGraphic | null>null,
 		border: { width = 2, color: lineColor = 0 } = {}
 	} = {}) {
 		const token = <any>this;
 		const l = <number>canvas.dimensions?.size * size; // Side length.
 		const { h, w } = token;
 		const lineStyle = { color: lineColor, alpha, width, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.BEVEL };
-		//@ts-ignore
-		color ??= <number | null>token._getBorderColor({ hover: true });
+		
+		color ??= <BorderControlGraphic | null>token._getBorderColor({ hover: true });
 
 		m *= l * -1;
-		//@ts-ignore
+		
 		token.target
-			.beginFill(color.INT, alpha)
+			//@ts-ignore
+			.beginFill(Color.from(color.INT), alpha)
 			.lineStyle(lineStyle)
 			.drawPolygon([-m, -m, -m - l, -m, -m, -m - l]) // Top left
 			.drawPolygon([w + m, -m, w + m + l, -m, w + m, -m - l]) // Top right

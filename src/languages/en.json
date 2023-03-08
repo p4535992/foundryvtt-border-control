@@ -1,4 +1,7 @@
 {
+	"Border-Control.setting.borderControlEnabled.name": "Enable/Disable Border Control Feature",
+	"Border-Control.setting.borderControlEnabled.hint": "Generate token bases based on token disposition or actor folder color.",
+
 	"Border-Control.setting.removeBorders.name": "Remove Borders",
 	"Border-Control.setting.removeBorders.hint": "Remove the border from specific tokens",
 
@@ -35,11 +38,14 @@
 	"Border-Control.setting.circleBorders.name": "Circular Borders",
 	"Border-Control.setting.circleBorders.hint": " ",
 
-	"Border-Control.setting.enableHud.name": "Border HUD element",
-	"Border-Control.setting.enableHud.hint": "Add Token HUD element to disable/enable borders",
+	"Border-Control.setting.hudEnable.name": "Border HUD element",
+	"Border-Control.setting.hudEnable.hint": "Add Token HUD element to disable/enable borders",
 
-	"Border-Control.setting.hudPos.name": "Border Control HUD Position",
-	"Border-Control.setting.hudPos.hint": " ",
+	"Border-Control.setting.hudColumn.name": "HUD Column",
+	"Border-Control.setting.hudColumn.hint": "Which HUD column to place the button in",
+
+	"Border-Control.setting.hudTopBottom.name": "HUD Top/Bottom",
+	"Border-Control.setting.hudTopBottom.hint": "Where to place the button in the column",
 
 	"Border-Control.setting.circularNameplate.name": "Circular Nameplates",
 	"Border-Control.setting.circularNameplate.hint": "Requires a refresh",
@@ -97,6 +103,19 @@
 
 	"Border-Control.setting.disableRefreshTarget.name": "Disable the refresh target feature",
 	"Border-Control.setting.disableRefreshTarget.hint": "Use other module like Better Target, Smart Target, ecc. for apply design to target",
+
+
+	"Border-Control.label.borderControl": "Border Control",
+	"Border-Control.label.borderControlCustomDisable": "Disable Border Control Disposition",
+	"Border-Control.label.borderControlCustomColorTokenInt": "Custom color token (INT)",
+	"Border-Control.label.borderControlCustomColorTokenExt": "Custom color token (EXT)",
+	"Border-Control.label.borderControlCustomColorTokenFrameOpacity": "Custom color token Frame Opacity",
+	"Border-Control.label.borderControlCustomColorTokenBaseOpacity": "Custom color token Base Opacity",
+	"Border-Control.label.borderControlCustomColor": "Custom color Border Control",
+
+	"Border-Control.label.chooseCustomColorToken": "Choose toogle border control color",
+	"Border-Control.label.applyCustomColor": "Apply custom color",
+	"Border-Control.label.doNothing": "Do nothing",
 
 	"Border-Control.setting.reset.name": "Reset settings to default",
 	"Border-Control.setting.reset.label": "Reset Settings To Default",

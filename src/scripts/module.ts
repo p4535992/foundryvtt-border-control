@@ -84,23 +84,31 @@ export const initHooks = async () => {
 			.append(`<input type="color"value="${nPCGM}" data-edit="Border-Control.nameplateColorGM">`);
 	});
 
-	//@ts-ignore
-	libWrapper.register("Border-Control", "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
-	//@ts-ignore
-	libWrapper.register("Border-Control", "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
+	if (game.settings.get(CONSTANTS.MODULE_NAME, "borderControlEnabled")) {
+		// setup all the hooks
 
-	if (!game.settings.get("Border-Control", "disableRefreshTarget")) {
-		//@ts-ignore
-		libWrapper.register("Border-Control", "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+		Hooks.on("renderTokenConfig", (config, html) => {
+			BorderFrame.renderTokenConfig(config, html);
+		});
 
 		//@ts-ignore
-		libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
+		libWrapper.register("Border-Control", "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
+		//@ts-ignore
+		libWrapper.register("Border-Control", "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
+
+		if (!game.settings.get("Border-Control", "disableRefreshTarget")) {
+			//@ts-ignore
+			libWrapper.register("Border-Control", "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+
+			//@ts-ignore
+			libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
+		}
+
+		//@ts-ignore
+		libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
+		//@ts-ignore
+		libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
 	}
-
-	//@ts-ignore
-	libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
-	//@ts-ignore
-	libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
 };
 
 export const setupHooks = async (): Promise<void> => {
@@ -110,21 +118,23 @@ export const setupHooks = async (): Promise<void> => {
 export const readyHooks = () => {
 	BCC = new BCconfig();
 
-	Hooks.on("renderTokenHUD", (app, html, data) => {
-		BorderFrame.AddBorderToggle(app, html, data);
-	});
+	if (game.settings.get(CONSTANTS.MODULE_NAME, "borderControlEnabled")) {
+		Hooks.on("renderTokenHUD", (app, html, data) => {
+			BorderFrame.AddBorderToggle(app, html, data);
+		});
 
-	Hooks.on("createToken", (data) => {
-		let token = <Token>canvas.tokens?.get(data.id);
-		if (!token.owner) {
-			token.cursor = "default";
-		}
-	});
+		Hooks.on("createToken", (data) => {
+			let token = <Token>canvas.tokens?.get(data.id);
+			if (!token.owner) {
+				token.cursor = "default";
+			}
+		});
 
-	// Removed for conflict with others modules ?
-	// canvas.tokens?.placeables.forEach((t) => {
-	// 	if (!t.owner) {
-	// 		t.cursor = "default";
-	// 	}
-	// });
+		// Removed for conflict with others modules ?
+		// canvas.tokens?.placeables.forEach((t) => {
+		// 	if (!t.owner) {
+		// 		t.cursor = "default";
+		// 	}
+		// });
+	}
 };

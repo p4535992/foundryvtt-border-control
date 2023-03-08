@@ -19,6 +19,15 @@ export const registerSettings = function () {
 
 	// =====================================================================
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "borderControlEnabled", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.borderControlEnabled.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.borderControlEnabled.hint"),
+		default: true,
+		type: Boolean,
+		scope: "world",
+		config: true
+	});
+
 	game.settings.register("Border-Control", "removeBorders", {
 		name: "Remove Borders",
 		hint: "Remove the border from specific tokens",
@@ -145,24 +154,42 @@ export const registerSettings = function () {
 		default: false,
 		config: true
 	});
-	game.settings.register("Border-Control", "enableHud", {
-		name: "Border HUD element",
-		hint: "Add Token HUD element to disable/enable borders",
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "hudEnable", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.hudEnable.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.hudEnable.hint"),
 		scope: "world",
 		type: Boolean,
 		default: true,
 		config: true
 	});
-	game.settings.register("Border-Control", "hudPos", {
-		name: "Border Control HUD Position",
+
+	/** Which column should the button be placed on */
+	game.settings.register(CONSTANTS.MODULE_NAME, "hudColumn", {
+		name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.name`),
+		hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.hint`),
 		scope: "world",
+		config: true,
 		type: String,
-		default: ".right",
+		default: "Right",
 		choices: <any>{
-			".right": "Right",
-			".left": "Left"
-		},
-		config: true
+			Left: "Left",
+			Right: "Right"
+		}
+	});
+
+	/** Whether the button should be placed on the top or bottom of the column */
+	game.settings.register(CONSTANTS.MODULE_NAME, "hudTopBottom", {
+		name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.name`),
+		hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.hint`),
+		scope: "world",
+		config: true,
+		type: String,
+		default: "Bottom",
+		choices: <any>{
+			Top: "Top",
+			Bottom: "Bottom"
+		}
 	});
 
 	game.settings.register("Border-Control", "circularNameplate", {
