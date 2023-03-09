@@ -109,10 +109,15 @@ export const initHooks = async () => {
 			libWrapper.register("Border-Control", "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
 		}
 
-		//@ts-ignore
-		libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
-		//@ts-ignore
-		libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
+		if (!game.settings.get("Border-Control", "disableNameplateDesign")) {
+			//@ts-ignore
+			libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
+		}
+
+		if (!game.settings.get("Border-Control", "disableDrawBarsDesign")) {
+			//@ts-ignore
+			libWrapper.register("Border-Control", "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
+		}
 	}
 };
 

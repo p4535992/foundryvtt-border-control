@@ -1,5 +1,5 @@
 import { BCconfig } from "./BCconfig";
-import { BorderControlGraphic } from "./BorderControlModels";
+import type { BorderControlGraphic } from "./BorderControlModels";
 import CONSTANTS from "./constants";
 import { i18n } from "./lib/lib";
 import { BCCBASE } from "./module";
@@ -434,15 +434,24 @@ export class BorderFrame {
 
 	static newBorder() {
 		const token = <any>this;
-		token.border?.clear();
-
-		let BCC = new BCconfig();
-		if (!BCCBASE) {
+		let BCC;
+		if (BCCBASE) {
 			// BCC = new BCconfig();
 			BCC = BCCBASE;
+		} else {
+			BCC = new BCconfig();
 		}
 
-		let borderColor = <BorderControlGraphic | null>token._getBorderColor();
+		//@ts-ignore
+		this.border.clear();
+		//@ts-ignore
+		this.border.position.set(this.document.x, this.document.y);
+		//@ts-ignore
+		if (!this.visible) {
+			return;
+		}
+		//@ts-ignore
+		let borderColor = <BorderControlGraphic | null>this._getBorderColor();
 		if (!borderColor) {
 			return;
 		}
@@ -462,16 +471,26 @@ export class BorderFrame {
 			}
 		}
 
-		if (
-			getProperty(
+		//@ts-ignore
+		let skipDraw;
+		try {
+			// skipDraw = token.document.getFlag(
+			// 	CONSTANTS.MODULE_NAME,
+			// 	BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+			// );
+			skipDraw = getProperty(
 				token.document,
 				`flags.${CONSTANTS.MODULE_NAME}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`
-			)
-		) {
+			);
+		} catch (e) {
+			//@ts-ignore
+			token.document.setFlag(CONSTANTS.MODULE_NAME, TokenFactions.BORDER_CONTROL_FLAGS.BORDER_DISABLE, false);
+			skipDraw = token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE);
+		}
+		//@ts-ignore
+		if (skipDraw) {
 			return;
 		}
-
-		token.border?.position.set(token.document.x, token.document.y);
 
 		let t = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
 		const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
@@ -495,19 +514,19 @@ export class BorderFrame {
 		// const sH = sB ? (token.h - token.h * s) / 2 : 0;
 
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "healthGradient")) {
-			const systemPath = BCCBASE.currentSystem;
-			const stepLevel = BCCBASE.stepLevel;
+			const systemPath = BCC.currentSystem;
+			const stepLevel = BCC.stepLevel;
 			const hpMax = getProperty(token, systemPath.max) + (getProperty(token, systemPath.tempMax) ?? 0);
 			const hpValue = getProperty(token, systemPath.value);
 			const hpDecimal = parseInt(String(BorderFrame.clamp((hpValue / hpMax) * stepLevel, stepLevel, 1))) || 1;
-			const color = BorderFrame.rgbToHex(BCCBASE.colorArray[hpDecimal - 1]);
+			const color = BorderFrame.rgbToHex(BCC.colorArray[hpDecimal - 1]);
 			borderColor.INT = parseInt(color.substr(1), 16);
 			if (game.settings.get(CONSTANTS.MODULE_NAME, "tempHPgradient") && getProperty(token, systemPath.temp) > 0) {
 				const tempValue = getProperty(token, systemPath.temp);
 				const tempDecimal = parseInt(
 					String(BorderFrame.clamp((tempValue / (hpMax / 2)) * stepLevel, stepLevel, 1))
 				);
-				const tempEx = BorderFrame.rgbToHex(BCCBASE.tempArray[tempDecimal - 1]);
+				const tempEx = BorderFrame.rgbToHex(BCC.tempArray[tempDecimal - 1]);
 				borderColor.EX = parseInt(tempEx.substr(1), 16);
 			}
 		}
@@ -537,9 +556,12 @@ export class BorderFrame {
 				.lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
 				// .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
 				.drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-		}
-		//@ts-ignore
-		else if (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1) {
+		} else if (
+			//@ts-ignore
+			canvas.grid.isHex ||
+			//@ts-ignore
+			(hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)
+		) {
 			// const p = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
 			const q = Math.round(p / 2);
 			//@ts-ignore
@@ -587,7 +609,7 @@ export class BorderFrame {
 		}
 	}
 
-	public static newBorderColor(hover: boolean): BorderControlGraphic {
+	public static newBorderColor(hover: boolean): BorderControlGraphic | null {
 		const token = <any>this;
 		/*
 		const colorFrom = game.settings.get(CONSTANTS.MODULE_NAME, "color-from");
@@ -702,36 +724,36 @@ export class BorderFrame {
 			// }
 		};
 
-		let borderColor = new BorderControlGraphic();
-		// if (token.controlled) {
-		// 	return overrides.CONTROLLED;
-		// } else if (
-		// 	(hover ?? token.hover) ||
-		// 	//@ts-ignore
-		// 	canvas.tokens?._highlight ||
-		// 	game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
-		// ) {
-		const disPath = CONST.TOKEN_DISPOSITIONS;
+		let borderColor: BorderControlGraphic | null = null;
+		if (token.controlled) {
+			return overrides.CONTROLLED;
+		} else if (
+			(hover ?? token.hover) ||
+			//@ts-ignore
+			canvas.tokens?._highlight ||
+			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+		) {
+			const disPath = CONST.TOKEN_DISPOSITIONS;
 
-		//@ts-ignore
-		const d = parseInt(token.document.disposition);
-		//@ts-ignore
-		if (!game.user?.isGM && token.owner) {
-			borderColor = overrides.CONTROLLED;
-		}
-		//@ts-ignore
-		else if (token.actor?.hasPlayerOwner) {
-			borderColor = overrides.PARTY;
-		} else if (d === disPath.FRIENDLY) {
-			borderColor = overrides.FRIENDLY;
-		} else if (d === disPath.NEUTRAL) {
-			borderColor = overrides.NEUTRAL;
+			//@ts-ignore
+			const d = parseInt(token.document.disposition);
+			//@ts-ignore
+			if (!game.user?.isGM && token.owner) {
+				borderColor = overrides.CONTROLLED;
+			}
+			//@ts-ignore
+			else if (token.actor?.hasPlayerOwner) {
+				borderColor = overrides.PARTY;
+			} else if (d === disPath.FRIENDLY) {
+				borderColor = overrides.FRIENDLY;
+			} else if (d === disPath.NEUTRAL) {
+				borderColor = overrides.NEUTRAL;
+			} else {
+				borderColor = overrides.HOSTILE;
+			}
 		} else {
-			borderColor = overrides.HOSTILE;
+			borderColor = null;
 		}
-		// } else {
-		// 	// borderColor = null;
-		// }
 		/*
 		if (colorFrom === "token-disposition") {
 			if (token.controlled) {
