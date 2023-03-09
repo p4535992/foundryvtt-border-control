@@ -278,6 +278,34 @@ export const registerSettings = function () {
 		config: true
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "plateFont", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.plateFont.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.plateFont.hint`,
+		scope: "world",
+		type: String,
+		choices: <any>fontFamilies,
+		default: "signika",
+		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultiplier", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.hint`,
+		scope: "world",
+		type: Number,
+		default: 1,
+		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "plateConsistency", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.hint`,
+		scope: "world",
+		type: Boolean,
+		default: false,
+		config: true
+	});
+
 	// Target Feature (Deprecated)
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "disableRefreshTarget", {
@@ -333,34 +361,6 @@ export const registerSettings = function () {
 		scope: "world",
 		type: Boolean,
 		default: true,
-		config: true
-	});
-
-	game.settings.register(CONSTANTS.MODULE_NAME, "plateFont", {
-		name: `${CONSTANTS.MODULE_NAME}.setting.plateFont.name`,
-		hint: `${CONSTANTS.MODULE_NAME}.setting.plateFont.hint`,
-		scope: "world",
-		type: String,
-		choices: <any>fontFamilies,
-		default: "signika",
-		config: true
-	});
-
-	game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultiplier", {
-		name: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.name`,
-		hint: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.hint`,
-		scope: "world",
-		type: Number,
-		default: 1,
-		config: true
-	});
-
-	game.settings.register(CONSTANTS.MODULE_NAME, "plateConsistency", {
-		name: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.name`,
-		hint: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.hint`,
-		scope: "world",
-		type: Boolean,
-		default: false,
 		config: true
 	});
 

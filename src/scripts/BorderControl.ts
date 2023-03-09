@@ -842,35 +842,39 @@ export class BorderFrame {
 		}
 	}
 
-	static getActorHpPath() {
-		switch (game.system.id) {
-			case "symbaroum": {
-				return {
-					value: "actor.system.health.toughness.value",
-					max: "actor.system.health.toughness.max",
-					tempMax: undefined,
-					temp: undefined
-				};
-			}
-			case "dnd5e": {
-				return {
-					value: "actor.system.attributes.hp.value",
-					max: "actor.system.attributes.hp.max",
-					tempMax: "actor.system.attributes.hp.tempmax",
-					temp: "actor.system.attributes.hp.temp"
-				};
-			}
-			default: {
-				return {
-					value: "actor.system.attributes.hp.value",
-					max: "actor.system.attributes.hp.max",
-					tempMax: "actor.system.attributes.hp.tempmax",
-					temp: "actor.system.attributes.hp.temp"
-				};
-			}
-		}
-	}
+	// static getActorHpPath() {
+	// 	switch (game.system.id) {
+	// 		case "symbaroum": {
+	// 			return {
+	// 				value: "actor.system.health.toughness.value",
+	// 				max: "actor.system.health.toughness.max",
+	// 				tempMax: undefined,
+	// 				temp: undefined
+	// 			};
+	// 		}
+	// 		case "dnd5e": {
+	// 			return {
+	// 				value: "actor.system.attributes.hp.value",
+	// 				max: "actor.system.attributes.hp.max",
+	// 				tempMax: "actor.system.attributes.hp.tempmax",
+	// 				temp: "actor.system.attributes.hp.temp"
+	// 			};
+	// 		}
+	// 		default: {
+	// 			return {
+	// 				value: "actor.system.attributes.hp.value",
+	// 				max: "actor.system.attributes.hp.max",
+	// 				tempMax: "actor.system.attributes.hp.tempmax",
+	// 				temp: "actor.system.attributes.hp.temp"
+	// 			};
+	// 		}
+	// 	}
+	// }
 
+	/**
+	 * @deprecated use instead other modules
+	 * @returns
+	 */
 	static drawNameplate() {
 		const token = <any>this;
 		const offSet = <number>game.settings.get(CONSTANTS.MODULE_NAME, "borderOffset");
@@ -935,6 +939,12 @@ export class BorderFrame {
 		}
 	}
 
+	/**
+	 * @deprecated use instead other modules
+	 * @param wrapped
+	 * @param args
+	 * @returns
+	 */
 	static drawBars(wrapped, ...args) {
 		const token = <any>this;
 		if (!game.settings.get(CONSTANTS.MODULE_NAME, "barAlpha") || !game.user?.isGM) {
@@ -964,6 +974,7 @@ export class BorderFrame {
 	 * Draw the targeting arrows around this token.
 	 * @param {ReticuleOptions} [reticule]  Additional parameters to configure how the targeting reticule is drawn.
 	 * @protected
+	 * @deprecated use instead other modules
 	 */
 	static _drawTarget({
 		margin: m = 0,
