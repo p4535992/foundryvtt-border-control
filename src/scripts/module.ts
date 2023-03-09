@@ -111,7 +111,12 @@ export const initHooks = async () => {
 
 		if (!game.settings.get("Border-Control", "disableNameplateDesign")) {
 			//@ts-ignore
-			libWrapper.register("Border-Control", "Token.prototype._drawNameplate", BorderFrame.drawNameplate, "OVERRIDE");
+			libWrapper.register(
+				"Border-Control",
+				"Token.prototype._drawNameplate",
+				BorderFrame.drawNameplate,
+				"OVERRIDE"
+			);
 		}
 
 		if (!game.settings.get("Border-Control", "disableDrawBarsDesign")) {

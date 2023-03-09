@@ -5,8 +5,8 @@
 	"Border-Control.setting.removeBorders.name": "Remove Borders",
 	"Border-Control.setting.removeBorders.hint": "Remove the border from specific tokens",
 
-	"Border-Control.setting.healthGradient.name": "HP Gradient",
-	"Border-Control.setting.healthGradient.hint": " ",
+	"Border-Control.setting.healthGradient.name": "Enable HP Gradient",
+	"Border-Control.setting.healthGradient.hint": "[NOT RECOMMENDED] It's advisable to let this check UNCHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token hp.",
 
 	"Border-Control.setting.tempHPgradient.name": "Gradient TempHP Enable",
 	"Border-Control.setting.tempHPgradient.hint": " ",
@@ -109,7 +109,6 @@
 
 	"Border-Control.setting.disableDrawBarsDesign.name": "Disable the draw bars design feature",
 	"Border-Control.setting.disableDrawBarsDesign.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token bars.",
-
 
 	"Border-Control.label.borderControl": "Border Control",
 	"Border-Control.label.borderControlCustomDisable": "Disable Border Control Disposition",

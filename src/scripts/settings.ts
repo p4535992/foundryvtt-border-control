@@ -20,8 +20,8 @@ export const registerSettings = function () {
 	// =====================================================================
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "borderControlEnabled", {
-		name: i18n(CONSTANTS.MODULE_NAME + ".setting.borderControlEnabled.name"),
-		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.borderControlEnabled.hint"),
+		name: `${CONSTANTS.MODULE_NAME}.setting.borderControlEnabled.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.borderControlEnabled.hint`,
 		default: true,
 		type: Boolean,
 		scope: "world",
@@ -29,8 +29,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "removeBorders", {
-		name: "Remove Borders",
-		hint: "Remove the border from specific tokens",
+		name: `${CONSTANTS.MODULE_NAME}.setting.removeBorders.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.removeBorders.hint`,
 		scope: "world",
 		type: String,
 		choices: <any>{
@@ -43,55 +43,17 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "permanentBorder", {
-		name: "Permanent Border",
-		hint: "Permanently shows token borders unless directly hidden, selected tokens have double width borders",
+		name: `${CONSTANTS.MODULE_NAME}.setting.permanentBorder.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.permanentBorder.hint`,
 		scope: "client",
 		type: Boolean,
 		default: false,
 		config: true
 	});
 
-	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradient", {
-		name: "HP Gradient",
-		hint: "Only works for: DnD5e, PF1e, PF2e, Symbaroum and SWADE",
-		scope: "world",
-		type: Boolean,
-		default: false,
-		config: possibleSystems.includes(game.system.id)
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "tempHPgradient", {
-		name: "Gradient TempHP Enable",
-		scope: "world",
-		type: Boolean,
-		default: false,
-		config: possibleSystems.includes(game.system.id)
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientA", {
-		name: "HP Gradient Start",
-		scope: "world",
-		type: String,
-		default: "#1b9421",
-		config: possibleSystems.includes(game.system.id)
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientB", {
-		name: "HP Gradient End",
-		scope: "world",
-		type: String,
-		default: "#c9240a",
-		config: possibleSystems.includes(game.system.id)
-	});
-
-	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientC", {
-		name: "HP Gradient TempHP",
-		scope: "world",
-		type: String,
-		default: "#22e3dd",
-		config: possibleSystems.includes(game.system.id)
-	});
-
 	game.settings.register(CONSTANTS.MODULE_NAME, "stepLevel", {
-		name: "Gradient Step Level",
-		hint: "How many individual colors are part of the gradient",
+		name: `${CONSTANTS.MODULE_NAME}.setting.stepLevel.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.stepLevel.hint`,
 		scope: "world",
 		type: Number,
 		default: 10,
@@ -99,8 +61,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "borderWidth", {
-		name: "Border Width",
-		hint: "Override border width in pixels",
+		name: `${CONSTANTS.MODULE_NAME}.setting.borderWidth.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.borderWidth.hint`,
 		scope: "client",
 		type: Number,
 		default: 4,
@@ -108,8 +70,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "borderGridScale", {
-		name: "Grid Scaling",
-		hint: "Scale border width to grid size, based on 100px grid",
+		name: `${CONSTANTS.MODULE_NAME}.setting.borderGridScale.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.borderGridScale.hint`,
 		scope: "client",
 		type: Boolean,
 		default: false,
@@ -117,38 +79,25 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "borderOffset", {
-		name: "Border Offset",
-		hint: "Customize border offset in pixels",
+		name: `${CONSTANTS.MODULE_NAME}.setting.borderOffset.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.borderOffset.hint`,
 		scope: "client",
 		type: Number,
 		default: 0,
 		config: true
 	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "targetSize", {
-		name: "Target Size Multiplier",
-		scope: "client",
-		type: Number,
-		default: 1,
-		config: true
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "internatTarget", {
-		name: "Internal Target",
-		hint: "Target reticule inside  token borders",
-		scope: "client",
-		type: Boolean,
-		default: false,
-		config: true
-	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "circleBorders", {
-		name: "Circular Borders",
+		name: `${CONSTANTS.MODULE_NAME}.setting.circleBorders.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.circleBorders.hint`,
 		scope: "client",
 		type: Boolean,
 		default: false,
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "scaleBorder", {
-		name: "Scale Borders",
-		hint: "Scales token border according to the 'scale' token setting",
+		name: `${CONSTANTS.MODULE_NAME}.setting.scaleBorder.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.scaleBorder.hint`,
 		scope: "world",
 		type: Boolean,
 		default: false,
@@ -192,97 +141,81 @@ export const registerSettings = function () {
 		}
 	});
 
-	game.settings.register(CONSTANTS.MODULE_NAME, "plateFont", {
-		name: "Nameplate Font",
-		hint: "Requires a refresh",
-		scope: "world",
-		type: String,
-		choices: <any>fontFamilies,
-		default: "signika",
-		config: true
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultiplier", {
-		name: "Nameplate Font Size",
-		hint: "Requires a refresh",
-		scope: "world",
-		type: Number,
-		default: 1,
-		config: true
-	});
-	game.settings.register(CONSTANTS.MODULE_NAME, "plateConsistency", {
-		name: "Nameplate Consistency",
-		hint: "Attempts to keep nameplates the same size across different grid sizes",
-		scope: "world",
-		type: Boolean,
-		default: false,
-		config: true
-	});
-
 	game.settings.register(CONSTANTS.MODULE_NAME, "controlledColor", {
-		name: "Color: Controlled",
+		name: `${CONSTANTS.MODULE_NAME}.setting.controlledColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.controlledColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#FF9829",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "controlledColorEx", {
-		name: "Color: Controlled External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.controlledColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.controlledColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "hostileColor", {
-		name: "Color: Hostile",
+		name: `${CONSTANTS.MODULE_NAME}.setting.hostileColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.hostileColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#E72124",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "hostileColorEx", {
-		name: "Color: Hostile External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.hostileColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.hostileColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "friendlyColor", {
-		name: "Color: Friendly",
+		name: `${CONSTANTS.MODULE_NAME}.setting.friendlyColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.friendlyColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#43DFDF",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "friendlyColorEx", {
-		name: "Color: Friendly External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.friendlyColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.friendlyColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "neutralColor", {
-		name: "Color: Neutral",
+		name: `${CONSTANTS.MODULE_NAME}.setting.neutralColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.neutralColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#F1D836",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "neutralColorEx", {
-		name: "Color: Neutral External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.neutralColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.neutralColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "partyColor", {
-		name: "Color: Party",
+		name: `${CONSTANTS.MODULE_NAME}.setting.partyColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.partyColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#33BC4E",
 		config: true
 	});
 	game.settings.register(CONSTANTS.MODULE_NAME, "partyColorEx", {
-		name: "Color: Party External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.partyColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.partyColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
@@ -292,8 +225,8 @@ export const registerSettings = function () {
 	// Nameplate Feature (Deprecated)
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "disableNameplateDesign", {
-		name: i18n(CONSTANTS.MODULE_NAME + ".setting.disableNameplateDesign.name"),
-		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.disableNameplateDesign.hint"),
+		name: `${CONSTANTS.MODULE_NAME}.setting.disableNameplateDesign.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.disableNameplateDesign.hint`,
 		scope: "world",
 		type: Boolean,
 		default: true,
@@ -301,7 +234,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "circularNameplate", {
-		name: "Circular Nameplates",
+		name: `${CONSTANTS.MODULE_NAME}.setting.circularNameplate.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.circularNameplate.hint`,
 		scope: "world",
 		type: Boolean,
 		default: false,
@@ -309,8 +243,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "circularNameplateRadius", {
-		name: "Circular Nameplates Radius",
-		hint: "Requires a refresh",
+		name: `${CONSTANTS.MODULE_NAME}.setting.circularNameplateRadius.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.circularNameplateRadius.hint`,
 		scope: "world",
 		type: Number,
 		default: 0,
@@ -318,7 +252,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "nameplateColor", {
-		name: "Nameplate Color",
+		name: `${CONSTANTS.MODULE_NAME}.setting.nameplateColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.nameplateColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#FFFFFF",
@@ -326,8 +261,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "nameplateColorGM", {
-		name: "Nameplate Color for GM only view",
-		hint: "Nameplate color used when only the GM can see the nameplate",
+		name: `${CONSTANTS.MODULE_NAME}.setting.nameplateColorGM.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.nameplateColorGM.hint`,
 		scope: "client",
 		type: String,
 		default: "#FFFFFF",
@@ -335,8 +270,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "nameplateOffset", {
-		name: "Nameplate Y Offset",
-		hint: "Y axis offset in pixels",
+		name: `${CONSTANTS.MODULE_NAME}.setting.nameplateOffset.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.nameplateOffset.hint`,
 		scope: "world",
 		type: Number,
 		default: 0,
@@ -346,16 +281,35 @@ export const registerSettings = function () {
 	// Target Feature (Deprecated)
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "disableRefreshTarget", {
-		name: "Disable the refresh target feature",
-		hint: "Use other module like Better Target, Smart Target, ecc. for apply design to target",
+		name: `${CONSTANTS.MODULE_NAME}.setting.disableRefreshTarget.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.disableRefreshTarget.hint`,
 		scope: "world",
 		type: Boolean,
 		default: true,
 		config: true
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "targetSize", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.targetSize.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.targetSize.hint`,
+		scope: "client",
+		type: Number,
+		default: 1,
+		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "internatTarget", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.internatTarget.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.internatTarget.hint`,
+		scope: "client",
+		type: Boolean,
+		default: false,
+		config: true
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "targetColor", {
-		name: "Color: Target",
+		name: `${CONSTANTS.MODULE_NAME}.setting.targetColor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.targetColor.hint`,
 		scope: "client",
 		type: String,
 		default: "#FF9829",
@@ -363,7 +317,8 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "targetColorEx", {
-		name: "Color: Target External",
+		name: `${CONSTANTS.MODULE_NAME}.setting.targetColorEx.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.targetColorEx.hint`,
 		scope: "client",
 		type: String,
 		default: "#000000",
@@ -373,21 +328,96 @@ export const registerSettings = function () {
 	// Bars Feature (Deprecated)
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "disableDrawBarsDesign", {
-		name: i18n(CONSTANTS.MODULE_NAME + ".setting.disableDrawBarsDesign.name"),
-		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.disableDrawBarsDesign.hint"),
+		name: `${CONSTANTS.MODULE_NAME}.setting.disableDrawBarsDesign.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.disableDrawBarsDesign.hint`,
 		scope: "world",
 		type: Boolean,
 		default: true,
 		config: true
 	});
 
-	game.settings.register(CONSTANTS.MODULE_NAME, "barAlpha", {
-		name: "Transparent Bars",
-		hint: "Display transparent HUD bars if these elements are not visible to players",
+	game.settings.register(CONSTANTS.MODULE_NAME, "plateFont", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.plateFont.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.plateFont.hint`,
+		scope: "world",
+		type: String,
+		choices: <any>fontFamilies,
+		default: "signika",
+		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultiplier", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.sizeMultiplier.hint`,
+		scope: "world",
+		type: Number,
+		default: 1,
+		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "plateConsistency", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.plateConsistency.hint`,
 		scope: "world",
 		type: Boolean,
 		default: false,
 		config: true
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "barAlpha", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.barAlpha.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.barAlpha.hint`,
+		scope: "world",
+		type: Boolean,
+		default: false,
+		config: true
+	});
+
+	// HealthGradient Feature (Deprecated)
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradient", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.healthGradient.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.healthGradient.hint`,
+		scope: "world",
+		type: Boolean,
+		default: false,
+		config: possibleSystems.includes(game.system.id)
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "tempHPgradient", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.tempHPgradient.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.tempHPgradient.hint`,
+		scope: "world",
+		type: Boolean,
+		default: false,
+		config: possibleSystems.includes(game.system.id)
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientA", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.healthGradientA.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.healthGradientA.hint`,
+		scope: "world",
+		type: String,
+		default: "#1b9421",
+		config: possibleSystems.includes(game.system.id)
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientB", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.healthGradientB.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.healthGradientB.hint`,
+		scope: "world",
+		type: String,
+		default: "#c9240a",
+		config: possibleSystems.includes(game.system.id)
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "healthGradientC", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.healthGradientC.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.healthGradientC.hint`,
+		scope: "world",
+		type: String,
+		default: "#22e3dd",
+		config: possibleSystems.includes(game.system.id)
 	});
 
 	// ========================================================================
