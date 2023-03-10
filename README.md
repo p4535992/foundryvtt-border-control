@@ -1,4 +1,4 @@
-### Control your tokens borders.
+### Border Control (Control your tokens borders)
 
 ![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-border-control/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge)
 
