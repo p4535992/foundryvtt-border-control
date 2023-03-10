@@ -222,6 +222,39 @@ export const registerSettings = function () {
 		config: true
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "actorFolderColorEx", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.actorFolderColorEx.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.actorFolderColorEx.hint"),
+		scope: "world",
+		type: String,
+		default: "#000000",
+		config: true
+	});
+
+	// Setting off
+	game.settings.register(CONSTANTS.MODULE_NAME, "customDispositionColorEx", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.customDispositionColorEx.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.customDispositionColorEx.hint"),
+		scope: "world",
+		type: String,
+		default: "#000000",
+		config: false
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "color-from", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.color-from.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.color-from.hint"),
+		scope: "world",
+		config: true,
+		default: "token-disposition",
+		type: String,
+		choices: <any>{
+			"token-disposition": i18n(CONSTANTS.MODULE_NAME + ".setting.color-from.opt.token-disposition"),
+			"actor-folder-color": i18n(CONSTANTS.MODULE_NAME + ".setting.color-from.opt.actor-folder-color")
+			// "custom-disposition": i18n(CONSTANTS.MODULE_NAME + ".setting.color-from.opt.custom-disposition")
+		}
+	});
+
 	// Nameplate Feature (Deprecated)
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "disableNameplateDesign", {

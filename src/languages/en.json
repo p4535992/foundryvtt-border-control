@@ -62,6 +62,19 @@
 	"Border-Control.setting.partyColorEx.name": "Color: Party External",
 	"Border-Control.setting.partyColorEx.hint": " ",
 
+	"Border-Control.setting.actorFolderColorEx.name": "Color: Actor Folder External",
+	"Border-Control.setting.actorFolderColorEx.hint": " ",
+
+	"Border-Control.setting.customDispositionColorEx.name": "Color: Custom Disposition External",
+	"Border-Control.setting.customDispositionColorEx.hint": " ",
+
+	"Border-Control.setting.color-from.name": "Generate Token Faction Color From",
+	"Border-Control.setting.color-from.hint": " ",
+
+	"Border-Control.setting.color-from.opt.token-disposition": "Default: A Token's Disposition",
+	"Border-Control.setting.color-from.opt.actor-folder-color": "An Actor's Folder Color",
+	"Border-Control.setting.color-from.opt.custom-disposition": "A Custom Color Set For Token Disposition",
+
 	"Border-Control.setting.healthGradient.name": "FEATURE: Enable HP Gradient",
 	"Border-Control.setting.healthGradient.hint": "[NOT RECOMMENDED] It's advisable to let this check UNCHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token hp.",
 

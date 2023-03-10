@@ -1,3 +1,7 @@
+### 2.0.2
+
+- First new rewrited release for FVTT 10
+
 ### 2.0.0
 
 - Complete rewrite of the code....

@@ -100,7 +100,7 @@ export class BorderFrame {
 		nav.append(
 			$(`
 			<a class="item" data-tab="bordercontrol">
-        <i class="fas fa-user-circle"></i>
+        <i class="fas fa-border-style"></i>
 				${i18n("Border-Control.label.borderControl")}
 			</a>
 		`)
@@ -611,7 +611,11 @@ export class BorderFrame {
 
 	public static newBorderColor(hover: boolean): BorderControlGraphic | null {
 		const token = <any>this;
-		/*
+
+		if (!BorderFrame.defaultColors) {
+			BorderFrame.onInit();
+		}
+
 		const colorFrom = game.settings.get(CONSTANTS.MODULE_NAME, "color-from");
 		let color;
 		let icon;
@@ -635,7 +639,7 @@ export class BorderFrame {
 				color = <string>game.settings.get(CONSTANTS.MODULE_NAME, `custom-${disposition}-color`);
 			}
 		}
-		*/
+
 		const currentCustomColorTokenInt = <string>(
 			token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT)
 		);
@@ -688,28 +692,28 @@ export class BorderFrame {
 				TEXTURE_EX: PIXI.Texture.EMPTY,
 				INT_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColor")),
 				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx"))
-			} as BorderControlGraphic
-			// ACTOR_FOLDER_COLOR: {
-			// 	INT: parseInt(String(color).substr(1), 16),
-			// 	EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
-			// 	ICON: icon ? String(icon) : "",
-			// 	TEXTURE_INT: PIXI.Texture.EMPTY,
-			// 	TEXTURE_EX: PIXI.Texture.EMPTY,
-			// 	INT_S: String(color),
-			// 	EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx"))
-			// },
-			// CUSTOM_DISPOSITION: {
-			// 	INT: parseInt(String(color).substr(1), 16),
-			// 	EX: parseInt(
-			// 		String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx")).substr(1),
-			// 		16
-			// 	),
-			// 	ICON: "",
-			// 	TEXTURE_INT: PIXI.Texture.EMPTY,
-			// 	TEXTURE_EX: PIXI.Texture.EMPTY,
-			// 	INT_S: String(color),
-			// 	EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx"))
-			// }
+			} as BorderControlGraphic,
+			ACTOR_FOLDER_COLOR: {
+				INT: parseInt(String(color).substr(1), 16),
+				EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx")).substr(1), 16),
+				ICON: icon ? String(icon) : "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(color),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx"))
+			},
+			CUSTOM_DISPOSITION: {
+				INT: parseInt(String(color).substr(1), 16),
+				EX: parseInt(
+					String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx")).substr(1),
+					16
+				),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(color),
+				EX_S: String(game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx"))
+			}
 		};
 
 		let borderControlCustom: BorderControlGraphic | null = null;
@@ -726,72 +730,73 @@ export class BorderFrame {
 		}
 
 		let borderColor: BorderControlGraphic | null = null;
-		if (token.controlled) {
-			return overrides.CONTROLLED;
-		} else if (
-			(hover ?? token.hover) ||
-			//@ts-ignore
-			canvas.tokens?._highlight ||
-			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
-		) {
-			if (borderControlCustom) {
-				borderColor = borderControlCustom;
-			} else {
-				const disPath = CONST.TOKEN_DISPOSITIONS;
-
+		if (colorFrom === "token-disposition") {
+			if (token.controlled) {
+				return overrides.CONTROLLED;
+			} else if (
 				//@ts-ignore
-				const d = parseInt(token.document.disposition);
+				(hover ?? token.hover) ||
 				//@ts-ignore
-				if (!game.user?.isGM && token.owner) {
-					borderColor = overrides.CONTROLLED;
-				}
-				//@ts-ignore
-				else if (token.actor?.hasPlayerOwner) {
-					borderColor = overrides.PARTY;
-				} else if (d === disPath.FRIENDLY) {
-					borderColor = overrides.FRIENDLY;
-				} else if (d === disPath.NEUTRAL) {
-					borderColor = overrides.NEUTRAL;
+				canvas.tokens?._highlight ||
+				game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+			) {
+				if (borderControlCustom) {
+					borderColor = borderControlCustom;
 				} else {
-					borderColor = overrides.HOSTILE;
+					const disPath = CONST.TOKEN_DISPOSITIONS;
+
+					//@ts-ignore
+					const d = parseInt(token.document.disposition);
+					//@ts-ignore
+					if (!game.user?.isGM && token.owner) {
+						borderColor = overrides.CONTROLLED;
+					}
+					//@ts-ignore
+					else if (token.actor?.hasPlayerOwner) {
+						borderColor = overrides.PARTY;
+					} else if (d === disPath.FRIENDLY) {
+						borderColor = overrides.FRIENDLY;
+					} else if (d === disPath.NEUTRAL) {
+						borderColor = overrides.NEUTRAL;
+					} else {
+						borderColor = overrides.HOSTILE;
+					}
 				}
+			} else {
+				// colorFrom === 'custom-disposition'
+				// borderColor = overrides.CUSTOM_DISPOSITION;
+				borderColor = null;
+			}
+		} else if (colorFrom === "actor-folder-color") {
+			if (
+				//@ts-ignore
+				(hover ?? token.hover) ||
+				//@ts-ignore
+				canvas.tokens?._highlight ||
+				game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
+			) {
+				if (borderControlCustom) {
+					borderColor = borderControlCustom;
+				} else {
+					borderColor = overrides.ACTOR_FOLDER_COLOR;
+				}
+			} else {
+				// colorFrom === 'custom-disposition'
+				// borderColor = overrides.CUSTOM_DISPOSITION;
+				borderColor = null;
 			}
 		} else {
+			// colorFrom === 'custom-disposition'
+			// borderColor = overrides.CUSTOM_DISPOSITION;
 			borderColor = null;
 		}
 
 		return borderColor;
 	}
 
-	static newTarget(reticule) {
-		const token = <any>this;
-		token.target.clear();
-
-		if (!token.targeted.size) {
-			return;
-		}
-
-		const multiplier = <number>game.settings.get(CONSTANTS.MODULE_NAME, "targetSize");
-		const INT = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColor")).substr(1), 16);
-		const EX = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColorEx")).substr(1), 16);
-
-		// Determine whether the current user has target and any other users
-		const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
-
-		// For the current user, draw the target arrows
-		if (user.length) {
-			token._drawTarget(reticule);
-		}
-		// For other users, draw offset pips
-		const hw = token.w / 2;
-		for (let [i, u] of others.entries()) {
-			const offset = Math.floor((i + 1) / 2) * 16;
-			const sign = i % 2 === 0 ? 1 : -1;
-			const x = hw + sign * offset;
-			//@ts-ignore
-			token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
-		}
-	}
+	/* -------------------------------------------- */
+	/* DEPRECATED METHODS USE OTHERS MODULE INSTEAD */
+	/* -------------------------------------------- */
 
 	// static getActorHpPath() {
 	// 	switch (game.system.id) {
@@ -821,6 +826,41 @@ export class BorderFrame {
 	// 		}
 	// 	}
 	// }
+
+	/**
+	 * @deprecated use instead other modules
+	 * @param reticule
+	 * @returns
+	 */
+	static newTarget(reticule) {
+		const token = <any>this;
+		token.target.clear();
+
+		if (!token.targeted.size) {
+			return;
+		}
+
+		const multiplier = <number>game.settings.get(CONSTANTS.MODULE_NAME, "targetSize");
+		const INT = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColor")).substr(1), 16);
+		const EX = parseInt((<string>game.settings.get(CONSTANTS.MODULE_NAME, "targetColorEx")).substr(1), 16);
+
+		// Determine whether the current user has target and any other users
+		const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
+
+		// For the current user, draw the target arrows
+		if (user.length) {
+			token._drawTarget(reticule);
+		}
+		// For other users, draw offset pips
+		const hw = token.w / 2;
+		for (let [i, u] of others.entries()) {
+			const offset = Math.floor((i + 1) / 2) * 16;
+			const sign = i % 2 === 0 ? 1 : -1;
+			const x = hw + sign * offset;
+			//@ts-ignore
+			token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
+		}
+	}
 
 	/**
 	 * @deprecated use instead other modules
@@ -918,8 +958,6 @@ export class BorderFrame {
 			});
 		}
 	}
-
-	/* -------------------------------------------- */
 
 	/**
 	 * Draw the targeting arrows around this token.
