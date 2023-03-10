@@ -17,28 +17,40 @@
 ### If you want to buy me a coffee [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/p4535992)
 
 
-Player side configuration of the tokens borders, color and scale. Target HUD color and size can be altered, target HUD can also be rendered inside the token border.
-
 Can prevent borders from showing on player clients for non-owned tokens; no longer hide your mimics behind tiles!
 
 Increased accessability for those with visibility impairments
 
 External border offset changeable.
 
-Color gradient reads actor HP and returns a color between the two provided colors.
-
-Temp HP gradient moves up from the "full hp" color towards a defined color, maxing out at 1/2 hpMax.
-
 This also fixes the current disposition bug: https://gitlab.com/foundrynet/foundryvtt/-/issues/4352
-
-Nameplates are now customizable, change the size, vertical offset and font. You can also make then circular, to fit with POG style tokens
-Available fonts are: Arial, Arial Black, Comic Sans MS, Courier New, Georgia, Helvetica, Impact, Tahoma, Times New Roman and Verdana.
 
 A border may be toggled off by using the Token HUD element here
 
 ![BorderHUD](/wiki/images/Border_Control_HUD.PNG?raw=true)
 
 HUD Bars can be set to show as semi-transparant when only visible to the
+
+### [DEPRECATED] Feature: Token Bars customization
+
+THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Arbron's Improved HP Bar](https://github.com/arbron/fvtt-hp-bar) and [FoundryVTT Bar Brawl](https://gitlab.com/woodentavern/foundryvtt-bar-brawl)
+
+Color gradient reads actor HP and returns a color between the two provided colors.
+
+Temp HP gradient moves up from the "full hp" color towards a defined color, maxing out at 1/2 hpMax.
+
+### [DEPRECATED] Feature: Nameplates customization 
+
+THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Token Variant Art](https://github.com/Aedif/TokenVariants) and [Custom Nameplates](https://github.com/earlSt1/vtt-custom-nameplates)
+
+Nameplates are now customizable, change the size, vertical offset and font. You can also make then circular, to fit with POG style tokens
+Available fonts are: Arial, Arial Black, Comic Sans MS, Courier New, Georgia, Helvetica, Impact, Tahoma, Times New Roman and Verdana.
+
+### [DEPRECATED] Feature: Target customization 
+
+THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Easy Target](https://bitbucket.org/Fyorl/easy-target) and [Smart Target](https://github.com/theripper93/Smart-Target)
+
+Player side configuration of the tokens borders, color and scale. Target HUD color and size can be altered, target HUD can also be rendered inside the token border.
 
 ## Installation
 
@@ -55,10 +67,6 @@ To install this module manually:
 ### libWrapper
 
 This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
-
-### Color Settings
-
-This module uses the [colorsettings](https://github.com/ardittristan/VTTColorSettings). It is a optional dependency but it is recommended for the best experience and compatibility with other modules.
 
 ## Supportes Systems
 

@@ -219,24 +219,24 @@ export class BorderFrame {
 				BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE,
 				!borderIsDisabled
 			);
-			if (borderIsDisabled) {
-				await token.document.unsetFlag(
-					CONSTANTS.MODULE_NAME,
-					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
-				);
-				await token.document.unsetFlag(
-					CONSTANTS.MODULE_NAME,
-					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
-				);
-				await token.document.unsetFlag(
-					CONSTANTS.MODULE_NAME,
-					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
-				);
-				await token.document.unsetFlag(
-					CONSTANTS.MODULE_NAME,
-					BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
-				);
-			}
+			// if (borderIsDisabled) {
+			// 	await token.document.unsetFlag(
+			// 		CONSTANTS.MODULE_NAME,
+			// 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+			// 	);
+			// 	await token.document.unsetFlag(
+			// 		CONSTANTS.MODULE_NAME,
+			// 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+			// 	);
+			// 	await token.document.unsetFlag(
+			// 		CONSTANTS.MODULE_NAME,
+			// 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+			// 	);
+			// 	await token.document.unsetFlag(
+			// 		CONSTANTS.MODULE_NAME,
+			// 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+			// 	);
+			// }
 		}
 
 		event.currentTarget.classList.toggle("active", !borderIsDisabled);
@@ -643,18 +643,6 @@ export class BorderFrame {
 			token.document.getFlag(CONSTANTS.MODULE_NAME, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT)
 		);
 
-		if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
-			return {
-				INT: parseInt(String(currentCustomColorTokenInt).substr(1), 16),
-				EX: parseInt(String(currentCustomColorTokenExt).substr(1), 16),
-				ICON: "",
-				TEXTURE_INT: PIXI.Texture.EMPTY,
-				TEXTURE_EX: PIXI.Texture.EMPTY,
-				INT_S: String(currentCustomColorTokenInt),
-				EX_S: String(currentCustomColorTokenExt)
-			} as BorderControlGraphic;
-		}
-
 		const overrides = {
 			CONTROLLED: {
 				INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_NAME, "controlledColor")).substr(1), 16),
@@ -724,6 +712,19 @@ export class BorderFrame {
 			// }
 		};
 
+		let borderControlCustom: BorderControlGraphic | null = null;
+		if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
+			borderControlCustom = {
+				INT: parseInt(String(currentCustomColorTokenInt).substr(1), 16),
+				EX: parseInt(String(currentCustomColorTokenExt).substr(1), 16),
+				ICON: "",
+				TEXTURE_INT: PIXI.Texture.EMPTY,
+				TEXTURE_EX: PIXI.Texture.EMPTY,
+				INT_S: String(currentCustomColorTokenInt),
+				EX_S: String(currentCustomColorTokenExt)
+			} as BorderControlGraphic;
+		}
+
 		let borderColor: BorderControlGraphic | null = null;
 		if (token.controlled) {
 			return overrides.CONTROLLED;
@@ -733,82 +734,32 @@ export class BorderFrame {
 			canvas.tokens?._highlight ||
 			game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
 		) {
-			const disPath = CONST.TOKEN_DISPOSITIONS;
-
-			//@ts-ignore
-			const d = parseInt(token.document.disposition);
-			//@ts-ignore
-			if (!game.user?.isGM && token.owner) {
-				borderColor = overrides.CONTROLLED;
-			}
-			//@ts-ignore
-			else if (token.actor?.hasPlayerOwner) {
-				borderColor = overrides.PARTY;
-			} else if (d === disPath.FRIENDLY) {
-				borderColor = overrides.FRIENDLY;
-			} else if (d === disPath.NEUTRAL) {
-				borderColor = overrides.NEUTRAL;
+			if (borderControlCustom) {
+				borderColor = borderControlCustom;
 			} else {
-				borderColor = overrides.HOSTILE;
+				const disPath = CONST.TOKEN_DISPOSITIONS;
+
+				//@ts-ignore
+				const d = parseInt(token.document.disposition);
+				//@ts-ignore
+				if (!game.user?.isGM && token.owner) {
+					borderColor = overrides.CONTROLLED;
+				}
+				//@ts-ignore
+				else if (token.actor?.hasPlayerOwner) {
+					borderColor = overrides.PARTY;
+				} else if (d === disPath.FRIENDLY) {
+					borderColor = overrides.FRIENDLY;
+				} else if (d === disPath.NEUTRAL) {
+					borderColor = overrides.NEUTRAL;
+				} else {
+					borderColor = overrides.HOSTILE;
+				}
 			}
 		} else {
 			borderColor = null;
 		}
-		/*
-		if (colorFrom === "token-disposition") {
-			if (token.controlled) {
-				return overrides.CONTROLLED;
-			} else if (
-				(hover ?? token.hover) ||
-				//@ts-ignore
-				canvas.tokens?._highlight ||
-				game.settings.get(CONSTANTS.MODULE_NAME, "permanentBorder")
-			) {
-				const disPath = CONST.TOKEN_DISPOSITIONS;
 
-				//@ts-ignore
-				const d = parseInt(token.document.disposition);
-				//@ts-ignore
-				if (!game.user?.isGM && token.owner) {
-					borderColor = overrides.CONTROLLED;
-				}
-				//@ts-ignore
-				else if (token.actor?.hasPlayerOwner) {
-					borderColor = overrides.PARTY;
-				} else if (d === disPath.FRIENDLY) {
-					borderColor = overrides.FRIENDLY;
-				} else if (d === disPath.NEUTRAL) {
-					borderColor = overrides.NEUTRAL;
-				} else {
-					borderColor = overrides.HOSTILE;
-				}
-			} else {
-				const disPath = CONST.TOKEN_DISPOSITIONS;
-
-				//@ts-ignore
-				const d = parseInt(token.document.disposition);
-				//@ts-ignore
-				if (!game.user?.isGM && token.owner) {
-					borderColor = overrides.CONTROLLED;
-				}
-				//@ts-ignore
-				else if (token.actor?.hasPlayerOwner) {
-					borderColor = overrides.PARTY;
-				} else if (d === disPath.FRIENDLY) {
-					borderColor = overrides.FRIENDLY;
-				} else if (d === disPath.NEUTRAL) {
-					borderColor = overrides.NEUTRAL;
-				} else {
-					borderColor = overrides.HOSTILE;
-				}
-			}
-		} else if (colorFrom === "actor-folder-color") {
-			borderColor = overrides.ACTOR_FOLDER_COLOR;
-		} else {
-			// colorFrom === 'custom-disposition'
-			borderColor = overrides.CUSTOM_DISPOSITION;
-		}
-		*/
 		return borderColor;
 	}
 

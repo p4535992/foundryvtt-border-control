@@ -8,24 +8,6 @@
 	"Border-Control.setting.permanentBorder.name": "Permanent Border",
 	"Border-Control.setting.permanentBorder.hint": "Permanently shows token borders unless directly hidden, selected tokens have double width borders",
 
-	"Border-Control.setting.healthGradient.name": "FEATURE: Enable HP Gradient",
-	"Border-Control.setting.healthGradient.hint": "[NOT RECOMMENDED] It's advisable to let this check UNCHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token hp.",
-
-	"Border-Control.setting.tempHPgradient.name": "Gradient TempHP Enable",
-	"Border-Control.setting.tempHPgradient.hint": " ",
-
-	"Border-Control.setting.healthGradientA.name": "HP Gradient Start",
-	"Border-Control.setting.healthGradientA.hint": " ",
-
-	"Border-Control.setting.healthGradientB.name": "HP Gradient End",
-	"Border-Control.setting.healthGradientB.hint": " ",
-
-	"Border-Control.setting.healthGradientC.name": "HP Gradient TempHP",
-	"Border-Control.setting.healthGradientC.hint": " ",
-
-	"Border-Control.setting.stepLevel.name": "Gradient Step Level",
-	"Border-Control.setting.stepLevel.hint": "How many individual colors are part of the gradient",
-
 	"Border-Control.setting.borderWidth.name": "Border Width",
 	"Border-Control.setting.borderWidth.hint": "Override border width",
 
@@ -34,12 +16,6 @@
 
 	"Border-Control.setting.borderOffset.name": "Border Offset",
 	"Border-Control.setting.borderOffset.hint": "Customize border offset",
-
-	"Border-Control.setting.targetSize.name": "Target Size Multiplier",
-	"Border-Control.setting.targetSize.hint": " ",
-
-	"Border-Control.setting.internatTarget.name": "Internal Target",
-	"Border-Control.setting.internatTarget.hint": "Target reticule inside  token borders",
 
 	"Border-Control.setting.circleBorders.name": "Circular Borders",
 	"Border-Control.setting.circleBorders.hint": " ",
@@ -55,36 +31,6 @@
 
 	"Border-Control.setting.hudTopBottom.name": "HUD Top/Bottom",
 	"Border-Control.setting.hudTopBottom.hint": "Where to place the button in the column",
-
-	"Border-Control.setting.disableNameplateDesign.name": "FEATURE: Disable the nameplate design feature",
-	"Border-Control.setting.disableNameplateDesign.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Token Variant Art', 'Custom Nameplates' for apply design to target",
-
-	"Border-Control.setting.circularNameplate.name": "Circular Nameplates",
-	"Border-Control.setting.circularNameplate.hint": "Requires a refresh",
-
-	"Border-Control.setting.circularNameplateRadius.name": "Circular Nameplates Radius",
-	"Border-Control.setting.circularNameplateRadius.hint": "Requires a refresh",
-
-	"Border-Control.setting.nameplateColor.name": "Nameplate Color",
-	"Border-Control.setting.nameplateColor.hint": " ",
-
-	"Border-Control.setting.nameplateColorGM.name": "Nameplate Color for GM only view",
-	"Border-Control.setting.nameplateColorGM.hint": "Nameplate color used when only the GM can see the nameplate",
-
-	"Border-Control.setting.nameplateOffset.name": "Nameplate Y Offset",
-	"Border-Control.setting.nameplateOffset.hint": "Requires a refresh",
-
-	"Border-Control.setting.plateFont.name": "Nameplate Font",
-	"Border-Control.setting.plateFont.hint": "Requires a refresh",
-
-	"Border-Control.setting.sizeMultiplier.name": "Nameplate Font Size",
-	"Border-Control.setting.sizeMultiplier.hint": "Requires a refresh",
-
-	"Border-Control.setting.plateConsistency.name": "Nameplate Consistency",
-	"Border-Control.setting.plateConsistency.hint": "Attempts to keep nameplates the same size across different grid sizes",
-
-	"Border-Control.setting.barAlpha.name": "Transparent Bars",
-	"Border-Control.setting.barAlpha.hint": "Display transparent HUD bars if these elements are not visible to players",
 
 	"Border-Control.setting.controlledColor.name": "Color: Controlled",
 	"Border-Control.setting.controlledColor.hint": " ",
@@ -116,17 +62,71 @@
 	"Border-Control.setting.partyColorEx.name": "Color: Party External",
 	"Border-Control.setting.partyColorEx.hint": " ",
 
-	"Border-Control.setting.targetColor.name": "Color: Target",
-	"Border-Control.setting.targetColor.hint": " ",
+	"Border-Control.setting.healthGradient.name": "FEATURE: Enable HP Gradient",
+	"Border-Control.setting.healthGradient.hint": "[NOT RECOMMENDED] It's advisable to let this check UNCHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token hp.",
 
-	"Border-Control.setting.targetColorEx.name": "Color: Target External",
-	"Border-Control.setting.targetColorEx.hint": " ",
+	"Border-Control.setting.tempHPgradient.name": "Gradient TempHP Enable",
+	"Border-Control.setting.tempHPgradient.hint": "[NEED 'Enable HP Gradient' ENABLED]",
 
-	"Border-Control.setting.disableRefreshTarget.name": "FEATURE: Disable the refresh target feature",
-	"Border-Control.setting.disableRefreshTarget.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Better Target', 'Easy Target' and 'Smart Target' for apply design to target",
+	"Border-Control.setting.healthGradientA.name": "HP Gradient Start",
+	"Border-Control.setting.healthGradientA.hint": "[NEED 'Enable HP Gradient' ENABLED]",
+
+	"Border-Control.setting.healthGradientB.name": "HP Gradient End",
+	"Border-Control.setting.healthGradientB.hint": "[NEED 'Enable HP Gradient' ENABLED]",
+
+	"Border-Control.setting.healthGradientC.name": "HP Gradient TempHP",
+	"Border-Control.setting.healthGradientC.hint": "[NEED 'Enable HP Gradient' ENABLED]",
+
+	"Border-Control.setting.stepLevel.name": "Gradient Step Level",
+	"Border-Control.setting.stepLevel.hint": "[NEED 'Enable HP Gradient' ENABLED] How many individual colors are part of the gradient",
+
+	"Border-Control.setting.disableNameplateDesign.name": "FEATURE: Disable the nameplate design feature",
+	"Border-Control.setting.disableNameplateDesign.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Token Variant Art', 'Custom Nameplates' for apply design to nameplate",
+
+	"Border-Control.setting.circularNameplate.name": "Circular Nameplates",
+	"Border-Control.setting.circularNameplate.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Requires a refresh",
+
+	"Border-Control.setting.circularNameplateRadius.name": "Circular Nameplates Radius",
+	"Border-Control.setting.circularNameplateRadius.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Requires a refresh",
+
+	"Border-Control.setting.nameplateColor.name": "Nameplate Color",
+	"Border-Control.setting.nameplateColor.hint": "[NEED 'Disable the nameplate design feature' DISABLED]",
+
+	"Border-Control.setting.nameplateColorGM.name": "Nameplate Color for GM only view",
+	"Border-Control.setting.nameplateColorGM.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Nameplate color used when only the GM can see the nameplate",
+
+	"Border-Control.setting.nameplateOffset.name": "Nameplate Y Offset",
+	"Border-Control.setting.nameplateOffset.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Requires a refresh",
+
+	"Border-Control.setting.plateFont.name": "Nameplate Font",
+	"Border-Control.setting.plateFont.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Requires a refresh",
+
+	"Border-Control.setting.sizeMultiplier.name": "Nameplate Font Size",
+	"Border-Control.setting.sizeMultiplier.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Requires a refresh",
+
+	"Border-Control.setting.plateConsistency.name": "Nameplate Consistency",
+	"Border-Control.setting.plateConsistency.hint": "[NEED 'Disable the nameplate design feature' DISABLED] Attempts to keep nameplates the same size across different grid sizes",
 
 	"Border-Control.setting.disableDrawBarsDesign.name": "FEATURE: Disable the draw bars design feature",
 	"Border-Control.setting.disableDrawBarsDesign.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token bars.",
+
+	"Border-Control.setting.barAlpha.name": "Transparent Bars",
+	"Border-Control.setting.barAlpha.hint": "[NEED 'Disable the draw bars design feature' DISABLED] Display transparent HUD bars if these elements are not visible to players",
+
+	"Border-Control.setting.disableRefreshTarget.name": "FEATURE: Disable the target feature",
+	"Border-Control.setting.disableRefreshTarget.hint": "[NOT RECOMMENDED] It's advisable to let this check CHECKED . Use instead other modules like 'Easy Target' and 'Smart Target' for apply design to target",
+
+	"Border-Control.setting.targetColor.name": "Color: Target",
+	"Border-Control.setting.targetColor.hint": "[NEED 'Disable the target feature' DISABLED]",
+
+	"Border-Control.setting.targetColorEx.name": "Color: Target External",
+	"Border-Control.setting.targetColorEx.hint": "[NEED 'Disable the target feature' DISABLED]",
+
+	"Border-Control.setting.targetSize.name": "Target Size Multiplier",
+	"Border-Control.setting.targetSize.hint": "[NEED 'Disable the target feature' DISABLED]",
+
+	"Border-Control.setting.internatTarget.name": "Internal Target",
+	"Border-Control.setting.internatTarget.hint": "[NEED 'Disable the target feature' DISABLED] Target reticule inside  token borders",
 
 	"Border-Control.label.borderControl": "Border Control",
 	"Border-Control.label.borderControlCustomDisable": "Disable Border Control Disposition",
