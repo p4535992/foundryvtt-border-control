@@ -2,7 +2,7 @@
 // Logger Utility
 // ================================
 
-import CONSTANTS from "../constants";
+import CONSTANTS from "../constants.mjs";
 
 // export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3

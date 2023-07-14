@@ -1,5 +1,5 @@
-import { BorderFrame } from "./BorderControl";
-import CONSTANTS from "./constants";
+import { BorderFrame } from "./BorderControl.mjs";
+import CONSTANTS from "./constants.mjs";
 
 export class BCconfig {
 	symbaroum: any;

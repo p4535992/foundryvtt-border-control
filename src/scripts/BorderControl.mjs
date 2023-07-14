@@ -1,8 +1,8 @@
-import { BCconfig } from "./BCconfig";
-import type { BorderControlGraphic } from "./BorderControlModels";
-import CONSTANTS from "./constants";
-import { i18n } from "./lib/lib";
-import { BCCBASE } from "./module";
+import { BCconfig } from "./BCconfig.mjs";
+import type { BorderControlGraphic } from "./BorderControlModels.mjs";
+import CONSTANTS from "./constants.mjs";
+import { i18n } from "./lib/lib.mjs";
+import { BCCBASE } from "./main.mjs";
 
 export class BorderFrame {
 	static BORDER_CONTROL_FLAGS = {

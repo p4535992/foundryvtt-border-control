@@ -1,9 +1,9 @@
-import { warn, error, debug, i18n } from "./lib/lib";
-import CONSTANTS from "./constants";
-import { setApi } from "../main";
-import API from "./api";
-import { BCconfig } from "./BCconfig";
-import { BorderFrame } from "./BorderControl";
+import { warn, error, debug, i18n } from "./lib/lib.mjs";
+import CONSTANTS from "./constants.mjs";
+import { setApi } from "../main.mjs";
+import API from "./api.mjs";
+import { BCconfig } from "./BCconfig.mjs";
+import { BorderFrame } from "./BorderControl.mjs";
 
 export let BCCBASE: BCconfig;
 

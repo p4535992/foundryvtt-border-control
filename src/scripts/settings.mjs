@@ -1,5 +1,5 @@
-import { debug, log, warn, i18n } from "./lib/lib";
-import CONSTANTS from "./constants";
+import { debug, log, warn, i18n } from "./lib/lib.mjs";
+import CONSTANTS from "./constants.mjs";
 
 let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
 
