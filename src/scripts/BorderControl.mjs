@@ -702,7 +702,7 @@ export class BorderFrame {
         //@ts-ignore
         (hover ?? token.hover) ||
         //@ts-ignore
-        canvas.tokens?._highlight ||
+        canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
       ) {
         if (borderControlCustom) {
@@ -737,7 +737,7 @@ export class BorderFrame {
         //@ts-ignore
         (hover ?? token.hover) ||
         //@ts-ignore
-        canvas.tokens?._highlight ||
+        canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
       ) {
         if (borderControlCustom) {
