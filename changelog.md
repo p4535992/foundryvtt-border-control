@@ -1,3 +1,7 @@
+### 2.1.1
+
+- Update for v11
+
 ### 2.0.2
 
 - First new rewrited release for FVTT 10
