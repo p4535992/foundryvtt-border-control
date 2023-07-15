@@ -38,7 +38,6 @@ export class BorderFrame {
 
   static async onInit() {
     BorderFrame.defaultColors = {
-
       "friendly-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor"), //'#43dfdf',
       "neutral-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColor"), //'#f1d836',
       "hostile-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColor"), //'#e72124',
@@ -46,12 +45,12 @@ export class BorderFrame {
 
       "party-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
       "party-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
-      
+
       "friendly-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx"),
       "neutral-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx"),
       "hostile-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx"),
       "controlled-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx"),
-      
+
       "party-external-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx"),
       "party-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx"),
 
@@ -78,12 +77,10 @@ export class BorderFrame {
       : "";
 
     const currentCustomColorTokenInt =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT) ||
-      "#000000";
+      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT) || "#000000";
 
     const currentCustomColorTokenExt =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT) ||
-      "#000000";
+      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT) || "#000000";
 
     const currentCustomColorTokenFrameOpacity =
       config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY) || 0.5;
@@ -410,7 +407,6 @@ export class BorderFrame {
   // ADDED
 
   static retrieveListBorderControl(token) {
-
     const colorFrom = game.settings.get(CONSTANTS.MODULE_ID, "color-from");
     let color;
     let icon;
@@ -490,6 +486,15 @@ export class BorderFrame {
         INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColor")),
         EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx")),
       },
+      SECRET: {
+        INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "secretColor")).substr(1), 16),
+        EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "secretColorEx")).substr(1), 16),
+        ICON: "",
+        TEXTURE_INT: PIXI.Texture.EMPTY,
+        TEXTURE_EX: PIXI.Texture.EMPTY,
+        INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "secretColor")),
+        EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "secretColorEx")),
+      },
       ACTOR_FOLDER_COLOR: {
         INT: parseInt(String(color).substr(1), 16),
         EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx")).substr(1), 16),
@@ -525,8 +530,8 @@ export class BorderFrame {
 
     if (borderControlCustom) {
       return {
-        CUSTOM_DISPOSITION_BY_FLAG: borderControlCustom
-      }
+        CUSTOM_DISPOSITION_BY_FLAG: borderControlCustom,
+      };
     } else {
       return overrides;
     }
@@ -557,11 +562,11 @@ export class BorderFrame {
     }
     let borderColor = null;
     const overrides = BorderFrame.retrieveListBorderControl(token);
-    if(overrides.CUSTOM_DISPOSITION_BY_FLAG){
+    if (overrides.CUSTOM_DISPOSITION_BY_FLAG) {
       borderColor = overrides.CUSTOM_DISPOSITION_BY_FLAG;
     } else {
       for (const [key, override] of Object.entries(overrides)) {
-        if(override.INT_S === borderColorColor.css) {
+        if (override.INT_S === borderColorColor.css) {
           borderColor = override;
           break;
         }
@@ -628,7 +633,7 @@ export class BorderFrame {
     // const sW = sB ? (token.w - token.w * s) / 2 : 0;
     // const sH = sB ? (token.h - token.h * s) / 2 : 0;
 
-    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign") 
+    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")
     //     && game.settings.get(CONSTANTS.MODULE_ID, "healthGradient")) {
     //   const systemPath = BCC.currentSystem;
     //   const stepLevel = BCC.stepLevel;
@@ -731,119 +736,9 @@ export class BorderFrame {
     }
 
     const colorFrom = game.settings.get(CONSTANTS.MODULE_ID, "color-from");
-    // let color;
-    // let icon;
-    // if (colorFrom === "token-disposition") {
-    //   const disposition = BorderFrame.dispositionKey(token);
-    //   if (disposition) {
-    //     color = BorderFrame.defaultColors[disposition];
-    //   }
-    // } else if (colorFrom === "actor-folder-color") {
-    //   if (token.actor && token.actor.folder && token.actor.folder) {
-    //     //@ts-ignore
-    //     color = token.actor.folder.color;
-    //     //@ts-ignore
-    //     icon = token.actor.folder.icon;
-    //   }
-    // } else {
-    //   // colorFrom === 'custom-disposition'
-    //   // TODO PUT SOME NEW FLAG ON THE TOKEN
-    //   const disposition = BorderFrame.dispositionKey(token);
-    //   if (disposition) {
-    //     color = game.settings.get(CONSTANTS.MODULE_ID, `custom-${disposition}-color`);
-    //   }
-    // }
-    //
-    // const currentCustomColorTokenInt = token.document.getFlag(
-    //   CONSTANTS.MODULE_ID,
-    //   BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
-    // );
-    // const currentCustomColorTokenExt = token.document.getFlag(
-    //   CONSTANTS.MODULE_ID,
-    //   BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
-    // );
-
-    // const overrides = {
-    //   CONTROLLED: {
-    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")),
-    //   },
-    //   FRIENDLY: {
-    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor")).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor")),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx")),
-    //   },
-    //   NEUTRAL: {
-    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColor")).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColor")),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx")),
-    //   },
-    //   HOSTILE: {
-    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColor")).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColor")),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx")),
-    //   },
-    //   PARTY: {
-    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "partyColor")).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColor")),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx")),
-    //   },
-    //   ACTOR_FOLDER_COLOR: {
-    //     INT: parseInt(String(color).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx")).substr(1), 16),
-    //     ICON: icon ? String(icon) : "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(color),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx")),
-    //   },
-    //   CUSTOM_DISPOSITION: {
-    //     INT: parseInt(String(color).substr(1), 16),
-    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx")).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(color),
-    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx")),
-    //   },
-    // };
-
-    // let borderControlCustom = null;
-    // if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
-    //   borderControlCustom = {
-    //     INT: parseInt(String(currentCustomColorTokenInt).substr(1), 16),
-    //     EX: parseInt(String(currentCustomColorTokenExt).substr(1), 16),
-    //     ICON: "",
-    //     TEXTURE_INT: PIXI.Texture.EMPTY,
-    //     TEXTURE_EX: PIXI.Texture.EMPTY,
-    //     INT_S: String(currentCustomColorTokenInt),
-    //     EX_S: String(currentCustomColorTokenExt),
-    //   };
-    // }
     let borderControlCustom = null;
     const overrides = BorderFrame.retrieveListBorderControl(token);
-    if(overrides.CUSTOM_DISPOSITION_BY_FLAG){
+    if (overrides.CUSTOM_DISPOSITION_BY_FLAG) {
       borderControlCustom = overrides.CUSTOM_DISPOSITION_BY_FLAG;
     }
 
@@ -875,6 +770,10 @@ export class BorderFrame {
             borderColor = overrides.FRIENDLY;
           } else if (d === disPath.NEUTRAL) {
             borderColor = overrides.NEUTRAL;
+          } else if (d === disPath.HOSTILE) {
+            borderColor = overrides.HOSTILE;
+          } else if (d === disPath.SECRET) {
+            borderColor = overrides.SECRET;
           } else {
             borderColor = overrides.HOSTILE;
           }
@@ -901,7 +800,9 @@ export class BorderFrame {
       borderColor = null;
     }
 
-    const finalBorderColor = borderColor ? Color.from(borderColor.INT) : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
+    const finalBorderColor = borderColor
+      ? Color.from(borderColor.INT)
+      : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
 
     return finalBorderColor;
   }

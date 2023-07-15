@@ -62,6 +62,12 @@
   "Border-Control.setting.partyColorEx.name": "Color: Party External",
   "Border-Control.setting.partyColorEx.hint": " ",
 
+  "Border-Control.setting.secretColor.name": "Color: Secret",
+  "Border-Control.setting.secretColor.hint": " ",
+
+  "Border-Control.setting.secretColorEx.name": "Color: Secret External",
+  "Border-Control.setting.secretColorEx.hint": " ",
+
   "Border-Control.setting.actorFolderColorEx.name": "Color: Actor Folder External",
   "Border-Control.setting.actorFolderColorEx.hint": " ",
 

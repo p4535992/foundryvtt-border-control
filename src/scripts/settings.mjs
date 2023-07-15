@@ -226,7 +226,22 @@ export const registerSettings = function () {
     default: "#000000",
     config: true,
   });
-
+  game.settings.register(CONSTANTS.MODULE_ID, "secretColor", {
+    name: `${CONSTANTS.MODULE_ID}.setting.secretColor.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.secretColor.hint`,
+    scope: "client",
+    type: String,
+    default: Color.from(colors.SECRET).css ?? "#A612D4",
+    config: true,
+  });
+  game.settings.register(CONSTANTS.MODULE_ID, "secretColorEx", {
+    name: `${CONSTANTS.MODULE_ID}.setting.secretColorEx.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.secretColorEx.hint`,
+    scope: "client",
+    type: String,
+    default: "#000000",
+    config: true,
+  });
   game.settings.register(CONSTANTS.MODULE_ID, "actorFolderColorEx", {
     name: i18n(CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.name"),
     hint: i18n(CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.hint"),

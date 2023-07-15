@@ -106,12 +106,7 @@ export const initHooks = async () => {
     //@ts-ignore
     libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
     //@ts-ignore
-    libWrapper.register(
-      CONSTANTS.MODULE_ID,
-      "Token.prototype._getBorderColor",
-      BorderFrame.newBorderColor,
-      "OVERRIDE"
-    );
+    libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
 
     // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
     //   //@ts-ignore
