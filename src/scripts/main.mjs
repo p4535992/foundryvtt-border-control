@@ -2,10 +2,10 @@ import { warn, error, debug, i18n } from "./lib/lib.mjs";
 import CONSTANTS from "./constants.mjs";
 import { setApi } from "../module.js";
 import API from "./api.mjs";
-import { BCconfig } from "./BCconfig.mjs";
+// import { BCconfig } from "./BCconfig.mjs";
 import { BorderFrame } from "./BorderControl.mjs";
 
-export let BCCBASE;
+// export let BCCBASE;
 
 export const initHooks = async () => {
   // Hooks.once("socketlib.ready", registerSocket);
@@ -25,14 +25,14 @@ export const initHooks = async () => {
     const afCE = game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx");
     const cdCE = game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx");
 
-    let tC = game.settings.get(CONSTANTS.MODULE_ID, "targetColor");
-    let tCE = game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx");
+    // let tC = game.settings.get(CONSTANTS.MODULE_ID, "targetColor");
+    // let tCE = game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx");
 
-    let gS = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientA");
-    let gE = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientB");
-    let gT = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientC");
-    let nPC = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
-    let nPCGM = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM");
+    // let gS = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientA");
+    // let gE = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientB");
+    // let gT = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientC");
+    // let nPC = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
+    // let nPCGM = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM");
     el.find('[name="Border-Control.neutralColor"]')
       .parent()
       .append(`<input type="color" value="${nC}" data-edit="Border-Control.neutralColor">`);
@@ -75,25 +75,25 @@ export const initHooks = async () => {
       .parent()
       .append(`<input type="color" value="${cdCE}" data-edit="Border-Control.customDispositionColorEx">`);
 
-    el.find('[name="Border-Control.targetColorEx"]')
-      .parent()
-      .append(`<input type="color"value="${tCE}" data-edit="Border-Control.targetColorEx">`);
+    // el.find('[name="Border-Control.targetColorEx"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${tCE}" data-edit="Border-Control.targetColorEx">`);
 
-    el.find('[name="Border-Control.healthGradientA"]')
-      .parent()
-      .append(`<input type="color"value="${gS}" data-edit="Border-Control.healthGradientA">`);
-    el.find('[name="Border-Control.healthGradientB"]')
-      .parent()
-      .append(`<input type="color"value="${gE}" data-edit="Border-Control.healthGradientB">`);
-    el.find('[name="Border-Control.healthGradientC"]')
-      .parent()
-      .append(`<input type="color"value="${gT}" data-edit="Border-Control.healthGradientC">`);
-    el.find('[name="Border-Control.nameplateColor"]')
-      .parent()
-      .append(`<input type="color"value="${nPC}" data-edit="Border-Control.nameplateColor">`);
-    el.find('[name="Border-Control.nameplateColorGM"]')
-      .parent()
-      .append(`<input type="color"value="${nPCGM}" data-edit="Border-Control.nameplateColorGM">`);
+    // el.find('[name="Border-Control.healthGradientA"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${gS}" data-edit="Border-Control.healthGradientA">`);
+    // el.find('[name="Border-Control.healthGradientB"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${gE}" data-edit="Border-Control.healthGradientB">`);
+    // el.find('[name="Border-Control.healthGradientC"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${gT}" data-edit="Border-Control.healthGradientC">`);
+    // el.find('[name="Border-Control.nameplateColor"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${nPC}" data-edit="Border-Control.nameplateColor">`);
+    // el.find('[name="Border-Control.nameplateColorGM"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${nPCGM}" data-edit="Border-Control.nameplateColorGM">`);
   });
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
@@ -113,28 +113,28 @@ export const initHooks = async () => {
       "OVERRIDE"
     );
 
-    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
-      //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
+    //   //@ts-ignore
+    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
 
-      //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
-    }
+    //   //@ts-ignore
+    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
+    // }
 
-    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableNameplateDesign")) {
-      //@ts-ignore
-      libWrapper.register(
-        CONSTANTS.MODULE_ID,
-        "Token.prototype._drawNameplate",
-        BorderFrame.drawNameplate,
-        "OVERRIDE"
-      );
-    }
+    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableNameplateDesign")) {
+    //   //@ts-ignore
+    //   libWrapper.register(
+    //     CONSTANTS.MODULE_ID,
+    //     "Token.prototype._drawNameplate",
+    //     BorderFrame.drawNameplate,
+    //     "OVERRIDE"
+    //   );
+    // }
 
-    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")) {
-      //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
-    }
+    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")) {
+    //   //@ts-ignore
+    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
+    // }
   }
 };
 
@@ -143,7 +143,7 @@ export const setupHooks = async () => {
 };
 
 export const readyHooks = () => {
-  BCCBASE = new BCconfig();
+  // BCCBASE = new BCconfig();
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
     Hooks.on("renderTokenHUD", (app, html, data) => {

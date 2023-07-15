@@ -5,6 +5,8 @@ let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
 
 let fontFamilies = {};
 
+const colors = CONFIG.Canvas.dispositionColors;
+
 export const registerSettings = function () {
   let index = 0;
   for (let [key, value] of Object.entries(CONFIG.fontDefinitions)) {
@@ -149,7 +151,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.controlledColor.hint`,
     scope: "client",
     type: String,
-    default: "#FF9829",
+    default: Color.from(colors.CONTROLLED).css ?? "#FF9829",
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "controlledColorEx", {
@@ -165,7 +167,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.hostileColor.hint`,
     scope: "client",
     type: String,
-    default: "#E72124",
+    default: Color.from(colors.HOSTILE).css ?? "#E72124",
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "hostileColorEx", {
@@ -181,7 +183,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.friendlyColor.hint`,
     scope: "client",
     type: String,
-    default: "#43DFDF",
+    default: Color.from(colors.FRIENDLY).css ?? "#43DFDF",
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "friendlyColorEx", {
@@ -197,7 +199,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.neutralColor.hint`,
     scope: "client",
     type: String,
-    default: "#F1D836",
+    default: Color.from(colors.NEUTRAL).css ?? "#F1D836",
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "neutralColorEx", {
@@ -213,7 +215,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.partyColor.hint`,
     scope: "client",
     type: String,
-    default: "#33BC4E",
+    default: Color.from(colors.PARTY).css ?? "#33BC4E",
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "partyColorEx", {
@@ -260,201 +262,201 @@ export const registerSettings = function () {
 
   // Nameplate Feature (Deprecated)
 
-  game.settings.register(CONSTANTS.MODULE_ID, "disableNameplateDesign", {
-    name: `${CONSTANTS.MODULE_ID}.setting.disableNameplateDesign.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.disableNameplateDesign.hint`,
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "disableNameplateDesign", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.disableNameplateDesign.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.disableNameplateDesign.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: true,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "circularNameplate", {
-    name: `${CONSTANTS.MODULE_ID}.setting.circularNameplate.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.circularNameplate.hint`,
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "circularNameplate", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.circularNameplate.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.circularNameplate.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: false,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "circularNameplateRadius", {
-    name: `${CONSTANTS.MODULE_ID}.setting.circularNameplateRadius.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.circularNameplateRadius.hint`,
-    scope: "world",
-    type: Number,
-    default: 0,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "circularNameplateRadius", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.circularNameplateRadius.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.circularNameplateRadius.hint`,
+  //   scope: "world",
+  //   type: Number,
+  //   default: 0,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "nameplateColor", {
-    name: `${CONSTANTS.MODULE_ID}.setting.nameplateColor.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.nameplateColor.hint`,
-    scope: "client",
-    type: String,
-    default: "#FFFFFF",
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "nameplateColor", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.nameplateColor.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.nameplateColor.hint`,
+  //   scope: "client",
+  //   type: String,
+  //   default: "#FFFFFF",
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "nameplateColorGM", {
-    name: `${CONSTANTS.MODULE_ID}.setting.nameplateColorGM.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.nameplateColorGM.hint`,
-    scope: "client",
-    type: String,
-    default: "#FFFFFF",
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "nameplateColorGM", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.nameplateColorGM.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.nameplateColorGM.hint`,
+  //   scope: "client",
+  //   type: String,
+  //   default: "#FFFFFF",
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "nameplateOffset", {
-    name: `${CONSTANTS.MODULE_ID}.setting.nameplateOffset.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.nameplateOffset.hint`,
-    scope: "world",
-    type: Number,
-    default: 0,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "nameplateOffset", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.nameplateOffset.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.nameplateOffset.hint`,
+  //   scope: "world",
+  //   type: Number,
+  //   default: 0,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "plateFont", {
-    name: `${CONSTANTS.MODULE_ID}.setting.plateFont.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.plateFont.hint`,
-    scope: "world",
-    type: String,
-    choices: fontFamilies,
-    default: "signika",
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "plateFont", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.plateFont.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.plateFont.hint`,
+  //   scope: "world",
+  //   type: String,
+  //   choices: fontFamilies,
+  //   default: "signika",
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "sizeMultiplier", {
-    name: `${CONSTANTS.MODULE_ID}.setting.sizeMultiplier.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.sizeMultiplier.hint`,
-    scope: "world",
-    type: Number,
-    default: 1,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "sizeMultiplier", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.sizeMultiplier.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.sizeMultiplier.hint`,
+  //   scope: "world",
+  //   type: Number,
+  //   default: 1,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "plateConsistency", {
-    name: `${CONSTANTS.MODULE_ID}.setting.plateConsistency.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.plateConsistency.hint`,
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "plateConsistency", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.plateConsistency.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.plateConsistency.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: false,
+  //   config: true,
+  // });
 
   // Target Feature (Deprecated)
 
-  game.settings.register(CONSTANTS.MODULE_ID, "disableRefreshTarget", {
-    name: `${CONSTANTS.MODULE_ID}.setting.disableRefreshTarget.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.disableRefreshTarget.hint`,
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "disableRefreshTarget", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.disableRefreshTarget.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.disableRefreshTarget.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: true,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "targetSize", {
-    name: `${CONSTANTS.MODULE_ID}.setting.targetSize.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.targetSize.hint`,
-    scope: "client",
-    type: Number,
-    default: 1,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "targetSize", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.targetSize.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.targetSize.hint`,
+  //   scope: "client",
+  //   type: Number,
+  //   default: 1,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "internatTarget", {
-    name: `${CONSTANTS.MODULE_ID}.setting.internatTarget.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.internatTarget.hint`,
-    scope: "client",
-    type: Boolean,
-    default: false,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "internatTarget", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.internatTarget.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.internatTarget.hint`,
+  //   scope: "client",
+  //   type: Boolean,
+  //   default: false,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "targetColor", {
-    name: `${CONSTANTS.MODULE_ID}.setting.targetColor.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.targetColor.hint`,
-    scope: "client",
-    type: String,
-    default: "#FF9829",
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "targetColor", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.targetColor.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.targetColor.hint`,
+  //   scope: "client",
+  //   type: String,
+  //   default: "#FF9829",
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "targetColorEx", {
-    name: `${CONSTANTS.MODULE_ID}.setting.targetColorEx.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.targetColorEx.hint`,
-    scope: "client",
-    type: String,
-    default: "#000000",
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "targetColorEx", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.targetColorEx.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.targetColorEx.hint`,
+  //   scope: "client",
+  //   type: String,
+  //   default: "#000000",
+  //   config: true,
+  // });
 
   // Bars Feature (Deprecated)
 
-  game.settings.register(CONSTANTS.MODULE_ID, "disableDrawBarsDesign", {
-    name: `${CONSTANTS.MODULE_ID}.setting.disableDrawBarsDesign.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.disableDrawBarsDesign.hint`,
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "disableDrawBarsDesign", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.disableDrawBarsDesign.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.disableDrawBarsDesign.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: true,
+  //   config: true,
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "barAlpha", {
-    name: `${CONSTANTS.MODULE_ID}.setting.barAlpha.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.barAlpha.hint`,
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "barAlpha", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.barAlpha.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.barAlpha.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: false,
+  //   config: true,
+  // });
 
   // HealthGradient Feature (Deprecated)
 
-  game.settings.register(CONSTANTS.MODULE_ID, "healthGradient", {
-    name: `${CONSTANTS.MODULE_ID}.setting.healthGradient.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.healthGradient.hint`,
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: possibleSystems.includes(game.system.id),
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "healthGradient", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.healthGradient.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.healthGradient.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: false,
+  //   config: possibleSystems.includes(game.system.id),
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "tempHPgradient", {
-    name: `${CONSTANTS.MODULE_ID}.setting.tempHPgradient.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.tempHPgradient.hint`,
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: possibleSystems.includes(game.system.id),
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "tempHPgradient", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.tempHPgradient.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.tempHPgradient.hint`,
+  //   scope: "world",
+  //   type: Boolean,
+  //   default: false,
+  //   config: possibleSystems.includes(game.system.id),
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "healthGradientA", {
-    name: `${CONSTANTS.MODULE_ID}.setting.healthGradientA.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientA.hint`,
-    scope: "world",
-    type: String,
-    default: "#1b9421",
-    config: possibleSystems.includes(game.system.id),
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "healthGradientA", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.healthGradientA.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientA.hint`,
+  //   scope: "world",
+  //   type: String,
+  //   default: "#1b9421",
+  //   config: possibleSystems.includes(game.system.id),
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "healthGradientB", {
-    name: `${CONSTANTS.MODULE_ID}.setting.healthGradientB.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientB.hint`,
-    scope: "world",
-    type: String,
-    default: "#c9240a",
-    config: possibleSystems.includes(game.system.id),
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "healthGradientB", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.healthGradientB.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientB.hint`,
+  //   scope: "world",
+  //   type: String,
+  //   default: "#c9240a",
+  //   config: possibleSystems.includes(game.system.id),
+  // });
 
-  game.settings.register(CONSTANTS.MODULE_ID, "healthGradientC", {
-    name: `${CONSTANTS.MODULE_ID}.setting.healthGradientC.name`,
-    hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientC.hint`,
-    scope: "world",
-    type: String,
-    default: "#22e3dd",
-    config: possibleSystems.includes(game.system.id),
-  });
+  // game.settings.register(CONSTANTS.MODULE_ID, "healthGradientC", {
+  //   name: `${CONSTANTS.MODULE_ID}.setting.healthGradientC.name`,
+  //   hint: `${CONSTANTS.MODULE_ID}.setting.healthGradientC.hint`,
+  //   scope: "world",
+  //   type: String,
+  //   default: "#22e3dd",
+  //   config: possibleSystems.includes(game.system.id),
+  // });
 
   // ========================================================================
 

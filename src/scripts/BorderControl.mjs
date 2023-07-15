@@ -1,8 +1,8 @@
-import { BCconfig } from "./BCconfig.mjs";
+// import { BCconfig } from "./BCconfig.mjs";
 import { BorderControlGraphic } from "./BorderControlModels.mjs";
 import CONSTANTS from "./constants.mjs";
 import { i18n } from "./lib/lib.mjs";
-import { BCCBASE } from "./main.mjs";
+// import { BCCBASE } from "./main.mjs";
 
 export class BorderFrame {
   static BORDER_CONTROL_FLAGS = {
@@ -38,22 +38,25 @@ export class BorderFrame {
 
   static async onInit() {
     BorderFrame.defaultColors = {
-      "party-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
-      "party-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
+
       "friendly-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor"), //'#43dfdf',
       "neutral-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColor"), //'#f1d836',
       "hostile-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColor"), //'#e72124',
-
       "controlled-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColor"),
-      "neutral-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx"),
+
+      "party-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
+      "party-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
+      
       "friendly-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx"),
+      "neutral-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx"),
       "hostile-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx"),
       "controlled-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx"),
+      
       "party-external-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx"),
       "party-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx"),
 
-      "target-npc": game.settings.get(CONSTANTS.MODULE_ID, "targetColor"),
-      "target-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx"),
+      // "target-npc": game.settings.get(CONSTANTS.MODULE_ID, "targetColor"),
+      // "target-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx"),
     };
 
     BorderFrame.dispositions = Object.keys(BorderFrame.defaultColors);
@@ -211,30 +214,36 @@ export class BorderFrame {
     );
 
     for (const token of canvas.tokens?.controlled) {
-      //@ts-ignore
-      await token.document.setFlag(
-        CONSTANTS.MODULE_ID,
-        BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE,
-        !borderIsDisabled
-      );
-      // if (borderIsDisabled) {
-      // 	await token.document.unsetFlag(
-      // 		CONSTANTS.MODULE_ID,
-      // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
-      // 	);
-      // 	await token.document.unsetFlag(
-      // 		CONSTANTS.MODULE_ID,
-      // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
-      // 	);
-      // 	await token.document.unsetFlag(
-      // 		CONSTANTS.MODULE_ID,
-      // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
-      // 	);
-      // 	await token.document.unsetFlag(
-      // 		CONSTANTS.MODULE_ID,
-      // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
-      // 	);
-      // }
+      try {
+        //@ts-ignore
+        await token.document.setFlag(
+          CONSTANTS.MODULE_ID,
+          BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE,
+          !borderIsDisabled
+        );
+        // if (borderIsDisabled) {
+        // 	await token.document.unsetFlag(
+        // 		CONSTANTS.MODULE_ID,
+        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+        // 	);
+        // 	await token.document.unsetFlag(
+        // 		CONSTANTS.MODULE_ID,
+        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+        // 	);
+        // 	await token.document.unsetFlag(
+        // 		CONSTANTS.MODULE_ID,
+        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+        // 	);
+        // 	await token.document.unsetFlag(
+        // 		CONSTANTS.MODULE_ID,
+        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+        // 	);
+        // }
+
+        token.refresh();
+      } catch (e) {
+        error(e);
+      }
     }
 
     event.currentTarget.classList.toggle("active", !borderIsDisabled);
@@ -400,187 +409,7 @@ export class BorderFrame {
 
   // ADDED
 
-  static newBorder() {
-    const token = this;
-    let BCC;
-    if (BCCBASE) {
-      // BCC = new BCconfig();
-      BCC = BCCBASE;
-    } else {
-      BCC = new BCconfig();
-    }
-
-    //@ts-ignore
-    this.border.clear();
-    //@ts-ignore
-    this.border.position.set(this.document.x, this.document.y);
-    //@ts-ignore
-    if (!this.visible) {
-      return;
-    }
-    //@ts-ignore
-    let borderColor = this._getBorderColor();
-    if (!borderColor) {
-      return;
-    }
-
-    switch (game.settings.get(CONSTANTS.MODULE_ID, "removeBorders")) {
-      case "0": {
-        break;
-      }
-      case "1": {
-        if (!token.owner) {
-          return;
-        }
-        break;
-      }
-      case "2": {
-        return;
-      }
-    }
-
-    //@ts-ignore
-    let skipDraw;
-    try {
-      // skipDraw = token.document.getFlag(
-      // 	CONSTANTS.MODULE_ID,
-      // 	BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
-      // );
-      skipDraw = getProperty(
-        token.document,
-        `flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`
-      );
-    } catch (e) {
-      //@ts-ignore
-      token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.BORDER_CONTROL_FLAGS.BORDER_DISABLE, false);
-      skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE);
-    }
-    //@ts-ignore
-    if (skipDraw) {
-      return;
-    }
-
-    let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
-    const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-    //@ts-ignore
-    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token._controlled) {
-      t = t * 2;
-    }
-    const sB = game.settings.get(CONSTANTS.MODULE_ID, "scaleBorder");
-    const bS = game.settings.get(CONSTANTS.MODULE_ID, "borderGridScale");
-    const nBS = bS ? canvas.dimensions?.size / 100 : 1;
-    //@ts-ignore
-    const sX = sB ? token.document.texture.scaleX : 1;
-    //@ts-ignore
-    const sY = sB ? token.document.texture.scaleY : 1;
-    const sW = sB ? (token.w - token.w * sX) / 2 : 0;
-    const sH = sB ? (token.h - token.h * sY) / 2 : 0;
-
-    const s = sX;
-    // const s: any = sB ? token.scale : 1;
-    // const sW = sB ? (token.w - token.w * s) / 2 : 0;
-    // const sH = sB ? (token.h - token.h * s) / 2 : 0;
-
-    if (game.settings.get(CONSTANTS.MODULE_ID, "healthGradient")) {
-      const systemPath = BCC.currentSystem;
-      const stepLevel = BCC.stepLevel;
-      const hpMax = getProperty(token, systemPath.max) + (getProperty(token, systemPath.tempMax) ?? 0);
-      const hpValue = getProperty(token, systemPath.value);
-      const hpDecimal = parseInt(String(BorderFrame._clamp((hpValue / hpMax) * stepLevel, stepLevel, 1))) || 1;
-      const color = BorderFrame._rgbToHex(BCC.colorArray[hpDecimal - 1]);
-      borderColor.INT = parseInt(color.substr(1), 16);
-      if (game.settings.get(CONSTANTS.MODULE_ID, "tempHPgradient") && getProperty(token, systemPath.temp) > 0) {
-        const tempValue = getProperty(token, systemPath.temp);
-        const tempDecimal = parseInt(String(BorderFrame._clamp((tempValue / (hpMax / 2)) * stepLevel, stepLevel, 1)));
-        const tempEx = BorderFrame._rgbToHex(BCC.tempArray[tempDecimal - 1]);
-        borderColor.EX = parseInt(tempEx.substr(1), 16);
-      }
-    }
-
-    const textureINT = borderColor.TEXTURE_INT || PIXI.Texture.EMPTY; //await PIXI.Texture.fromURL(token.document.texture.src) || PIXI.Texture.EMPTY;
-    const textureEX = borderColor.TEXTURE_EX || PIXI.Texture.EMPTY;
-
-    // Draw Hex border for size 1 tokens on a hex grid
-    const gt = CONST.GRID_TYPES;
-    const hexTypes = [gt.HEXEVENQ, gt.HEXEVENR, gt.HEXODDQ, gt.HEXODDR];
-
-    if (game.settings.get(CONSTANTS.MODULE_ID, "circleBorders")) {
-      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-      const h = Math.round(t / 2);
-      const o = Math.round(h / 2);
-
-      //@ts-ignore
-      token.border
-        //@ts-ignore
-        .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
-        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + t + p);
-        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
-
-      //@ts-ignore
-      token.border
-        //@ts-ignore
-        .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
-        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
-        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-    } else if (
-      //@ts-ignore
-      canvas.grid.isHex ||
-      //@ts-ignore
-      (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)
-    ) {
-      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-      const q = Math.round(p / 2);
-      //@ts-ignore
-      const polygon = canvas.grid?.grid?.getPolygon(
-        -1.5 - q + sW,
-        -1.5 - q + sH,
-        (token.w + 2) * sX + p,
-        (token.h + 2) * sY + p
-      );
-      //@ts-ignore
-      // const polygon = canvas.grid?.grid?.getPolygon(
-      // 	-1.5 - q + sW,
-      // 	-1.5 - q + sH,
-      // 	(token.w + 2) * s + p,
-      // 	(token.h + 2) * s + p
-      // );
-
-      //@ts-ignore
-      token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
-
-      //@ts-ignore
-      token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
-    }
-
-    // Otherwise Draw Square border
-    else {
-      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-      const q = Math.round(p / 2);
-      const h = Math.round(t / 2);
-      const o = Math.round(h / 2);
-
-      //@ts-ignore
-      token.border
-        //@ts-ignore
-        .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
-        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
-        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
-
-      //@ts-ignore
-      token.border
-        //@ts-ignore
-        .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
-        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
-        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
-    }
-  }
-
-  static newBorderColor(hover) {
-    const token = this;
-
-    if (!BorderFrame.defaultColors) {
-      BorderFrame.onInit();
-    }
+  static retrieveListBorderControl(token) {
 
     const colorFrom = game.settings.get(CONSTANTS.MODULE_ID, "color-from");
     let color;
@@ -694,15 +523,338 @@ export class BorderFrame {
       };
     }
 
+    if (borderControlCustom) {
+      return {
+        CUSTOM_DISPOSITION_BY_FLAG: borderControlCustom
+      }
+    } else {
+      return overrides;
+    }
+  }
+
+  static newBorder() {
+    const token = this;
+    // let BCC;
+    // if (BCCBASE) {
+    //   // BCC = new BCconfig();
+    //   BCC = BCCBASE;
+    // } else {
+    //   BCC = new BCconfig();
+    // }
+
+    //@ts-ignore
+    this.border.clear();
+    //@ts-ignore
+    this.border.position.set(this.document.x, this.document.y);
+    //@ts-ignore
+    if (!this.visible) {
+      return;
+    }
+    //@ts-ignore
+    let borderColorColor = this._getBorderColor();
+    if (!borderColorColor) {
+      return;
+    }
+    let borderColor = null;
+    const overrides = BorderFrame.retrieveListBorderControl(token);
+    if(overrides.CUSTOM_DISPOSITION_BY_FLAG){
+      borderColor = overrides.CUSTOM_DISPOSITION_BY_FLAG;
+    } else {
+      for (const [key, override] of Object.entries(overrides)) {
+        if(override.INT_S === borderColorColor.css) {
+          borderColor = override;
+          break;
+        }
+      }
+    }
+    if (!borderColor) {
+      return;
+    }
+
+    switch (game.settings.get(CONSTANTS.MODULE_ID, "removeBorders")) {
+      case "0": {
+        break;
+      }
+      case "1": {
+        if (!token.owner) {
+          return;
+        }
+        break;
+      }
+      case "2": {
+        return;
+      }
+    }
+
+    //@ts-ignore
+    let skipDraw;
+    try {
+      // skipDraw = token.document.getFlag(
+      // 	CONSTANTS.MODULE_ID,
+      // 	BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+      // );
+      skipDraw = getProperty(
+        token.document,
+        `flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`
+      );
+    } catch (e) {
+      //@ts-ignore
+      token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.BORDER_CONTROL_FLAGS.BORDER_DISABLE, false);
+      skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE);
+    }
+    //@ts-ignore
+    if (skipDraw) {
+      return;
+    }
+
+    let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
+    const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
+    //@ts-ignore
+    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token._controlled) {
+      t = t * 2;
+    }
+    const sB = game.settings.get(CONSTANTS.MODULE_ID, "scaleBorder");
+    const bS = game.settings.get(CONSTANTS.MODULE_ID, "borderGridScale");
+    const nBS = bS ? canvas.dimensions?.size / 100 : 1;
+    //@ts-ignore
+    const sX = sB ? token.document.texture.scaleX : 1;
+    //@ts-ignore
+    const sY = sB ? token.document.texture.scaleY : 1;
+    const sW = sB ? (token.w - token.w * sX) / 2 : 0;
+    const sH = sB ? (token.h - token.h * sY) / 2 : 0;
+
+    const s = sX;
+    // const s: any = sB ? token.scale : 1;
+    // const sW = sB ? (token.w - token.w * s) / 2 : 0;
+    // const sH = sB ? (token.h - token.h * s) / 2 : 0;
+
+    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign") 
+    //     && game.settings.get(CONSTANTS.MODULE_ID, "healthGradient")) {
+    //   const systemPath = BCC.currentSystem;
+    //   const stepLevel = BCC.stepLevel;
+    //   const hpMax = getProperty(token, systemPath.max) + (getProperty(token, systemPath.tempMax) ?? 0);
+    //   const hpValue = getProperty(token, systemPath.value);
+    //   const hpDecimal = parseInt(String(BorderFrame._clamp((hpValue / hpMax) * stepLevel, stepLevel, 1))) || 1;
+    //   const color = BorderFrame._rgbToHex(BCC.colorArray[hpDecimal - 1]);
+    //   borderColor.INT = parseInt(color.substr(1), 16);
+    //   if (game.settings.get(CONSTANTS.MODULE_ID, "tempHPgradient") && getProperty(token, systemPath.temp) > 0) {
+    //     const tempValue = getProperty(token, systemPath.temp);
+    //     const tempDecimal = parseInt(String(BorderFrame._clamp((tempValue / (hpMax / 2)) * stepLevel, stepLevel, 1)));
+    //     const tempEx = BorderFrame._rgbToHex(BCC.tempArray[tempDecimal - 1]);
+    //     borderColor.EX = parseInt(tempEx.substr(1), 16);
+    //   }
+    // }
+
+    const textureINT = borderColor.TEXTURE_INT || PIXI.Texture.EMPTY; //await PIXI.Texture.fromURL(token.document.texture.src) || PIXI.Texture.EMPTY;
+    const textureEX = borderColor.TEXTURE_EX || PIXI.Texture.EMPTY;
+
+    // Draw Hex border for size 1 tokens on a hex grid
+    const gt = CONST.GRID_TYPES;
+    const hexTypes = [gt.HEXEVENQ, gt.HEXEVENR, gt.HEXODDQ, gt.HEXODDR];
+
+    if (game.settings.get(CONSTANTS.MODULE_ID, "circleBorders")) {
+      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
+      const h = Math.round(t / 2);
+      const o = Math.round(h / 2);
+
+      //@ts-ignore
+      token.border
+        //@ts-ignore
+        .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + t + p);
+        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
+
+      //@ts-ignore
+      token.border
+        //@ts-ignore
+        .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
+        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
+    } else if (
+      //@ts-ignore
+      canvas.grid.isHex ||
+      //@ts-ignore
+      (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)
+    ) {
+      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
+      const q = Math.round(p / 2);
+      //@ts-ignore
+      const polygon = canvas.grid?.grid?.getPolygon(
+        -1.5 - q + sW,
+        -1.5 - q + sH,
+        (token.w + 2) * sX + p,
+        (token.h + 2) * sY + p
+      );
+      //@ts-ignore
+      // const polygon = canvas.grid?.grid?.getPolygon(
+      // 	-1.5 - q + sW,
+      // 	-1.5 - q + sH,
+      // 	(token.w + 2) * s + p,
+      // 	(token.h + 2) * s + p
+      // );
+
+      //@ts-ignore
+      token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
+
+      //@ts-ignore
+      token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
+    }
+
+    // Otherwise Draw Square border
+    else {
+      // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
+      const q = Math.round(p / 2);
+      const h = Math.round(t / 2);
+      const o = Math.round(h / 2);
+
+      //@ts-ignore
+      token.border
+        //@ts-ignore
+        .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
+        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
+
+      //@ts-ignore
+      token.border
+        //@ts-ignore
+        .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
+        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
+    }
+  }
+
+  static newBorderColor(hover) {
+    const token = this;
+
+    if (!BorderFrame.defaultColors) {
+      BorderFrame.onInit();
+    }
+
+    const colorFrom = game.settings.get(CONSTANTS.MODULE_ID, "color-from");
+    // let color;
+    // let icon;
+    // if (colorFrom === "token-disposition") {
+    //   const disposition = BorderFrame.dispositionKey(token);
+    //   if (disposition) {
+    //     color = BorderFrame.defaultColors[disposition];
+    //   }
+    // } else if (colorFrom === "actor-folder-color") {
+    //   if (token.actor && token.actor.folder && token.actor.folder) {
+    //     //@ts-ignore
+    //     color = token.actor.folder.color;
+    //     //@ts-ignore
+    //     icon = token.actor.folder.icon;
+    //   }
+    // } else {
+    //   // colorFrom === 'custom-disposition'
+    //   // TODO PUT SOME NEW FLAG ON THE TOKEN
+    //   const disposition = BorderFrame.dispositionKey(token);
+    //   if (disposition) {
+    //     color = game.settings.get(CONSTANTS.MODULE_ID, `custom-${disposition}-color`);
+    //   }
+    // }
+    //
+    // const currentCustomColorTokenInt = token.document.getFlag(
+    //   CONSTANTS.MODULE_ID,
+    //   BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+    // );
+    // const currentCustomColorTokenExt = token.document.getFlag(
+    //   CONSTANTS.MODULE_ID,
+    //   BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+    // );
+
+    // const overrides = {
+    //   CONTROLLED: {
+    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")),
+    //   },
+    //   FRIENDLY: {
+    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor")).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor")),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx")),
+    //   },
+    //   NEUTRAL: {
+    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColor")).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColor")),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx")),
+    //   },
+    //   HOSTILE: {
+    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColor")).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColor")),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx")),
+    //   },
+    //   PARTY: {
+    //     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "partyColor")).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColor")),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx")),
+    //   },
+    //   ACTOR_FOLDER_COLOR: {
+    //     INT: parseInt(String(color).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx")).substr(1), 16),
+    //     ICON: icon ? String(icon) : "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(color),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx")),
+    //   },
+    //   CUSTOM_DISPOSITION: {
+    //     INT: parseInt(String(color).substr(1), 16),
+    //     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx")).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(color),
+    //     EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx")),
+    //   },
+    // };
+
+    // let borderControlCustom = null;
+    // if (currentCustomColorTokenInt && currentCustomColorTokenInt != "#000000") {
+    //   borderControlCustom = {
+    //     INT: parseInt(String(currentCustomColorTokenInt).substr(1), 16),
+    //     EX: parseInt(String(currentCustomColorTokenExt).substr(1), 16),
+    //     ICON: "",
+    //     TEXTURE_INT: PIXI.Texture.EMPTY,
+    //     TEXTURE_EX: PIXI.Texture.EMPTY,
+    //     INT_S: String(currentCustomColorTokenInt),
+    //     EX_S: String(currentCustomColorTokenExt),
+    //   };
+    // }
+    let borderControlCustom = null;
+    const overrides = BorderFrame.retrieveListBorderControl(token);
+    if(overrides.CUSTOM_DISPOSITION_BY_FLAG){
+      borderControlCustom = overrides.CUSTOM_DISPOSITION_BY_FLAG;
+    }
+
     let borderColor = null;
     if (colorFrom === "token-disposition") {
       if (token.controlled) {
-        return overrides.CONTROLLED;
+        borderColor = overrides.CONTROLLED;
       } else if (
-        //@ts-ignore
-        (hover ?? token.hover) ||
-        //@ts-ignore
-        canvas.tokens?.highlightObjects ||
+        (hover ?? this.hover) ||
+        token.layer.highlightObjects ||
+        //canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
       ) {
         if (borderControlCustom) {
@@ -728,16 +880,13 @@ export class BorderFrame {
           }
         }
       } else {
-        // colorFrom === 'custom-disposition'
-        // borderColor = overrides.CUSTOM_DISPOSITION;
         borderColor = null;
       }
     } else if (colorFrom === "actor-folder-color") {
       if (
-        //@ts-ignore
-        (hover ?? token.hover) ||
-        //@ts-ignore
-        canvas.tokens?.highlightObjects ||
+        (hover ?? this.hover) ||
+        token.layer.highlightObjects ||
+        //canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
       ) {
         if (borderControlCustom) {
@@ -746,213 +895,182 @@ export class BorderFrame {
           borderColor = overrides.ACTOR_FOLDER_COLOR;
         }
       } else {
-        // colorFrom === 'custom-disposition'
-        // borderColor = overrides.CUSTOM_DISPOSITION;
         borderColor = null;
       }
     } else {
-      // colorFrom === 'custom-disposition'
-      // borderColor = overrides.CUSTOM_DISPOSITION;
       borderColor = null;
     }
 
-    return borderColor;
+    const finalBorderColor = borderColor ? Color.from(borderColor.INT) : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
+
+    return finalBorderColor;
   }
 
   /* -------------------------------------------- */
   /* DEPRECATED METHODS USE OTHERS MODULE INSTEAD */
   /* -------------------------------------------- */
 
-  // static getActorHpPath() {
-  // 	switch (game.system.id) {
-  // 		case "symbaroum": {
-  // 			return {
-  // 				value: "actor.system.health.toughness.value",
-  // 				max: "actor.system.health.toughness.max",
-  // 				tempMax: undefined,
-  // 				temp: undefined
-  // 			};
-  // 		}
-  // 		case "dnd5e": {
-  // 			return {
-  // 				value: "actor.system.attributes.hp.value",
-  // 				max: "actor.system.attributes.hp.max",
-  // 				tempMax: "actor.system.attributes.hp.tempmax",
-  // 				temp: "actor.system.attributes.hp.temp"
-  // 			};
-  // 		}
-  // 		default: {
-  // 			return {
-  // 				value: "actor.system.attributes.hp.value",
-  // 				max: "actor.system.attributes.hp.max",
-  // 				tempMax: "actor.system.attributes.hp.tempmax",
-  // 				temp: "actor.system.attributes.hp.temp"
-  // 			};
-  // 		}
-  // 	}
+  // /**
+  //  * @deprecated use instead other modules
+  //  * @param reticule
+  //  * @returns
+  //  */
+  // static newTarget(reticule) {
+  //   const token = this;
+  //   token.target.clear();
+
+  //   if (!token.targeted.size) {
+  //     return;
+  //   }
+
+  //   const multiplier = game.settings.get(CONSTANTS.MODULE_ID, "targetSize");
+  //   const INT = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColor").substr(1), 16);
+  //   const EX = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx").substr(1), 16);
+
+  //   // Determine whether the current user has target and any other users
+  //   const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
+
+  //   // For the current user, draw the target arrows
+  //   if (user.length) {
+  //     token._drawTarget(reticule);
+  //   }
+  //   // For other users, draw offset pips
+  //   const hw = token.w / 2;
+  //   for (let [i, u] of others.entries()) {
+  //     const offset = Math.floor((i + 1) / 2) * 16;
+  //     const sign = i % 2 === 0 ? 1 : -1;
+  //     const x = hw + sign * offset;
+  //     //@ts-ignore
+  //     token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
+  //   }
   // }
 
-  /**
-   * @deprecated use instead other modules
-   * @param reticule
-   * @returns
-   */
-  static newTarget(reticule) {
-    const token = this;
-    token.target.clear();
+  // /**
+  //  * @deprecated use instead other modules
+  //  * @returns
+  //  */
+  // static drawNameplate() {
+  //   const token = this;
+  //   const offSet = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
+  //   const yOff = game.settings.get(CONSTANTS.MODULE_ID, "nameplateOffset");
+  //   const bOff = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") / 2;
+  //   const replaceFont = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
+  //   let color =
+  //     game.user?.isGM && [10, 40, 20].includes(token.document.displayName)
+  //       ? game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM")
+  //       : game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
+  //   const sizeMulti = game.settings.get(CONSTANTS.MODULE_ID, "sizeMultiplier");
 
-    if (!token.targeted.size) {
-      return;
-    }
+  //   if (game.settings.get(CONSTANTS.MODULE_ID, "circularNameplate")) {
+  //     let style = CONFIG.canvasTextStyle.clone();
+  //     let extraRad = game.settings.get(CONSTANTS.MODULE_ID, "circularNameplateRadius");
+  //     if (!game.modules.get("custom-nameplates")?.active) {
+  //       style.fontFamily = replaceFont;
+  //       style.fontSize *= sizeMulti;
+  //     }
+  //     if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
+  //       style.fontSize *= canvas.grid?.size / 100;
+  //     }
+  //     style.fill = color;
+  //     var text = new PreciseText(token.name, style);
+  //     text.resolution = 4;
+  //     text.style.trim = true;
+  //     text.updateText(true);
 
-    const multiplier = game.settings.get(CONSTANTS.MODULE_ID, "targetSize");
-    const INT = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColor").substr(1), 16);
-    const EX = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx").substr(1), 16);
+  //     var radius = token.w / 2 + text.texture.height + bOff + extraRad;
+  //     var maxRopePoints = 100;
+  //     var step = Math.PI / maxRopePoints;
 
-    // Determine whether the current user has target and any other users
-    const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
+  //     var ropePoints = maxRopePoints - Math.round((text.texture.width / (radius * Math.PI)) * maxRopePoints);
+  //     ropePoints /= 2;
 
-    // For the current user, draw the target arrows
-    if (user.length) {
-      token._drawTarget(reticule);
-    }
-    // For other users, draw offset pips
-    const hw = token.w / 2;
-    for (let [i, u] of others.entries()) {
-      const offset = Math.floor((i + 1) / 2) * 16;
-      const sign = i % 2 === 0 ? 1 : -1;
-      const x = hw + sign * offset;
-      //@ts-ignore
-      token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
-    }
-  }
+  //     var points = [];
+  //     for (var i = maxRopePoints - ropePoints; i > ropePoints; i--) {
+  //       var x = radius * Math.cos(step * i);
+  //       var y = radius * Math.sin(step * i);
+  //       points.push(new PIXI.Point(-x, -y));
+  //     }
+  //     const name = new PIXI.SimpleRope(text.texture, points);
+  //     name.rotation = Math.PI;
+  //     name.position.set(token.w / 2, token.h / 2 + yOff);
+  //     return name;
+  //   } else {
+  //     //@ts-ignore
+  //     const style = token._getTextStyle();
+  //     if (!game.modules.get("custom-nameplates")?.active) {
+  //       style.fontFamily = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
+  //       style.fontSize *= sizeMulti;
+  //     }
+  //     if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
+  //       style.fontSize *= canvas.grid?.size / 100;
+  //     }
+  //     style.fill = color;
 
-  /**
-   * @deprecated use instead other modules
-   * @returns
-   */
-  static drawNameplate() {
-    const token = this;
-    const offSet = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-    const yOff = game.settings.get(CONSTANTS.MODULE_ID, "nameplateOffset");
-    const bOff = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") / 2;
-    const replaceFont = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
-    let color =
-      game.user?.isGM && [10, 40, 20].includes(token.document.displayName)
-        ? game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM")
-        : game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
-    const sizeMulti = game.settings.get(CONSTANTS.MODULE_ID, "sizeMultiplier");
+  //     const name = new PreciseText(token.document.name, style);
+  //     name.anchor.set(0.5, 0);
+  //     name.position.set(token.w / 2, token.h + bOff + yOff + offSet);
+  //     return name;
+  //   }
+  // }
 
-    if (game.settings.get(CONSTANTS.MODULE_ID, "circularNameplate")) {
-      let style = CONFIG.canvasTextStyle.clone();
-      let extraRad = game.settings.get(CONSTANTS.MODULE_ID, "circularNameplateRadius");
-      if (!game.modules.get("custom-nameplates")?.active) {
-        style.fontFamily = replaceFont;
-        style.fontSize *= sizeMulti;
-      }
-      if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
-        style.fontSize *= canvas.grid?.size / 100;
-      }
-      style.fill = color;
-      var text = new PreciseText(token.name, style);
-      text.resolution = 4;
-      text.style.trim = true;
-      text.updateText(true);
+  // /**
+  //  * @deprecated use instead other modules
+  //  * @param wrapped
+  //  * @param args
+  //  * @returns
+  //  */
+  // static drawBars(wrapped, ...args) {
+  //   const token = this;
+  //   if (!game.settings.get(CONSTANTS.MODULE_ID, "barAlpha") || !game.user?.isGM) {
+  //     return wrapped(...args);
+  //   }
+  //   if (!token.actor || [50, 0, 30].includes(token.document.displayBars)) {
+  //     return wrapped(...args);
+  //   } else {
+  //     return ["bar1", "bar2"].forEach((b, i) => {
+  //       const bar = token.bars[b];
+  //       const attr = token.document.getBarAttribute(b);
+  //       if (!attr || attr.type !== "bar") {
+  //         return (bar.visible = false);
+  //       }
+  //       token._drawBar(i, bar, attr);
+  //       bar.visible = true;
+  //       bar.alpha = 0.5;
+  //       token.bars.visible = token._canViewMode(token.document.displayBars);
+  //       return token.bars.visible;
+  //     });
+  //   }
+  // }
 
-      var radius = token.w / 2 + text.texture.height + bOff + extraRad;
-      var maxRopePoints = 100;
-      var step = Math.PI / maxRopePoints;
+  // /**
+  //  * Draw the targeting arrows around this token.
+  //  * @param {ReticuleOptions} [reticule]  Additional parameters to configure how the targeting reticule is drawn.
+  //  * @protected
+  //  * @deprecated use instead other modules
+  //  */
+  // static _drawTarget({
+  //   margin: m = 0,
+  //   alpha = 1,
+  //   size = 0.15,
+  //   color = null,
+  //   border: { width = 2, color: lineColor = 0 } = {},
+  // } = {}) {
+  //   const token = this;
+  //   const l = canvas.dimensions?.size * size; // Side length.
+  //   const { h, w } = token;
+  //   const lineStyle = { color: lineColor, alpha, width, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.BEVEL };
 
-      var ropePoints = maxRopePoints - Math.round((text.texture.width / (radius * Math.PI)) * maxRopePoints);
-      ropePoints /= 2;
+  //   color ??= token._getBorderColor({ hover: true });
 
-      var points = [];
-      for (var i = maxRopePoints - ropePoints; i > ropePoints; i--) {
-        var x = radius * Math.cos(step * i);
-        var y = radius * Math.sin(step * i);
-        points.push(new PIXI.Point(-x, -y));
-      }
-      const name = new PIXI.SimpleRope(text.texture, points);
-      name.rotation = Math.PI;
-      name.position.set(token.w / 2, token.h / 2 + yOff);
-      return name;
-    } else {
-      //@ts-ignore
-      const style = token._getTextStyle();
-      if (!game.modules.get("custom-nameplates")?.active) {
-        style.fontFamily = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
-        style.fontSize *= sizeMulti;
-      }
-      if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
-        style.fontSize *= canvas.grid?.size / 100;
-      }
-      style.fill = color;
+  //   m *= l * -1;
 
-      const name = new PreciseText(token.document.name, style);
-      name.anchor.set(0.5, 0);
-      name.position.set(token.w / 2, token.h + bOff + yOff + offSet);
-      return name;
-    }
-  }
-
-  /**
-   * @deprecated use instead other modules
-   * @param wrapped
-   * @param args
-   * @returns
-   */
-  static drawBars(wrapped, ...args) {
-    const token = this;
-    if (!game.settings.get(CONSTANTS.MODULE_ID, "barAlpha") || !game.user?.isGM) {
-      return wrapped(...args);
-    }
-    if (!token.actor || [50, 0, 30].includes(token.document.displayBars)) {
-      return wrapped(...args);
-    } else {
-      return ["bar1", "bar2"].forEach((b, i) => {
-        const bar = token.bars[b];
-        const attr = token.document.getBarAttribute(b);
-        if (!attr || attr.type !== "bar") {
-          return (bar.visible = false);
-        }
-        token._drawBar(i, bar, attr);
-        bar.visible = true;
-        bar.alpha = 0.5;
-        token.bars.visible = token._canViewMode(token.document.displayBars);
-        return token.bars.visible;
-      });
-    }
-  }
-
-  /**
-   * Draw the targeting arrows around this token.
-   * @param {ReticuleOptions} [reticule]  Additional parameters to configure how the targeting reticule is drawn.
-   * @protected
-   * @deprecated use instead other modules
-   */
-  static _drawTarget({
-    margin: m = 0,
-    alpha = 1,
-    size = 0.15,
-    color = null,
-    border: { width = 2, color: lineColor = 0 } = {},
-  } = {}) {
-    const token = this;
-    const l = canvas.dimensions?.size * size; // Side length.
-    const { h, w } = token;
-    const lineStyle = { color: lineColor, alpha, width, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.BEVEL };
-
-    color ??= token._getBorderColor({ hover: true });
-
-    m *= l * -1;
-
-    token.target
-      //@ts-ignore
-      .beginFill(Color.from(color.INT), alpha)
-      .lineStyle(lineStyle)
-      .drawPolygon([-m, -m, -m - l, -m, -m, -m - l]) // Top left
-      .drawPolygon([w + m, -m, w + m + l, -m, w + m, -m - l]) // Top right
-      .drawPolygon([-m, h + m, -m - l, h + m, -m, h + m + l]) // Bottom left
-      .drawPolygon([w + m, h + m, w + m + l, h + m, w + m, h + m + l]); // Bottom right
-  }
+  //   token.target
+  //     //@ts-ignore
+  //     .beginFill(Color.from(color.INT), alpha)
+  //     .lineStyle(lineStyle)
+  //     .drawPolygon([-m, -m, -m - l, -m, -m, -m - l]) // Top left
+  //     .drawPolygon([w + m, -m, w + m + l, -m, w + m, -m - l]) // Top right
+  //     .drawPolygon([-m, h + m, -m - l, h + m, -m, h + m + l]) // Bottom left
+  //     .drawPolygon([w + m, h + m, w + m + l, h + m, w + m, h + m + l]); // Bottom right
+  // }
 }
