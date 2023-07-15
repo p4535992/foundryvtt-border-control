@@ -12,27 +12,27 @@ export const initHooks = async () => {
   // registerSocket();
 
   Hooks.on("renderSettingsConfig", (app, el, data) => {
-    let nC = game.settings.get(CONSTANTS.MODULE_NAME, "neutralColor");
-    let fC = game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColor");
-    let hC = game.settings.get(CONSTANTS.MODULE_NAME, "hostileColor");
-    let cC = game.settings.get(CONSTANTS.MODULE_NAME, "controlledColor");
-    let pC = game.settings.get(CONSTANTS.MODULE_NAME, "partyColor");
-    let nCE = game.settings.get(CONSTANTS.MODULE_NAME, "neutralColorEx");
-    let fCE = game.settings.get(CONSTANTS.MODULE_NAME, "friendlyColorEx");
-    let hCE = game.settings.get(CONSTANTS.MODULE_NAME, "hostileColorEx");
-    let cCE = game.settings.get(CONSTANTS.MODULE_NAME, "controlledColorEx");
-    let pCE = game.settings.get(CONSTANTS.MODULE_NAME, "partyColorEx");
-    const afCE = game.settings.get(CONSTANTS.MODULE_NAME, "actorFolderColorEx");
-    const cdCE = game.settings.get(CONSTANTS.MODULE_NAME, "customDispositionColorEx");
+    let nC = game.settings.get(CONSTANTS.MODULE_ID, "neutralColor");
+    let fC = game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor");
+    let hC = game.settings.get(CONSTANTS.MODULE_ID, "hostileColor");
+    let cC = game.settings.get(CONSTANTS.MODULE_ID, "controlledColor");
+    let pC = game.settings.get(CONSTANTS.MODULE_ID, "partyColor");
+    let nCE = game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx");
+    let fCE = game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx");
+    let hCE = game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx");
+    let cCE = game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx");
+    let pCE = game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx");
+    const afCE = game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx");
+    const cdCE = game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx");
 
-    let tC = game.settings.get(CONSTANTS.MODULE_NAME, "targetColor");
-    let tCE = game.settings.get(CONSTANTS.MODULE_NAME, "targetColorEx");
+    let tC = game.settings.get(CONSTANTS.MODULE_ID, "targetColor");
+    let tCE = game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx");
 
-    let gS = game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientA");
-    let gE = game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientB");
-    let gT = game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientC");
-    let nPC = game.settings.get(CONSTANTS.MODULE_NAME, "nameplateColor");
-    let nPCGM = game.settings.get(CONSTANTS.MODULE_NAME, "nameplateColorGM");
+    let gS = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientA");
+    let gE = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientB");
+    let gT = game.settings.get(CONSTANTS.MODULE_ID, "healthGradientC");
+    let nPC = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
+    let nPCGM = game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM");
     el.find('[name="Border-Control.neutralColor"]')
       .parent()
       .append(`<input type="color" value="${nC}" data-edit="Border-Control.neutralColor">`);
@@ -96,7 +96,7 @@ export const initHooks = async () => {
       .append(`<input type="color"value="${nPCGM}" data-edit="Border-Control.nameplateColorGM">`);
   });
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "borderControlEnabled")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
     // setup all the hooks
 
     Hooks.on("renderTokenConfig", (config, html) => {
@@ -104,36 +104,36 @@ export const initHooks = async () => {
     });
 
     //@ts-ignore
-    libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
+    libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
     //@ts-ignore
     libWrapper.register(
-      CONSTANTS.MODULE_NAME,
+      CONSTANTS.MODULE_ID,
       "Token.prototype._getBorderColor",
       BorderFrame.newBorderColor,
       "OVERRIDE"
     );
 
-    if (!game.settings.get(CONSTANTS.MODULE_NAME, "disableRefreshTarget")) {
+    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
       //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
 
       //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
+      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
     }
 
-    if (!game.settings.get(CONSTANTS.MODULE_NAME, "disableNameplateDesign")) {
+    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableNameplateDesign")) {
       //@ts-ignore
       libWrapper.register(
-        CONSTANTS.MODULE_NAME,
+        CONSTANTS.MODULE_ID,
         "Token.prototype._drawNameplate",
         BorderFrame.drawNameplate,
         "OVERRIDE"
       );
     }
 
-    if (!game.settings.get(CONSTANTS.MODULE_NAME, "disableDrawBarsDesign")) {
+    if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")) {
       //@ts-ignore
-      libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
+      libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
     }
   }
 };
@@ -145,7 +145,7 @@ export const setupHooks = async () => {
 export const readyHooks = () => {
   BCCBASE = new BCconfig();
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "borderControlEnabled")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
     Hooks.on("renderTokenHUD", (app, html, data) => {
       BorderFrame.AddBorderToggle(app, html, data);
     });

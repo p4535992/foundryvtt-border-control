@@ -1,8 +1,8 @@
 const CONSTANTS = {
-  MODULE_NAME: "Border-Control",
+  MODULE_ID: "Border-Control",
   PATH: `modules/Border-Control/`,
 };
 
-CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_NAME}/`;
+CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_ID}/`;
 
 export default CONSTANTS;

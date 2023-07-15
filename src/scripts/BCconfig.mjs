@@ -48,13 +48,13 @@ export class BCconfig {
       temp: undefined,
     };
 
-    this.stepLevel = game.settings.get(CONSTANTS.MODULE_NAME, "stepLevel");
+    this.stepLevel = game.settings.get(CONSTANTS.MODULE_ID, "stepLevel");
     //@ts-ignore
-    this.endColor = Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientA")).rgb;
+    this.endColor = Color.from(game.settings.get(CONSTANTS.MODULE_ID, "healthGradientA")).rgb;
     //@ts-ignore
-    this.startColor = Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientB")).rgb;
+    this.startColor = Color.from(game.settings.get(CONSTANTS.MODULE_ID, "healthGradientB")).rgb;
     //@ts-ignore
-    this.tempColor = Color.from(game.settings.get(CONSTANTS.MODULE_NAME, "healthGradientC")).rgb;
+    this.tempColor = Color.from(game.settings.get(CONSTANTS.MODULE_ID, "healthGradientC")).rgb;
     this.colorArray = BorderFrame.interpolateColors(
       `rgb(${this.startColor[0] * 255}, ${this.startColor[1] * 255}, ${this.startColor[2] * 255})`,
       `rgb(${this.endColor[0] * 255}, ${this.endColor[1] * 255}, ${this.endColor[2] * 255})`,
