@@ -17,11 +17,13 @@ export const initHooks = async () => {
     let hC = game.settings.get(CONSTANTS.MODULE_ID, "hostileColor");
     let cC = game.settings.get(CONSTANTS.MODULE_ID, "controlledColor");
     let pC = game.settings.get(CONSTANTS.MODULE_ID, "partyColor");
+    let sC = game.settings.get(CONSTANTS.MODULE_ID, "secretColor");
     let nCE = game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx");
     let fCE = game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx");
     let hCE = game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx");
     let cCE = game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx");
     let pCE = game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx");
+    let sCE = game.settings.get(CONSTANTS.MODULE_ID, "secretColorEx");
     const afCE = game.settings.get(CONSTANTS.MODULE_ID, "actorFolderColorEx");
     const cdCE = game.settings.get(CONSTANTS.MODULE_ID, "customDispositionColorEx");
 
@@ -48,9 +50,14 @@ export const initHooks = async () => {
     el.find('[name="Border-Control.partyColor"]')
       .parent()
       .append(`<input type="color"value="${pC}" data-edit="Border-Control.partyColor">`);
-    el.find('[name="Border-Control.targetColor"]')
+
+    el.find('[name="Border-Control.secretColor"]')
       .parent()
-      .append(`<input type="color"value="${tC}" data-edit="Border-Control.targetColor">`);
+      .append(`<input type="color"value="${sC}" data-edit="Border-Control.secretColor">`);
+
+    // el.find('[name="Border-Control.targetColor"]')
+    //   .parent()
+    //   .append(`<input type="color"value="${tC}" data-edit="Border-Control.targetColor">`);
 
     el.find('[name="Border-Control.neutralColorEx"]')
       .parent()
@@ -67,6 +74,10 @@ export const initHooks = async () => {
     el.find('[name="Border-Control.partyColorEx"]')
       .parent()
       .append(`<input type="color"value="${pCE}" data-edit="Border-Control.partyColorEx">`);
+
+    el.find('[name="Border-Control.secretColorEx"]')
+      .parent()
+      .append(`<input type="color"value="${sCE}" data-edit="Border-Control.secretColorEx">`);
 
     el.find('[name="Border-Control.actorFolderColorEx"]')
       .parent()
