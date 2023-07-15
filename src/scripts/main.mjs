@@ -149,7 +149,6 @@ export const setupHooks = async () => {
 };
 
 export const readyHooks = () => {
-  // BCCBASE = new BCconfig();
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
     Hooks.on("renderTokenHUD", (app, html, data) => {
@@ -163,11 +162,11 @@ export const readyHooks = () => {
       }
     });
 
-    // Removed for conflict with others modules ?
-    canvas.tokens?.placeables.forEach((t) => {
-      if (!t.owner) {
-        t.cursor = "default";
-      }
-    });
+    // // Removed for conflict with others modules ?
+    // canvas.tokens?.placeables.forEach((t) => {
+    //   if (!t.owner) {
+    //     t.cursor = "default";
+    //   }
+    // });
   }
 };

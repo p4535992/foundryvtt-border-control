@@ -539,23 +539,14 @@ export class BorderFrame {
 
   static newBorder() {
     const token = this;
-    // let BCC;
-    // if (BCCBASE) {
-    //   // BCC = new BCconfig();
-    //   BCC = BCCBASE;
-    // } else {
-    //   BCC = new BCconfig();
-    // }
 
-    //@ts-ignore
     this.border.clear();
-    //@ts-ignore
+
     this.border.position.set(this.document.x, this.document.y);
-    //@ts-ignore
     if (!this.visible) {
       return;
     }
-    //@ts-ignore
+
     let borderColorColor = this._getBorderColor();
     if (!borderColorColor) {
       return;
@@ -615,7 +606,7 @@ export class BorderFrame {
     let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
     const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
     //@ts-ignore
-    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token._controlled) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) { //  && token._controlled
       t = t * 2;
     }
     const sB = game.settings.get(CONSTANTS.MODULE_ID, "scaleBorder");
@@ -800,9 +791,13 @@ export class BorderFrame {
       borderColor = null;
     }
 
+    // const finalBorderColor = borderColor
+    //   ? Color.from(borderColor.INT)
+    //   : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
+
     const finalBorderColor = borderColor
       ? Color.from(borderColor.INT)
-      : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
+      : null;
 
     return finalBorderColor;
   }
