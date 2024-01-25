@@ -32,7 +32,8 @@ export class BorderFrame {
       "friendly-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColor"), //'#43dfdf',
       "neutral-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColor"), //'#f1d836',
       "hostile-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColor"), //'#e72124',
-      "controlled-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColor"),
+      "secret-npc": game.settings.get(CONSTANTS.MODULE_ID, "secretColor"), //'#e72124',
+      "controlled-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColor"), //'0xFF6400'
 
       "party-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
       "party-npc": game.settings.get(CONSTANTS.MODULE_ID, "partyColor"), //'#33bc4e',
@@ -40,6 +41,7 @@ export class BorderFrame {
       "friendly-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "friendlyColorEx"),
       "neutral-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "neutralColorEx"),
       "hostile-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "hostileColorEx"),
+      "secret-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "secretColorEx"),
       "controlled-external-npc": game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx"),
 
       "party-external-member": game.settings.get(CONSTANTS.MODULE_ID, "partyColorEx"),
@@ -733,8 +735,30 @@ export class BorderFrame {
     }
   }
 
-  static newBorderColor(hover) {
+  /**
+   * Get the hex color that should be used to render the Token border
+   * @param {object} [options]
+   * @param {boolean} [options.hover]  Return a border color for this hover state, otherwise use the token's current
+   *                                   state.
+   * @returns {number|null}            The hex color used to depict the border color
+   * @protected
+   */
+  static newBorderColor({ hover } = {}) {
+    // const colors = CONFIG.Canvas.dispositionColors;
+    // if ( this.controlled ) return colors.CONTROLLED;
+    // else if ( (hover ?? this.hover) || this.layer.highlightObjects ) {
+    //   let d = this.document.disposition;
+    //   if ( !game.user.isGM && this.isOwner ) return colors.CONTROLLED;
+    //   else if ( this.actor?.hasPlayerOwner ) return colors.PARTY;
+    //   else if ( d === CONST.TOKEN_DISPOSITIONS.FRIENDLY ) return colors.FRIENDLY;
+    //   else if ( d === CONST.TOKEN_DISPOSITIONS.NEUTRAL ) return colors.NEUTRAL;
+    //   else if ( d === CONST.TOKEN_DISPOSITIONS.HOSTILE ) return colors.HOSTILE;
+    //   else if ( d === CONST.TOKEN_DISPOSITIONS.SECRET ) return this.isOwner ? colors.SECRET : null;
+    // }
+    // return null;
+
     const token = this;
+    let hoverTmp = hover != undefined && hover != null ? hover : this.hover;
 
     if (!BorderFrame.defaultColors) {
       BorderFrame.onInit();
@@ -752,7 +776,7 @@ export class BorderFrame {
       if (token.controlled) {
         borderColor = overrides.CONTROLLED;
       } else if (
-        (hover ?? this.hover) ||
+        hoverTmp ||
         token.layer.highlightObjects ||
         //canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
