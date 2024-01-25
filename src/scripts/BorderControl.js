@@ -568,17 +568,18 @@ export class BorderFrame {
     }
   }
 
-  static newBorder() {
-    const token = this;
+  static newBorder(token, permanentBorder = false) {
+    token = token ?? this;
+    if (!permanentBorder) {
+      token.border.clear();
+    }
 
-    this.border.clear();
-
-    this.border.position.set(this.document.x, this.document.y);
-    if (!this.visible) {
+    token.border.position.set(token.document.x, token.document.y);
+    if (!token.visible) {
       return;
     }
 
-    let borderColorColor = this._getBorderColor();
+    let borderColorColor = token._getBorderColor();
     if (!borderColorColor) {
       return;
     }
@@ -774,7 +775,15 @@ export class BorderFrame {
     let borderColor = null;
     if (colorFrom === "token-disposition") {
       if (token.controlled) {
-        borderColor = overrides.CONTROLLED;
+        borderColor = overrides.CONTROLLED ?? {
+          INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")).substr(1), 16),
+          EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")).substr(1), 16),
+          ICON: "",
+          TEXTURE_INT: PIXI.Texture.EMPTY,
+          TEXTURE_EX: PIXI.Texture.EMPTY,
+          INT_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")),
+          EX_S: String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")),
+        };
       } else if (
         hoverTmp ||
         token.layer.highlightObjects ||
@@ -833,6 +842,19 @@ export class BorderFrame {
     const finalBorderColor = borderColor ? Color.from(borderColor.INT) : null;
 
     return finalBorderColor;
+  }
+
+  static _applyRenderFlags(wrapped, ...args) {
+    let result = wrapped(...args);
+    // const hideLabel = this.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.HIDE_LABEL) ?? false;
+    const permanentBorder = game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder");
+
+    if (permanentBorder) {
+      BorderFrame.newBorder(this, true);
+      // this._refreshBorder();
+    }
+
+    return result;
   }
 
   /* -------------------------------------------- */
