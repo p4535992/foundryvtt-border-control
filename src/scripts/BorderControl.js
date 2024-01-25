@@ -1,20 +1,11 @@
 // import { BCconfig } from "./BCconfig.js";
 import { BorderControlGraphic } from "./BorderControlModels.js";
 import CONSTANTS from "./constants.js";
+import { injectConfig } from "./lib/injectConfig.js";
 import { i18n } from "./lib/lib.js";
 // import { BCCBASE } from "./main.js";
 
 export class BorderFrame {
-  static BORDER_CONTROL_FLAGS = {
-    BORDER_DRAW_FRAME: "borderDrawFrame", //'draw-frame',
-    BORDER_DISABLE: "noBorder", // "borderDisable", // 'disable'
-    // BORDER_NO_BORDER: "noBorder", // noBorder
-    BORDER_CUSTOM_COLOR_INT: "borderCustomColorInt",
-    BORDER_CUSTOM_COLOR_EXT: "borderCustomColorExt",
-    BORDER_CUSTOM_FRAME_OPACITY: "borderCustomFrameOpacity",
-    BORDER_CUSTOM_BASE_OPACITY: "borderCustomBaseOpacity",
-  };
-
   static dispositionKey = (token) => {
     const dispositionValue = parseInt(String(token.document.disposition), 10);
     let disposition;
@@ -62,6 +53,8 @@ export class BorderFrame {
   }
 
   static renderTokenConfig = async function (config, html) {
+    BorderFrame.renderTokenConfigHandler(config, html);
+    /*
     const tokenDocument = config.object;
     if (!game.user?.isGM) {
       return;
@@ -71,22 +64,22 @@ export class BorderFrame {
     }
     const borderControlDisableValue = config.object.getFlag(
       CONSTANTS.MODULE_ID,
-      BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+      CONSTANTS.FLAGS.BORDER_DISABLE
     )
       ? "checked"
       : "";
 
     const currentCustomColorTokenInt =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT) || "#000000";
+      config.object.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT) || "#000000";
 
     const currentCustomColorTokenExt =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT) || "#000000";
+      config.object.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT) || "#000000";
 
     const currentCustomColorTokenFrameOpacity =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY) || 0.5;
+      config.object.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY) || 0.5;
 
     const currentCustomColorTokenBaseOpacity =
-      config.object.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY) || 0.5;
+      config.object.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY) || 0.5;
 
     // Expand the width
     config.position.width = 540;
@@ -106,38 +99,38 @@ export class BorderFrame {
       <div class="form-group">
         <label>${i18n("Border-Control.label.borderControlCustomDisable")}</label>
         <input type="checkbox"
-          data-edit="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
-          name="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}"
+          data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}"
           data-dtype="Boolean" ${borderControlDisableValue}>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
         <input type="color"
-          data-edit="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
-          name="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT}"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT}"
           data-dtype="String" value="${currentCustomColorTokenInt}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
         <input type="color"
-          data-edit="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
-          name="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT}"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           data-dtype="String" value="${currentCustomColorTokenExt}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
-          data-edit="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
-          name="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
+          data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
           data-dtype="Number" value="${currentCustomColorTokenFrameOpacity}"></input>
       </div>
       <div class="form-group">
         <label>${i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
-          data-edit="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
-          name="flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
+          data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
           data-dtype="Number" value="${currentCustomColorTokenBaseOpacity}"></input>
       </div>
     `;
@@ -161,7 +154,61 @@ export class BorderFrame {
     //   .parent()
     //   .find('.tab[data-tab="bordercontrol"] input[type="color"][data-edit]')
     //   .change(config._onChangeInput.bind(config));
+    */
   };
+
+  /**
+   * Handler called when token configuration window is opened. Injects custom form html and deals
+   * with updating token.
+   * @category GMOnly
+   * @function
+   * @async
+   * @param {TokenConfig} tokenConfig
+   * @param {JQuery} html
+   */
+  static async renderTokenConfigHandler(tokenConfig, html) {
+    // if (!tokenConfig.token.hasPlayerOwner) {
+    //   return;
+    // }
+    if (!html) {
+      return;
+    }
+
+    injectConfig.inject(
+      tokenConfig,
+      html,
+      {
+        moduleId: CONSTANTS.MODULE_ID,
+        tab: {
+          name: CONSTANTS.MODULE_ID,
+          label: i18n("Border-Control.label.borderControl"),
+          icon: "fas fa-border-style",
+        },
+      },
+      tokenConfig.object
+    );
+
+    const posTab = html.find(`.tab[data-tab="${CONSTANTS.MODULE_ID}"]`);
+    const tokenFlags = tokenConfig.options.sheetConfig
+      ? tokenConfig.object.flags
+        ? tokenConfig.object.flags[CONSTANTS.MODULE_ID] || {}
+        : {}
+      : tokenConfig.token.flags
+      ? tokenConfig.token.flags[CONSTANTS.MODULE_ID] || {}
+      : {};
+
+    const data = {
+      hasPlayerOwner: tokenConfig.token.hasPlayerOwner,
+      borderControlDisableValue: tokenFlags[CONSTANTS.FLAGS.BORDER_DISABLE] ? "checked" : "",
+      currentCustomColorTokenInt: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT] || "#000000",
+      currentCustomColorTokenExt: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT] || "#000000",
+      currentCustomColorTokenFrameOpacity: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY] || 0.5,
+      currentCustomColorTokenBaseOpacity: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY] || 0.5,
+    };
+
+    const insertHTML = await renderTemplate(`modules/${CONSTANTS.MODULE_ID}/templates/token-config.html`, data);
+    posTab.append(insertHTML);
+  }
 
   // START NEW MANAGE
 
@@ -176,10 +223,7 @@ export class BorderFrame {
       return;
     }
 
-    const borderControlDisableFlag = app.object.document.getFlag(
-      CONSTANTS.MODULE_ID,
-      BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
-    );
+    const borderControlDisableFlag = app.object.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
 
     const borderButton = `
     <div class="control-icon borderControlBorder
@@ -205,35 +249,28 @@ export class BorderFrame {
 
   static async ToggleBorder(event) {
     //@ts-ignore
-    const borderIsDisabled = this.object.document.getFlag(
-      CONSTANTS.MODULE_ID,
-      BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
-    );
+    const borderIsDisabled = this.object.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
 
     for (const token of canvas.tokens?.controlled) {
       try {
         //@ts-ignore
-        await token.document.setFlag(
-          CONSTANTS.MODULE_ID,
-          BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE,
-          !borderIsDisabled
-        );
+        await token.document.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE, !borderIsDisabled);
         // if (borderIsDisabled) {
         // 	await token.document.unsetFlag(
         // 		CONSTANTS.MODULE_ID,
-        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT
         // 	);
         // 	await token.document.unsetFlag(
         // 		CONSTANTS.MODULE_ID,
-        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT
         // 	);
         // 	await token.document.unsetFlag(
         // 		CONSTANTS.MODULE_ID,
-        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY
+        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY
         // 	);
         // 	await token.document.unsetFlag(
         // 		CONSTANTS.MODULE_ID,
-        // 		BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY
+        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY
         // 	);
         // }
 
@@ -251,20 +288,16 @@ export class BorderFrame {
     const tokenTmp = this.object;
 
     const currentCustomColorTokenInt =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT) ||
-      "#000000";
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT) || "#000000";
 
     const currentCustomColorTokenExt =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT) ||
-      "#000000";
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT) || "#000000";
 
     const currentCustomColorTokenFrameOpacity =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY) ||
-      0.5;
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY) || 0.5;
 
     const currentCustomColorTokenBaseOpacity =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY) ||
-      0.5;
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY) || 0.5;
 
     const dialogContent = `
       <div class="form-group">
@@ -318,22 +351,22 @@ export class BorderFrame {
             for (const token of canvas.tokens?.controlled) {
               token.document.setFlag(
                 CONSTANTS.MODULE_ID,
-                BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT,
+                CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT,
                 newCurrentCustomColorTokenInt
               );
               token.document.setFlag(
                 CONSTANTS.MODULE_ID,
-                BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT,
+                CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT,
                 newCurrentCustomColorTokenExt
               );
               token.document.setFlag(
                 CONSTANTS.MODULE_ID,
-                BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_FRAME_OPACITY,
+                CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY,
                 newCurrentCustomColorTokenFrameOpacity
               );
               token.document.setFlag(
                 CONSTANTS.MODULE_ID,
-                BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_BASE_OPACITY,
+                CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY,
                 newCurrentCustomColorTokenBaseOpacity
               );
             }
@@ -433,11 +466,11 @@ export class BorderFrame {
 
     const currentCustomColorTokenInt = token.document.getFlag(
       CONSTANTS.MODULE_ID,
-      BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_INT
+      CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT
     );
     const currentCustomColorTokenExt = token.document.getFlag(
       CONSTANTS.MODULE_ID,
-      BorderFrame.BORDER_CONTROL_FLAGS.BORDER_CUSTOM_COLOR_EXT
+      CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT
     );
 
     const overrides = {
@@ -587,16 +620,13 @@ export class BorderFrame {
     try {
       // skipDraw = token.document.getFlag(
       // 	CONSTANTS.MODULE_ID,
-      // 	BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE
+      // 	CONSTANTS.FLAGS.BORDER_DISABLE
       // );
-      skipDraw = getProperty(
-        token.document,
-        `flags.${CONSTANTS.MODULE_ID}.${BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE}`
-      );
+      skipDraw = getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}`);
     } catch (e) {
       //@ts-ignore
-      token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.BORDER_CONTROL_FLAGS.BORDER_DISABLE, false);
-      skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, BorderFrame.BORDER_CONTROL_FLAGS.BORDER_DISABLE);
+      token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.CONSTANTS.FLAGS.BORDER_DISABLE, false);
+      skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
     }
     //@ts-ignore
     if (skipDraw) {

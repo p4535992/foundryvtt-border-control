@@ -1,0 +1,37 @@
+<div class="form-group">
+    <label>{{localize "Border-Control.label.borderControlCustomDisable" }}</label>
+    <input type="checkbox"
+        data-edit="flags.Border-Control.noBorder"
+        name="flags.Border-Control.noBorder"
+        data-dtype="Boolean" {{borderControlDisableValue}}>
+</div>
+<div class="form-group">
+    <label>{{localize "Border-Control.label.borderControlCustomColorTokenInt" }}</label>
+    <input type="color"
+        data-edit="flags.Border-Control.borderCustomColorInt"
+        name="flags.Border-Control.borderCustomColorInt"
+        data-dtype="String" value="{{currentCustomColorTokenInt}}"></input>
+</div>
+<div class="form-group">
+    <label>{{localize "Border-Control.label.borderControlCustomColorTokenExt" }}</label>
+    <input type="color"
+        data-edit="flags.Border-Control.borderCustomColorExt"
+        name="flags.Border-Control.borderCustomColorExt"
+        data-dtype="String" value="{{currentCustomColorTokenExt}}"></input>
+</div>
+<div class="form-group">
+    <label>{{localize "Border-Control.label.borderControlCustomColorTokenFrameOpacity" }}</label>
+    <input type="number"
+        min="0" max="1" step="0.1"
+        data-edit="flags.Border-Control.borderCustomFrameOpacity"
+        name="flags.Border-Control.borderCustomFrameOpacity"
+        data-dtype="Number" value="{{currentCustomColorTokenFrameOpacity}}"></input>
+</div>
+<div class="form-group">
+    <label>{{localize "Border-Control.label.borderControlCustomColorTokenBaseOpacity" }}</label>
+    <input type="number"
+        min="0" max="1" step="0.1"
+        data-edit="flags.Border-Control.borderCustomBaseOpacity"
+        name="flags.Border-Control.borderCustomBaseOpacity"
+        data-dtype="Number" value="{{currentCustomColorTokenBaseOpacity}}"></input>
+</div>
