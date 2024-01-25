@@ -1,8 +1,8 @@
-// import { BCconfig } from "./BCconfig.mjs";
-import { BorderControlGraphic } from "./BorderControlModels.mjs";
-import CONSTANTS from "./constants.mjs";
-import { i18n } from "./lib/lib.mjs";
-// import { BCCBASE } from "./main.mjs";
+// import { BCconfig } from "./BCconfig.js";
+import { BorderControlGraphic } from "./BorderControlModels.js";
+import CONSTANTS from "./constants.js";
+import { i18n } from "./lib/lib.js";
+// import { BCCBASE } from "./main.js";
 
 export class BorderFrame {
   static BORDER_CONTROL_FLAGS = {
@@ -606,7 +606,8 @@ export class BorderFrame {
     let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
     const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
     //@ts-ignore
-    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) { //  && token._controlled
+    if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) {
+      //  && token._controlled
       t = t * 2;
     }
     const sB = game.settings.get(CONSTANTS.MODULE_ID, "scaleBorder");
@@ -795,9 +796,7 @@ export class BorderFrame {
     //   ? Color.from(borderColor.INT)
     //   : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
 
-    const finalBorderColor = borderColor
-      ? Color.from(borderColor.INT)
-      : null;
+    const finalBorderColor = borderColor ? Color.from(borderColor.INT) : null;
 
     return finalBorderColor;
   }

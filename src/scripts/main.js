@@ -1,9 +1,9 @@
-import { warn, error, debug, i18n } from "./lib/lib.mjs";
-import CONSTANTS from "./constants.mjs";
+import { warn, error, debug, i18n } from "./lib/lib.js";
+import CONSTANTS from "./constants.js";
 import { setApi } from "../module.js";
-import API from "./api.mjs";
-// import { BCconfig } from "./BCconfig.mjs";
-import { BorderFrame } from "./BorderControl.mjs";
+import API from "./api.js";
+// import { BCconfig } from "./BCconfig.js";
+import { BorderFrame } from "./BorderControl.js";
 
 // export let BCCBASE;
 
@@ -149,7 +149,6 @@ export const setupHooks = async () => {
 };
 
 export const readyHooks = () => {
-
   if (game.settings.get(CONSTANTS.MODULE_ID, "borderControlEnabled")) {
     Hooks.on("renderTokenHUD", (app, html, data) => {
       BorderFrame.AddBorderToggle(app, html, data);
