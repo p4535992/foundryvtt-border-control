@@ -114,21 +114,20 @@ export const initHooks = async () => {
       BorderFrame.renderTokenConfig(config, html);
     });
 
-    //@ts-ignore
     libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshBorder", BorderFrame.newBorder, "OVERRIDE");
-    //@ts-ignore
+
     libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
 
     // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
-    //   //@ts-ignore
+    //
     //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
 
-    //   //@ts-ignore
+    //
     //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
     // }
 
     // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableNameplateDesign")) {
-    //   //@ts-ignore
+    //
     //   libWrapper.register(
     //     CONSTANTS.MODULE_ID,
     //     "Token.prototype._drawNameplate",
@@ -138,7 +137,7 @@ export const initHooks = async () => {
     // }
 
     // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")) {
-    //   //@ts-ignore
+    //
     //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
     // }
   }

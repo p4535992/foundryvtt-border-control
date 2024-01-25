@@ -248,12 +248,10 @@ export class BorderFrame {
   }
 
   static async ToggleBorder(event) {
-    //@ts-ignore
     const borderIsDisabled = this.object.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
 
     for (const token of canvas.tokens?.controlled) {
       try {
-        //@ts-ignore
         await token.document.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE, !borderIsDisabled);
         // if (borderIsDisabled) {
         // 	await token.document.unsetFlag(
@@ -284,7 +282,6 @@ export class BorderFrame {
   }
 
   static async ToggleCustomBorder(event) {
-    //@ts-ignore
     const tokenTmp = this.object;
 
     const currentCustomColorTokenInt =
@@ -334,7 +331,7 @@ export class BorderFrame {
       buttons: {
         yes: {
           label: i18n("Border-Control.label.applyCustomColor"),
-          //@ts-ignore
+
           callback: async (html) => {
             const newCurrentCustomColorTokenInt = $(
               html.find(`input[data-edit='Border-Control.currentCustomColorTokenInt']`)[0]
@@ -450,9 +447,8 @@ export class BorderFrame {
       }
     } else if (colorFrom === "actor-folder-color") {
       if (token.actor && token.actor.folder && token.actor.folder) {
-        //@ts-ignore
         color = token.actor.folder.color;
-        //@ts-ignore
+
         icon = token.actor.folder.icon;
       }
     } else {
@@ -615,7 +611,6 @@ export class BorderFrame {
       }
     }
 
-    //@ts-ignore
     let skipDraw;
     try {
       // skipDraw = token.document.getFlag(
@@ -624,18 +619,17 @@ export class BorderFrame {
       // );
       skipDraw = getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}`);
     } catch (e) {
-      //@ts-ignore
       token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.CONSTANTS.FLAGS.BORDER_DISABLE, false);
       skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
     }
-    //@ts-ignore
+
     if (skipDraw) {
       return;
     }
 
     let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
     const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-    //@ts-ignore
+
     if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) {
       //  && token._controlled
       t = t * 2;
@@ -643,9 +637,9 @@ export class BorderFrame {
     const sB = game.settings.get(CONSTANTS.MODULE_ID, "scaleBorder");
     const bS = game.settings.get(CONSTANTS.MODULE_ID, "borderGridScale");
     const nBS = bS ? canvas.dimensions?.size / 100 : 1;
-    //@ts-ignore
+
     const sX = sB ? token.document.texture.scaleX : 1;
-    //@ts-ignore
+
     const sY = sB ? token.document.texture.scaleY : 1;
     const sW = sB ? (token.w - token.w * sX) / 2 : 0;
     const sH = sB ? (token.h - token.h * sY) / 2 : 0;
@@ -684,35 +678,28 @@ export class BorderFrame {
       const h = Math.round(t / 2);
       const o = Math.round(h / 2);
 
-      //@ts-ignore
       token.border
-        //@ts-ignore
+
         .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
         // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + t + p);
         .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
 
-      //@ts-ignore
       token.border
-        //@ts-ignore
+
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
         // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
         .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-    } else if (
-      //@ts-ignore
-      canvas.grid.isHex ||
-      //@ts-ignore
-      (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)
-    ) {
+    } else if (canvas.grid.isHex || (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)) {
       // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
       const q = Math.round(p / 2);
-      //@ts-ignore
+
       const polygon = canvas.grid?.grid?.getPolygon(
         -1.5 - q + sW,
         -1.5 - q + sH,
         (token.w + 2) * sX + p,
         (token.h + 2) * sY + p
       );
-      //@ts-ignore
+
       // const polygon = canvas.grid?.grid?.getPolygon(
       // 	-1.5 - q + sW,
       // 	-1.5 - q + sH,
@@ -720,10 +707,8 @@ export class BorderFrame {
       // 	(token.h + 2) * s + p
       // );
 
-      //@ts-ignore
       token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
 
-      //@ts-ignore
       token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
     }
 
@@ -734,16 +719,14 @@ export class BorderFrame {
       const h = Math.round(t / 2);
       const o = Math.round(h / 2);
 
-      //@ts-ignore
       token.border
-        //@ts-ignore
+
         .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
         // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
         .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 
-      //@ts-ignore
       token.border
-        //@ts-ignore
+
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
         // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
         .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
@@ -779,14 +762,11 @@ export class BorderFrame {
         } else {
           const disPath = CONST.TOKEN_DISPOSITIONS;
 
-          //@ts-ignore
           const d = parseInt(token.document.disposition);
-          //@ts-ignore
+
           if (!game.user?.isGM && token.owner) {
             borderColor = overrides.CONTROLLED;
-          }
-          //@ts-ignore
-          else if (token.actor?.hasPlayerOwner) {
+          } else if (token.actor?.hasPlayerOwner) {
             borderColor = overrides.PARTY;
           } else if (d === disPath.FRIENDLY) {
             borderColor = overrides.FRIENDLY;
@@ -865,7 +845,7 @@ export class BorderFrame {
   //     const offset = Math.floor((i + 1) / 2) * 16;
   //     const sign = i % 2 === 0 ? 1 : -1;
   //     const x = hw + sign * offset;
-  //     //@ts-ignore
+  //
   //     token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
   //   }
   // }
@@ -920,7 +900,7 @@ export class BorderFrame {
   //     name.position.set(token.w / 2, token.h / 2 + yOff);
   //     return name;
   //   } else {
-  //     //@ts-ignore
+  //
   //     const style = token._getTextStyle();
   //     if (!game.modules.get("custom-nameplates")?.active) {
   //       style.fontFamily = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
@@ -990,7 +970,7 @@ export class BorderFrame {
   //   m *= l * -1;
 
   //   token.target
-  //     //@ts-ignore
+  //
   //     .beginFill(Color.from(color.INT), alpha)
   //     .lineStyle(lineStyle)
   //     .drawPolygon([-m, -m, -m - l, -m, -m, -m - l]) // Top left
