@@ -70,7 +70,7 @@ export const registerSettings = function () {
     hint: `${CONSTANTS.MODULE_ID}.setting.borderWidth.hint`,
     scope: "client",
     type: Number,
-    default: 4,
+    default: 4, // CONFIG.Canvas.objectBorderThickness
     config: true,
   });
 

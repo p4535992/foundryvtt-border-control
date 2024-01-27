@@ -1,3 +1,8 @@
+### 2.2.1
+
+- BUg fix: https://github.com/p4535992/foundryvtt-border-control/issues/8
+- Bug fix: https://github.com/p4535992/foundryvtt-border-control/issues/7
+
 ### 2.1.1-2
 
 - Update for v11

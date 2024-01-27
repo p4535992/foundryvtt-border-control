@@ -1,6 +1,5 @@
 import { warn, error, debug, i18n } from "./lib/lib.js";
 import CONSTANTS from "./constants.js";
-import { setApi } from "../module.js";
 import API from "./api.js";
 // import { BCconfig } from "./BCconfig.js";
 import { BorderFrame } from "./BorderControl.js";
@@ -118,40 +117,33 @@ export const initHooks = async () => {
 
     libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._getBorderColor", BorderFrame.newBorderColor, "OVERRIDE");
 
-    libWrapper.register(
-      CONSTANTS.MODULE_ID,
-      "Token.prototype._applyRenderFlags",
-      BorderFrame._applyRenderFlags,
-      "WRAPPER"
-    );
+    // TRY TO FIX THE PERMANENT BORDER WITHOUT SUCCESS
 
-    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableRefreshTarget")) {
-    //
-    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._refreshTarget", BorderFrame.newTarget, "OVERRIDE");
+    // libWrapper.register(
+    //   CONSTANTS.MODULE_ID,
+    //   "Token.prototype._refreshVisibility",
+    //   BorderFrame.tokenPrototypeRefreshVisibilityHandler,
+    //   "MIXED"
+    // );
 
-    //
-    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype._drawTarget", BorderFrame._drawTarget, "OVERRIDE");
-    // }
+    // libWrapper.register(
+    //   CONSTANTS.MODULE_ID,
+    //   "Token.prototype.refresh",
+    //   BorderFrame.tokenPrototypeRefreshHandler,
+    //   "MIXED"
+    // );
 
-    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableNameplateDesign")) {
-    //
-    //   libWrapper.register(
-    //     CONSTANTS.MODULE_ID,
-    //     "Token.prototype._drawNameplate",
-    //     BorderFrame.drawNameplate,
-    //     "OVERRIDE"
-    //   );
-    // }
-
-    // if (!game.settings.get(CONSTANTS.MODULE_ID, "disableDrawBarsDesign")) {
-    //
-    //   libWrapper.register(CONSTANTS.MODULE_ID, "Token.prototype.drawBars", BorderFrame.drawBars, "MIXED");
-    // }
+    // libWrapper.register(
+    //   CONSTANTS.MODULE_ID,
+    //   "Token.prototype._applyRenderFlags",
+    //   BorderFrame.tokenApplyRenderFlagsHandler,
+    //   "WRAPPER"
+    // );
   }
 };
 
 export const setupHooks = async () => {
-  setApi(API);
+  game.modules.get(CONSTANTS.MODULE_ID).api = API;
 };
 
 export const readyHooks = () => {

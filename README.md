@@ -23,8 +23,6 @@ Increased accessability for those with visibility impairments
 
 External border offset changeable.
 
-This also fixes the current disposition bug: https://gitlab.com/foundrynet/foundryvtt/-/issues/4352
-
 A border may be toggled off by using the Token HUD element here
 
 ![BorderHUD](/wiki/images/Border_Control_HUD.PNG?raw=true)
@@ -33,7 +31,7 @@ HUD Bars can be set to show as semi-transparant when only visible to the
 
 ### [DEPRECATED] Feature: Token Bars customization
 
-THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Arbron's Improved HP Bar](https://github.com/arbron/fvtt-hp-bar) and [FoundryVTT Bar Brawl](https://gitlab.com/woodentavern/foundryvtt-bar-brawl)
+THIS FEATURE IS DEPRECATED AND REMOVED IN FAVOR OF OTHER MODULES LIKE [Arbron's Improved HP Bar](https://github.com/arbron/fvtt-hp-bar) and [FoundryVTT Bar Brawl](https://gitlab.com/woodentavern/foundryvtt-bar-brawl)
 
 Color gradient reads actor HP and returns a color between the two provided colors.
 
@@ -41,14 +39,14 @@ Temp HP gradient moves up from the "full hp" color towards a defined color, maxi
 
 ### [DEPRECATED] Feature: Nameplates customization 
 
-THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Token Variant Art](https://github.com/Aedif/TokenVariants) and [Custom Nameplates](https://github.com/earlSt1/vtt-custom-nameplates)
+THIS FEATURE IS DEPRECATED AND REMOVED IN FAVOR OF OTHER MODULES LIKE [Token Variant Art](https://github.com/Aedif/TokenVariants) and [Custom Nameplates](https://github.com/earlSt1/vtt-custom-nameplates)
 
 Nameplates are now customizable, change the size, vertical offset and font. You can also make then circular, to fit with POG style tokens
 Available fonts are: Arial, Arial Black, Comic Sans MS, Courier New, Georgia, Helvetica, Impact, Tahoma, Times New Roman and Verdana.
 
 ### [DEPRECATED] Feature: Target customization 
 
-THIS FEATURE IS DEPRECATED IN FAVOR OF OTHER MODULES LIKE [Easy Target](https://bitbucket.org/Fyorl/easy-target) and [Smart Target](https://github.com/theripper93/Smart-Target)
+THIS FEATURE IS DEPRECATED AND REMOVED IN FAVOR OF OTHER MODULES LIKE [Easy Target](https://bitbucket.org/Fyorl/easy-target) and [Smart Target](https://github.com/theripper93/Smart-Target)
 
 Player side configuration of the tokens borders, color and scale. Target HUD color and size can be altered, target HUD can also be rendered inside the token border.
 
@@ -133,15 +131,14 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 
 ## License
 
+- **[injectConfig](https://github.com/theripper93/injectConfig)**: [MIT](https://github.com/theripper93/injectConfig/blob/main/LICENSE)
+- **[Border-Control](https://github.com/kandashi/Border-Control)**: [MIT](https://github.com/kandashi/Border-Control/blob/master/LICENSE)
+
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
-
-## Acknowledgements
-
-Bootstrapped with League of Extraordinary FoundryVTT Developers  [foundry-vtt-types](https://github.com/League-of-Foundry-Developers/foundry-vtt-types).
 
 ## Credit
 
 Thanks to anyone who helps me with this code! I appreciate the user community's feedback on this project!
 
-- [Border-Control](https://github.com/kandashi/Border-Control) ty to [kandashi](https://github.com/kandashi)
-
+- Ty to [theripper93](https://github.com/theripper93) for the module [injectConfig](https://github.com/theripper93/injectConfig)
+- Ty to [kandashi](https://github.com/kandashi) for the module [Border-Control](https://github.com/kandashi/Border-Control)

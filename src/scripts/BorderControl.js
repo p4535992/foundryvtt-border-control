@@ -2,7 +2,7 @@
 import { BorderControlGraphic } from "./BorderControlModels.js";
 import CONSTANTS from "./constants.js";
 import { injectConfig } from "./lib/injectConfig.js";
-import { i18n } from "./lib/lib.js";
+import { i18n, isRealNumber } from "./lib/lib.js";
 // import { BCCBASE } from "./main.js";
 
 export class BorderFrame {
@@ -204,8 +204,12 @@ export class BorderFrame {
       borderControlDisableValue: tokenFlags[CONSTANTS.FLAGS.BORDER_DISABLE] ? "checked" : "",
       currentCustomColorTokenInt: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT] || "#000000",
       currentCustomColorTokenExt: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT] || "#000000",
-      currentCustomColorTokenFrameOpacity: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY] || 0.5,
-      currentCustomColorTokenBaseOpacity: tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY] || 0.5,
+      currentCustomColorTokenFrameOpacity: isRealNumber(tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY])
+        ? tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY]
+        : 0.5,
+      currentCustomColorTokenBaseOpacity: isRealNumber(tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY])
+        ? tokenFlags[CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY]
+        : 0.5,
     };
 
     const insertHTML = await renderTemplate(`modules/${CONSTANTS.MODULE_ID}/templates/token-config.html`, data);
@@ -255,25 +259,6 @@ export class BorderFrame {
     for (const token of canvas.tokens?.controlled) {
       try {
         await token.document.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE, !borderIsDisabled);
-        // if (borderIsDisabled) {
-        // 	await token.document.unsetFlag(
-        // 		CONSTANTS.MODULE_ID,
-        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT
-        // 	);
-        // 	await token.document.unsetFlag(
-        // 		CONSTANTS.MODULE_ID,
-        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT
-        // 	);
-        // 	await token.document.unsetFlag(
-        // 		CONSTANTS.MODULE_ID,
-        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY
-        // 	);
-        // 	await token.document.unsetFlag(
-        // 		CONSTANTS.MODULE_ID,
-        // 		CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY
-        // 	);
-        // }
-
         token.refresh();
       } catch (e) {
         error(e);
@@ -292,11 +277,17 @@ export class BorderFrame {
     const currentCustomColorTokenExt =
       tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT) || "#000000";
 
-    const currentCustomColorTokenFrameOpacity =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY) || 0.5;
+    const currentCustomColorTokenFrameOpacity = isRealNumber(
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY)
+    )
+      ? tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY)
+      : 0.5;
 
-    const currentCustomColorTokenBaseOpacity =
-      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY) || 0.5;
+    const currentCustomColorTokenBaseOpacity = isRealNumber(
+      tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY)
+    )
+      ? tokenTmp.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY)
+      : 0.5;
 
     const dialogContent = `
       <div class="form-group">
@@ -630,7 +621,7 @@ export class BorderFrame {
       return;
     }
 
-    let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") || CONFIG.Canvas.objectBorderThickness;
+    let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth"); // || CONFIG.Canvas.objectBorderThickness;
     const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
 
     if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) {
@@ -808,7 +799,7 @@ export class BorderFrame {
           } else if (d === disPath.HOSTILE) {
             borderColor = overrides.HOSTILE;
           } else if (d === disPath.SECRET) {
-            borderColor = overrides.SECRET;
+            borderColor = token.isOwner ? overrides.SECRET : null;
           } else {
             borderColor = overrides.HOSTILE;
           }
@@ -818,7 +809,7 @@ export class BorderFrame {
       }
     } else if (colorFrom === "actor-folder-color") {
       if (
-        (hover ?? this.hover) ||
+        hoverTmp ||
         token.layer.highlightObjects ||
         //canvas.tokens?.highlightObjects ||
         game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder")
@@ -844,184 +835,36 @@ export class BorderFrame {
     return finalBorderColor;
   }
 
-  static _applyRenderFlags(wrapped, ...args) {
-    let result = wrapped(...args);
-    // const hideLabel = this.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.HIDE_LABEL) ?? false;
-    const permanentBorder = game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder");
+  // TRY TO FIX THE PERMANENT BORDER WITHOUT SUCCESS
 
-    if (permanentBorder) {
-      BorderFrame.newBorder(this, true);
-      // this._refreshBorder();
-    }
-
-    return result;
-  }
-
-  /* -------------------------------------------- */
-  /* DEPRECATED METHODS USE OTHERS MODULE INSTEAD */
-  /* -------------------------------------------- */
-
-  // /**
-  //  * @deprecated use instead other modules
-  //  * @param reticule
-  //  * @returns
-  //  */
-  // static newTarget(reticule) {
-  //   const token = this;
-  //   token.target.clear();
-
-  //   if (!token.targeted.size) {
-  //     return;
+  // static tokenApplyRenderFlagsHandler(wrapped, ...args) {
+  //   let result = wrapped(...args);
+  //   const permanentBorder = game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder");
+  //   if (permanentBorder) {
+  //     BorderFrame.newBorder(this, true);
+  //     // this._refreshBorder();
   //   }
 
-  //   const multiplier = game.settings.get(CONSTANTS.MODULE_ID, "targetSize");
-  //   const INT = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColor").substr(1), 16);
-  //   const EX = parseInt(game.settings.get(CONSTANTS.MODULE_ID, "targetColorEx").substr(1), 16);
-
-  //   // Determine whether the current user has target and any other users
-  //   const [others, user] = Array.from(token.targeted).partition((u) => u === game.user);
-
-  //   // For the current user, draw the target arrows
-  //   if (user.length) {
-  //     token._drawTarget(reticule);
-  //   }
-  //   // For other users, draw offset pips
-  //   const hw = token.w / 2;
-  //   for (let [i, u] of others.entries()) {
-  //     const offset = Math.floor((i + 1) / 2) * 16;
-  //     const sign = i % 2 === 0 ? 1 : -1;
-  //     const x = hw + sign * offset;
-  //
-  //     token.target.beginFill(Color.from(u.color), 1.0).lineStyle(2, 0x0000000).drawCircle(x, 0, 6);
-  //   }
+  //   return result;
   // }
 
-  // /**
-  //  * @deprecated use instead other modules
-  //  * @returns
-  //  */
-  // static drawNameplate() {
-  //   const token = this;
-  //   const offSet = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
-  //   const yOff = game.settings.get(CONSTANTS.MODULE_ID, "nameplateOffset");
-  //   const bOff = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth") / 2;
-  //   const replaceFont = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
-  //   let color =
-  //     game.user?.isGM && [10, 40, 20].includes(token.document.displayName)
-  //       ? game.settings.get(CONSTANTS.MODULE_ID, "nameplateColorGM")
-  //       : game.settings.get(CONSTANTS.MODULE_ID, "nameplateColor");
-  //   const sizeMulti = game.settings.get(CONSTANTS.MODULE_ID, "sizeMultiplier");
-
-  //   if (game.settings.get(CONSTANTS.MODULE_ID, "circularNameplate")) {
-  //     let style = CONFIG.canvasTextStyle.clone();
-  //     let extraRad = game.settings.get(CONSTANTS.MODULE_ID, "circularNameplateRadius");
-  //     if (!game.modules.get("custom-nameplates")?.active) {
-  //       style.fontFamily = replaceFont;
-  //       style.fontSize *= sizeMulti;
-  //     }
-  //     if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
-  //       style.fontSize *= canvas.grid?.size / 100;
-  //     }
-  //     style.fill = color;
-  //     var text = new PreciseText(token.name, style);
-  //     text.resolution = 4;
-  //     text.style.trim = true;
-  //     text.updateText(true);
-
-  //     var radius = token.w / 2 + text.texture.height + bOff + extraRad;
-  //     var maxRopePoints = 100;
-  //     var step = Math.PI / maxRopePoints;
-
-  //     var ropePoints = maxRopePoints - Math.round((text.texture.width / (radius * Math.PI)) * maxRopePoints);
-  //     ropePoints /= 2;
-
-  //     var points = [];
-  //     for (var i = maxRopePoints - ropePoints; i > ropePoints; i--) {
-  //       var x = radius * Math.cos(step * i);
-  //       var y = radius * Math.sin(step * i);
-  //       points.push(new PIXI.Point(-x, -y));
-  //     }
-  //     const name = new PIXI.SimpleRope(text.texture, points);
-  //     name.rotation = Math.PI;
-  //     name.position.set(token.w / 2, token.h / 2 + yOff);
-  //     return name;
-  //   } else {
-  //
-  //     const style = token._getTextStyle();
-  //     if (!game.modules.get("custom-nameplates")?.active) {
-  //       style.fontFamily = game.settings.get(CONSTANTS.MODULE_ID, "plateFont");
-  //       style.fontSize *= sizeMulti;
-  //     }
-  //     if (game.settings.get(CONSTANTS.MODULE_ID, "plateConsistency")) {
-  //       style.fontSize *= canvas.grid?.size / 100;
-  //     }
-  //     style.fill = color;
-
-  //     const name = new PreciseText(token.document.name, style);
-  //     name.anchor.set(0.5, 0);
-  //     name.position.set(token.w / 2, token.h + bOff + yOff + offSet);
-  //     return name;
+  // static tokenPrototypeRefreshHandler = function (wrapped, ...args) {
+  //   const permanentBorder = game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder");
+  //   if (permanentBorder) {
+  //     BorderFrame.newBorder(this, false);
+  //     // this._refreshBorder();
   //   }
-  // }
+  //   return wrapped(...args);
+  // };
 
-  // /**
-  //  * @deprecated use instead other modules
-  //  * @param wrapped
-  //  * @param args
-  //  * @returns
-  //  */
-  // static drawBars(wrapped, ...args) {
-  //   const token = this;
-  //   if (!game.settings.get(CONSTANTS.MODULE_ID, "barAlpha") || !game.user?.isGM) {
-  //     return wrapped(...args);
+  // static tokenPrototypeRefreshVisibilityHandler = function (wrapped, ...args) {
+  //   if (this.isVisible && this.renderable) {
+  //     const permanentBorder = game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder");
+  //     if (permanentBorder) {
+  //       BorderFrame.newBorder(this, false);
+  //       // this._refreshBorder();
+  //     }
   //   }
-  //   if (!token.actor || [50, 0, 30].includes(token.document.displayBars)) {
-  //     return wrapped(...args);
-  //   } else {
-  //     return ["bar1", "bar2"].forEach((b, i) => {
-  //       const bar = token.bars[b];
-  //       const attr = token.document.getBarAttribute(b);
-  //       if (!attr || attr.type !== "bar") {
-  //         return (bar.visible = false);
-  //       }
-  //       token._drawBar(i, bar, attr);
-  //       bar.visible = true;
-  //       bar.alpha = 0.5;
-  //       token.bars.visible = token._canViewMode(token.document.displayBars);
-  //       return token.bars.visible;
-  //     });
-  //   }
-  // }
-
-  // /**
-  //  * Draw the targeting arrows around this token.
-  //  * @param {ReticuleOptions} [reticule]  Additional parameters to configure how the targeting reticule is drawn.
-  //  * @protected
-  //  * @deprecated use instead other modules
-  //  */
-  // static _drawTarget({
-  //   margin: m = 0,
-  //   alpha = 1,
-  //   size = 0.15,
-  //   color = null,
-  //   border: { width = 2, color: lineColor = 0 } = {},
-  // } = {}) {
-  //   const token = this;
-  //   const l = canvas.dimensions?.size * size; // Side length.
-  //   const { h, w } = token;
-  //   const lineStyle = { color: lineColor, alpha, width, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.BEVEL };
-
-  //   color ??= token._getBorderColor({ hover: true });
-
-  //   m *= l * -1;
-
-  //   token.target
-  //
-  //     .beginFill(Color.from(color.INT), alpha)
-  //     .lineStyle(lineStyle)
-  //     .drawPolygon([-m, -m, -m - l, -m, -m, -m - l]) // Top left
-  //     .drawPolygon([w + m, -m, w + m + l, -m, w + m, -m - l]) // Top right
-  //     .drawPolygon([-m, h + m, -m - l, h + m, -m, h + m + l]) // Bottom left
-  //     .drawPolygon([w + m, h + m, w + m + l, h + m, w + m, h + m + l]); // Bottom right
+  //   return wrapped(...args);
   // }
 }
