@@ -1,5 +1,5 @@
-import { debug, log, warn, i18n } from "./lib/lib.js";
 import CONSTANTS from "./constants.js";
+import Logger from "./lib/Logger.js";
 
 let possibleSystems = ["dnd5e", "symbaroum", "pf2e", "pf1", "swade"];
 
@@ -110,8 +110,8 @@ export const registerSettings = function () {
   });
 
   game.settings.register(CONSTANTS.MODULE_ID, "hudEnable", {
-    name: i18n(CONSTANTS.MODULE_ID + ".setting.hudEnable.name"),
-    hint: i18n(CONSTANTS.MODULE_ID + ".setting.hudEnable.hint"),
+    name: CONSTANTS.MODULE_ID + ".setting.hudEnable.name",
+    hint: CONSTANTS.MODULE_ID + ".setting.hudEnable.hint",
     scope: "world",
     type: Boolean,
     default: true,
@@ -120,8 +120,8 @@ export const registerSettings = function () {
 
   /** Which column should the button be placed on */
   game.settings.register(CONSTANTS.MODULE_ID, "hudColumn", {
-    name: i18n(`${CONSTANTS.MODULE_ID}.setting.hudColumn.name`),
-    hint: i18n(`${CONSTANTS.MODULE_ID}.setting.hudColumn.hint`),
+    name: `${CONSTANTS.MODULE_ID}.setting.hudColumn.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.hudColumn.hint`,
     scope: "world",
     config: true,
     type: String,
@@ -134,8 +134,8 @@ export const registerSettings = function () {
 
   /** Whether the button should be placed on the top or bottom of the column */
   game.settings.register(CONSTANTS.MODULE_ID, "hudTopBottom", {
-    name: i18n(`${CONSTANTS.MODULE_ID}.setting.hudTopBottom.name`),
-    hint: i18n(`${CONSTANTS.MODULE_ID}.setting.hudTopBottom.hint`),
+    name: `${CONSTANTS.MODULE_ID}.setting.hudTopBottom.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.hudTopBottom.hint`,
     scope: "world",
     config: true,
     type: String,
@@ -243,8 +243,8 @@ export const registerSettings = function () {
     config: true,
   });
   game.settings.register(CONSTANTS.MODULE_ID, "actorFolderColorEx", {
-    name: i18n(CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.name"),
-    hint: i18n(CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.hint"),
+    name: CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.name",
+    hint: CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.hint",
     scope: "world",
     type: String,
     default: "#000000",
@@ -253,8 +253,8 @@ export const registerSettings = function () {
 
   // Setting off
   game.settings.register(CONSTANTS.MODULE_ID, "customDispositionColorEx", {
-    name: i18n(CONSTANTS.MODULE_ID + ".setting.customDispositionColorEx.name"),
-    hint: i18n(CONSTANTS.MODULE_ID + ".setting.customDispositionColorEx.hint"),
+    name: CONSTANTS.MODULE_ID + ".setting.customDispositionColorEx.name",
+    hint: CONSTANTS.MODULE_ID + ".setting.customDispositionColorEx.hint",
     scope: "world",
     type: String,
     default: "#000000",
@@ -262,16 +262,16 @@ export const registerSettings = function () {
   });
 
   game.settings.register(CONSTANTS.MODULE_ID, "color-from", {
-    name: i18n(CONSTANTS.MODULE_ID + ".setting.color-from.name"),
-    hint: i18n(CONSTANTS.MODULE_ID + ".setting.color-from.hint"),
+    name: CONSTANTS.MODULE_ID + ".setting.color-from.name",
+    hint: CONSTANTS.MODULE_ID + ".setting.color-from.hint",
     scope: "world",
     config: true,
     default: "token-disposition",
     type: String,
     choices: {
-      "token-disposition": i18n(CONSTANTS.MODULE_ID + ".setting.color-from.opt.token-disposition"),
-      "actor-folder-color": i18n(CONSTANTS.MODULE_ID + ".setting.color-from.opt.actor-folder-color"),
-      // "custom-disposition": i18n(CONSTANTS.MODULE_ID + ".setting.color-from.opt.custom-disposition")
+      "token-disposition": CONSTANTS.MODULE_ID + ".setting.color-from.opt.token-disposition",
+      "actor-folder-color": CONSTANTS.MODULE_ID + ".setting.color-from.opt.actor-folder-color",
+      // "custom-disposition": CONSTANTS.MODULE_ID + ".setting.color-from.opt.custom-disposition")
     },
   });
 
@@ -504,7 +504,7 @@ class ResetSettingsDialog extends FormApplication {
               ?.get("world")
               ?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_ID}.`));
             for (let setting of worldSettings) {
-              log(`Reset setting '${setting.key}'`);
+              Logger.log(`Reset setting '${setting.key}'`);
               await setting.delete();
             }
             //window.location.reload();

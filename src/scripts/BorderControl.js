@@ -1,8 +1,9 @@
 // import { BCconfig } from "./BCconfig.js";
 import { BorderControlGraphic } from "./BorderControlModels.js";
 import CONSTANTS from "./constants.js";
+import Logger from "./lib/Logger.js";
 import { injectConfig } from "./lib/injectConfig.js";
-import { i18n, isRealNumber } from "./lib/lib.js";
+import { isRealNumber } from "./lib/lib.js";
 // import { BCCBASE } from "./main.js";
 
 export class BorderFrame {
@@ -92,35 +93,35 @@ export class BorderFrame {
       $(`
 			<a class="item" data-tab="bordercontrol">
         <i class="fas fa-border-style"></i>
-				${i18n("Border-Control.label.borderControl")}
+				${Logger.i18n("Border-Control.label.borderControl")}
 			</a>
 		`)
     );
 
     const formConfig = `
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomDisable")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomDisable")}</label>
         <input type="checkbox"
           data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}"
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}"
           data-dtype="Boolean" ${borderControlDisableValue}>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
         <input type="color"
           data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT}"
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_INT}"
           data-dtype="String" value="${currentCustomColorTokenInt}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
         <input type="color"
           data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_COLOR_EXT}"
           data-dtype="String" value="${currentCustomColorTokenExt}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_FRAME_OPACITY}"
@@ -128,7 +129,7 @@ export class BorderFrame {
           data-dtype="Number" value="${currentCustomColorTokenFrameOpacity}"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           data-edit="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_CUSTOM_BASE_OPACITY}"
@@ -183,7 +184,7 @@ export class BorderFrame {
         moduleId: CONSTANTS.MODULE_ID,
         tab: {
           name: CONSTANTS.MODULE_ID,
-          label: i18n("Border-Control.label.borderControl"),
+          label: Logger.i18n("Border-Control.label.borderControl"),
           icon: "fas fa-border-style",
         },
       },
@@ -291,26 +292,26 @@ export class BorderFrame {
 
     const dialogContent = `
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenInt")}</label>
         <input type="color"
           value="${currentCustomColorTokenInt}"
           data-edit="Border-Control.currentCustomColorTokenInt"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenExt")}</label>
         <input type="color"
           value="${currentCustomColorTokenExt}"
           data-edit="Border-Control.currentCustomColorTokenExt"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenFrameOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           value="${currentCustomColorTokenFrameOpacity}"
           data-edit="Border-Control.currentCustomColorTokenFrameOpacity"></input>
       </div>
       <div class="form-group">
-        <label>${i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
+        <label>${Logger.i18n("Border-Control.label.borderControlCustomColorTokenBaseOpacity")}</label>
         <input type="number"
           min="0" max="1" step="0.1"
           value="${currentCustomColorTokenBaseOpacity}"
@@ -319,11 +320,11 @@ export class BorderFrame {
       `;
 
     const d = new Dialog({
-      title: i18n("Border-Control.label.chooseCustomColorToken"),
+      title: Logger.i18n("Border-Control.label.chooseCustomColorToken"),
       content: dialogContent,
       buttons: {
         yes: {
-          label: i18n("Border-Control.label.applyCustomColor"),
+          label: Logger.i18n("Border-Control.label.applyCustomColor"),
 
           callback: async (html) => {
             const newCurrentCustomColorTokenInt = $(
@@ -363,7 +364,7 @@ export class BorderFrame {
           },
         },
         no: {
-          label: i18n("Border-Control.label.doNothing"),
+          label: Logger.i18n("Border-Control.label.doNothing"),
           callback: (html) => {
             // Do nothing
           },

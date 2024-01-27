@@ -1,4 +1,3 @@
-import { warn, error, debug, i18n } from "./lib/lib.js";
 import CONSTANTS from "./constants.js";
 import API from "./api.js";
 // import { BCconfig } from "./BCconfig.js";
