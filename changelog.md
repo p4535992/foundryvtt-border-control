@@ -1,3 +1,7 @@
+### 2.2.2
+
+- Little fix for hex grid
+
 ### 2.2.1
 
 - BUg fix: https://github.com/p4535992/foundryvtt-border-control/issues/8

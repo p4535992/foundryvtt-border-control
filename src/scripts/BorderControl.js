@@ -684,16 +684,17 @@ export class BorderFrame {
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
         // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
         .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-    } else if (canvas.grid.isHex || (hexTypes.includes(canvas.grid?.type) && token.width === 1 && token.height === 1)) {
+    } else if (canvas.grid.isHex || hexTypes.includes(canvas.grid?.type)) {
+      // && token.width === 1 && token.height === 1)) {
       // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
       const q = Math.round(p / 2);
 
-      const polygon = canvas.grid?.grid?.getPolygon(
-        -1.5 - q + sW,
-        -1.5 - q + sH,
-        (token.w + 2) * sX + p,
-        (token.h + 2) * sY + p
-      );
+      // Should be able to use getBorderPolygon or replaced method after https://github.com/foundryvtt/foundryvtt/issues/10088 is released?
+      // Until then only works when width and height are the same
+      const polygon =
+        token.document.width === token.document.height
+          ? canvas.grid?.grid?.getBorderPolygon(token.document.width, token.document.height, q)
+          : canvas.grid?.grid?.getPolygon(-1.5 - q + sW, -1.5 - q + sH, (token.w + 2) * sX + p, (token.h + 2) * sY + p);
 
       // const polygon = canvas.grid?.grid?.getPolygon(
       // 	-1.5 - q + sW,
