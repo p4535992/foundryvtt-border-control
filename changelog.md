@@ -1,3 +1,7 @@
+### 2.2.3
+
+- Update manifest v12
+
 ### 2.2.2
 
 - Little fix for hex grid
