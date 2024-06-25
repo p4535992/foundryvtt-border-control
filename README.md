@@ -46,7 +46,7 @@ Available fonts are: Arial, Arial Black, Comic Sans MS, Courier New, Georgia, He
 
 ### [DEPRECATED] Feature: Target customization 
 
-THIS FEATURE IS DEPRECATED AND REMOVED IN FAVOR OF OTHER MODULES LIKE [Easy Target](https://bitbucket.org/Fyorl/easy-target) and [Smart Target](https://github.com/theripper93/Smart-Target)
+THIS FEATURE IS DEPRECATED AND REMOVED IN FAVOR OF OTHER MODULES LIKE [Smart Target](https://github.com/theripper93/Smart-Target)
 
 Player side configuration of the tokens borders, color and scale. Target HUD color and size can be altered, target HUD can also be rendered inside the token border.
 
@@ -65,16 +65,6 @@ To install this module manually:
 ### libWrapper
 
 This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
-
-## Supportes Systems
-
-Supported systems for color gradient are :
-
-- DnD5e
-- PF1
-- PF2
-- SWADE
-- Symbaroum
 
 ## Known issue
 
