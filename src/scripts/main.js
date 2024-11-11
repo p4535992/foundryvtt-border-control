@@ -153,7 +153,7 @@ export const readyHooks = () => {
 
     Hooks.on("createToken", (data) => {
       let token = canvas.tokens?.get(data.id);
-      if (!token.owner) {
+      if (!token.isOwner) {
         token.cursor = "default";
       }
     });

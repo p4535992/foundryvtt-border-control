@@ -596,7 +596,7 @@ export class BorderFrame {
         break;
       }
       case "1": {
-        if (!token.owner) {
+        if (!token.isOwner) {
           return;
         }
         break;
@@ -612,7 +612,7 @@ export class BorderFrame {
       // 	CONSTANTS.MODULE_ID,
       // 	CONSTANTS.FLAGS.BORDER_DISABLE
       // );
-      skipDraw = getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}`);
+      skipDraw = foundry.utils.getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.BORDER_DISABLE}`);
     } catch (e) {
       token.document.setFlag(CONSTANTS.MODULE_ID, TokenFactions.CONSTANTS.FLAGS.BORDER_DISABLE, false);
       skipDraw = token.document.getFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.BORDER_DISABLE);
@@ -684,7 +684,7 @@ export class BorderFrame {
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
         // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
         .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
-    } else if (canvas.grid.isHex || hexTypes.includes(canvas.grid?.type)) {
+    } else if (canvas.grid.isHexagonal || hexTypes.includes(canvas.grid?.type)) {
       // && token.width === 1 && token.height === 1)) {
       // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
       const q = Math.round(p / 2);
@@ -790,7 +790,7 @@ export class BorderFrame {
 
           const d = parseInt(token.document.disposition);
 
-          if (!game.user?.isGM && token.owner) {
+          if (!game.user?.isGM && token.isOwner) {
             borderColor = overrides.CONTROLLED;
           } else if (token.actor?.hasPlayerOwner) {
             borderColor = overrides.PARTY;
@@ -801,13 +801,13 @@ export class BorderFrame {
           } else if (d === disPath.HOSTILE) {
             borderColor = overrides.HOSTILE;
           } else if (d === disPath.SECRET) {
-            borderColor = token.isOwner ? overrides.SECRET : null;
+            borderColor = token.isOwner ? overrides.SECRET : overrides.NEUTRAL;
           } else {
             borderColor = overrides.HOSTILE;
           }
         }
       } else {
-        borderColor = null;
+        borderColor = overrides.NEUTRAL;
       }
     } else if (colorFrom === "actor-folder-color") {
       if (
@@ -822,18 +822,23 @@ export class BorderFrame {
           borderColor = overrides.ACTOR_FOLDER_COLOR;
         }
       } else {
-        borderColor = null;
+        borderColor = overrides.NEUTRAL;
       }
     } else {
-      borderColor = null;
+      borderColor = overrides.NEUTRAL;
     }
 
     // const finalBorderColor = borderColor
     //   ? Color.from(borderColor.INT)
     //   : Color.from(CONFIG.Canvas.dispositionColors.NEUTRAL);
 
-    const finalBorderColor = borderColor ? Color.from(borderColor.INT) : null;
-
+    //const finalBorderColor = borderColor ? Color.from(borderColor.INT) : Color.from(overrides.NEUTRAL.INT);
+    let finalBorderColor
+    if ( borderColor == null || borderColor == undefined ) {
+      finalBorderColor = 0x0000FF;
+    } else  {
+      finalBorderColor = borderColor.INT;
+    }
     return finalBorderColor;
   }
 
