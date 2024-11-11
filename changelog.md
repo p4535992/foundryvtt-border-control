@@ -1,8 +1,8 @@
 ### 12.0.0
 
-- Update for v12: https://github.com/p4535992/foundryvtt-border-control/issues/11
-- Probably fixed: https://github.com/p4535992/foundryvtt-border-control/issues/9
-- Probably fixed: https://github.com/p4535992/foundryvtt-border-control/issues/6
+- Update for v12: https://github.com/p4535992/foundryvtt-border-control/issues/11 ty to @LeRatierBretonnien 
+- Probably fixed: https://github.com/p4535992/foundryvtt-border-control/issues/9 ty to @LeRatierBretonnien 
+- Probably fixed: https://github.com/p4535992/foundryvtt-border-control/issues/6 ty to @LeRatierBretonnien 
 
 ### 2.2.3
 
