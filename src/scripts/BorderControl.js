@@ -91,11 +91,11 @@ export class BorderFrame {
     const nav = html.find(`nav.sheet-tabs.tabs[data-group="main"]`);
     nav.append(
       $(`
-			<a class="item" data-tab="bordercontrol">
+      <a class="item" data-tab="bordercontrol">
         <i class="fas fa-border-style"></i>
-				${Logger.i18n("Border-Control.label.borderControl")}
-			</a>
-		`)
+        ${Logger.i18n("Border-Control.label.borderControl")}
+      </a>
+    `)
     );
 
     const formConfig = `
@@ -143,10 +143,10 @@ export class BorderFrame {
       .find("footer")
       .before(
         $(`
-			<div class="tab" data-tab="bordercontrol">
-				${formConfig}
-			</div>
-		`)
+      <div class="tab" data-tab="bordercontrol">
+        ${formConfig}
+      </div>
+    `)
       );
 
     nav
@@ -197,8 +197,8 @@ export class BorderFrame {
         ? tokenConfig.object.flags[CONSTANTS.MODULE_ID] || {}
         : {}
       : tokenConfig.token.flags
-      ? tokenConfig.token.flags[CONSTANTS.MODULE_ID] || {}
-      : {};
+        ? tokenConfig.token.flags[CONSTANTS.MODULE_ID] || {}
+        : {};
 
     const data = {
       hasPlayerOwner: tokenConfig.token.hasPlayerOwner,
@@ -395,10 +395,10 @@ export class BorderFrame {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
       : null;
   }
 
@@ -639,6 +639,9 @@ export class BorderFrame {
     const sW = sB ? (token.w - token.w * sX) / 2 : 0;
     const sH = sB ? (token.h - token.h * sY) / 2 : 0;
 
+    console.log("sX", sX, "sY", sY, "sW", sW, "sH", sH);
+    console.log("token", token);
+
     const s = sX;
     // const s: any = sB ? token.scale : 1;
     // const sW = sB ? (token.w - token.w * s) / 2 : 0;
@@ -674,16 +677,13 @@ export class BorderFrame {
       const o = Math.round(h / 2);
 
       token.border
-
         .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
-        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + t + p);
-        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + t + p);
+        .drawCircle(-token.center.x+(token.w), -token.center.y+(token.h), (token.w / 2) * s + t + p);
 
       token.border
-
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
-        // .drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
-        .drawCircle(token.w / 2, token.h / 2, (token.w / 2) * s + h + t / 2 + p);
+        //.drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
+        .drawCircle(-token.center.x+(token.w), -token.center.y+(token.h), (token.w / 2) * s + h + t / 2 + p);
     } else if (canvas.grid.isHexagonal || hexTypes.includes(canvas.grid?.type)) {
       // && token.width === 1 && token.height === 1)) {
       // const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
@@ -691,17 +691,24 @@ export class BorderFrame {
 
       // Should be able to use getBorderPolygon or replaced method after https://github.com/foundryvtt/foundryvtt/issues/10088 is released?
       // Until then only works when width and height are the same
-      const polygon =
+      /*const polygon =
         token.document.width === token.document.height
           ? canvas.grid?.grid?.getBorderPolygon(token.document.width, token.document.height, q)
-          : canvas.grid?.grid?.getPolygon(-1.5 - q + sW, -1.5 - q + sH, (token.w + 2) * sX + p, (token.h + 2) * sY + p);
+          //: canvas.grid?.grid?.getPolygon(-1.5 - q + sW, -1.5 - q + sH, (token.w + 2) * sX + p, (token.h + 2) * sY + p);
+          : canvas.grid?.grid?.getPolygon(-token.x, -token.y, (token.w + 2) * sX + p, (token.h + 2) * sY + p); */
 
-      // const polygon = canvas.grid?.grid?.getPolygon(
-      // 	-1.5 - q + sW,
-      // 	-1.5 - q + sH,
-      // 	(token.w + 2) * s + p,
-      // 	(token.h + 2) * s + p
-      // );
+      /*const polygon = canvas.grid?.grid?.getPolygon(
+       	-1.5 - q + sW,
+       	-1.5 - q + sH,
+       	(token.w + 2) * s + p,
+       	(token.h + 2) * s + p
+       );*/
+       const polygon = canvas.grid?.grid?.getPolygon(
+        -token.x,
+        -token.y,
+        (token.w + 2) * s + p,
+        (token.h + 2) * s + p
+      );
 
       token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
 
@@ -718,14 +725,14 @@ export class BorderFrame {
       token.border
 
         .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
-        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
-        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
+        .drawRoundedRect(-token.x, -token.y, token.w, token.h, 3);
+        //.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 
       token.border
 
         .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
-        // .drawRoundedRect(token.x, token.y, token.w, token.h, 3);
-        .drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
+        .drawRoundedRect(-token.x, -token.y, token.w, token.h, 3);
+        //.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
     }
   }
 
@@ -834,9 +841,9 @@ export class BorderFrame {
 
     //const finalBorderColor = borderColor ? Color.from(borderColor.INT) : Color.from(overrides.NEUTRAL.INT);
     let finalBorderColor
-    if ( borderColor == null || borderColor == undefined ) {
-      finalBorderColor = 0x0000FF;
-    } else  {
+    if (borderColor == null || borderColor == undefined) {
+      finalBorderColor = CONFIG.Canvas.dispositionColors.NEUTRAL;
+    } else {
       finalBorderColor = borderColor.INT;
     }
     return finalBorderColor;
