@@ -567,6 +567,10 @@ export class BorderFrame {
     }
 
     static newBorder(token, permanentBorder = false) {
+        if (!BorderFrame.defaultColors) {
+            BorderFrame.onInit();
+        }
+
         token = token ?? this;
         if (!permanentBorder) {
             token.border.clear();
@@ -587,9 +591,16 @@ export class BorderFrame {
             borderColor = overrides.CUSTOM_DISPOSITION_BY_FLAG;
         } else {
             for (const [key, override] of Object.entries(overrides)) {
-                if (override.INT_S === borderColorColor.css) {
-                    borderColor = override;
-                    break;
+                if (borderColorColor.css) {
+                    if (override.INT_S === borderColorColor.css) {
+                        borderColor = override;
+                        break;
+                    }
+                } else if (borderColorColor) {
+                    if (override.INT === borderColorColor) {
+                        borderColor = override;
+                        break;
+                    }
                 }
             }
         }
@@ -632,6 +643,9 @@ export class BorderFrame {
         }
 
         let t = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth"); // || CONFIG.Canvas.objectBorderThickness;
+        if (game.settings.get(CONSTANTS.MODULE_ID, "zoomScaling")) {
+            t /= Math.min(1, canvas.stage.scale.x);
+        }
         const p = game.settings.get(CONSTANTS.MODULE_ID, "borderOffset");
 
         if (game.settings.get(CONSTANTS.MODULE_ID, "permanentBorder") && token.controlled) {
@@ -648,8 +662,8 @@ export class BorderFrame {
         const sW = sB ? (token.w - token.w * sX) / 2 : 0;
         const sH = sB ? (token.h - token.h * sY) / 2 : 0;
 
-        console.log("sX", sX, "sY", sY, "sW", sW, "sH", sH);
-        console.log("token", token);
+        Logger.debug("Coordinates:", { sX: sX, sY: sY, sW: sW, sH: sH });
+        Logger.debug("token", token);
 
         const s = sX;
         // const s: any = sB ? token.scale : 1;
@@ -686,11 +700,21 @@ export class BorderFrame {
             const o = Math.round(h / 2);
 
             token.border
-                .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+                .lineStyle({
+                    width: t * nBS,
+                    color: Color.from(borderColor.EX),
+                    alignment: 0.75,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
                 .drawCircle(-token.center.x + token.w, -token.center.y + token.h, (token.w / 2) * s + t + p);
 
             token.border
-                .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+                .lineStyle({
+                    width: h * nBS,
+                    color: Color.from(borderColor.INT),
+                    alignment: 1.0,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
                 //.drawCircle(token.x + token.w / 2, token.y + token.h / 2, (token.w / 2) * sX + h + t / 2 + p);
                 .drawCircle(-token.center.x + token.w, -token.center.y + token.h, (token.w / 2) * s + h + t / 2 + p);
         } else if (canvas.grid.isHexagonal || hexTypes.includes(canvas.grid?.type)) {
@@ -719,9 +743,23 @@ export class BorderFrame {
                 (token.h + 2) * s + p,
             );
 
-            token.border.lineStyle(t * nBS, Color.from(borderColor.EX), 0.8).drawPolygon(polygon);
+            token.border
+                .lineStyle({
+                    width: t * nBS,
+                    color: Color.from(borderColor.EX),
+                    alignment: 0.75,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
+                .drawPolygon(polygon);
 
-            token.border.lineStyle((t * nBS) / 2, Color.from(borderColor.INT), 1.0).drawPolygon(polygon);
+            token.border
+                .lineStyle({
+                    width: (t * nBS) / 2,
+                    color: Color.from(borderColor.INT),
+                    alignment: 1.0,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
+                .drawPolygon(polygon);
         }
 
         // Otherwise Draw Square border
@@ -733,13 +771,23 @@ export class BorderFrame {
 
             token.border
 
-                .lineStyle(t * nBS, Color.from(borderColor.EX), 0.8)
+                .lineStyle({
+                    width: t * nBS,
+                    color: Color.from(borderColor.EX),
+                    alignment: 0.75,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
                 .drawRoundedRect(-token.x, -token.y, token.w, token.h, 3);
             //.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
 
             token.border
 
-                .lineStyle(h * nBS, Color.from(borderColor.INT), 1.0)
+                .lineStyle({
+                    width: h * nBS,
+                    color: Color.from(borderColor.INT),
+                    alignment: 1.0,
+                    join: PIXI.LINE_JOIN.ROUND,
+                })
                 .drawRoundedRect(-token.x, -token.y, token.w, token.h, 3);
             //.drawRoundedRect(-o - q + sW, -o - q + sH, (token.w + h) * s + p, (token.h + h) * s + p, 3);
         }
@@ -754,18 +802,18 @@ export class BorderFrame {
      * @protected
      */
     static newBorderColor({ hover } = {}) {
-        // const colors = CONFIG.Canvas.dispositionColors;
-        // if ( this.controlled ) return colors.CONTROLLED;
-        // else if ( (hover ?? this.hover) || this.layer.highlightObjects ) {
-        //   let d = this.document.disposition;
-        //   if ( !game.user.isGM && this.isOwner ) return colors.CONTROLLED;
-        //   else if ( this.actor?.hasPlayerOwner ) return colors.PARTY;
-        //   else if ( d === CONST.TOKEN_DISPOSITIONS.FRIENDLY ) return colors.FRIENDLY;
-        //   else if ( d === CONST.TOKEN_DISPOSITIONS.NEUTRAL ) return colors.NEUTRAL;
-        //   else if ( d === CONST.TOKEN_DISPOSITIONS.HOSTILE ) return colors.HOSTILE;
-        //   else if ( d === CONST.TOKEN_DISPOSITIONS.SECRET ) return this.isOwner ? colors.SECRET : null;
+        // _getBorderColor() {
+        //     const colors = CONFIG.Canvas.dispositionColors;
+        //     if ( this.controlled || (this.isOwner && !game.user.isGM) ) return colors.CONTROLLED;
+        //     const D = CONST.TOKEN_DISPOSITIONS;
+        //     switch ( this.document.disposition ) {
+        //     case D.SECRET: return colors.SECRET;
+        //     case D.HOSTILE: return colors.HOSTILE;
+        //     case D.NEUTRAL: return colors.NEUTRAL;
+        //     case D.FRIENDLY: return this.actor?.hasPlayerOwner ? colors.PARTY : colors.FRIENDLY;
+        //     default: throw new Error("Invalid disposition");
+        //     }
         // }
-        // return null;
 
         const token = this;
         let hoverTmp = hover != undefined && hover != null ? hover : this.hover;
@@ -783,7 +831,7 @@ export class BorderFrame {
 
         let borderColor = null;
         if (colorFrom === "token-disposition") {
-            if (token.controlled) {
+            if (token.controlled || (token.isOwner && !game.user.isGM)) {
                 borderColor = overrides.CONTROLLED ?? {
                     INT: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColor")).substr(1), 16),
                     EX: parseInt(String(game.settings.get(CONSTANTS.MODULE_ID, "controlledColorEx")).substr(1), 16),
@@ -811,7 +859,7 @@ export class BorderFrame {
                     } else if (token.actor?.hasPlayerOwner) {
                         borderColor = overrides.PARTY;
                     } else if (d === disPath.FRIENDLY) {
-                        borderColor = overrides.FRIENDLY;
+                        borderColor = token.actor?.hasPlayerOwner ? overrides.PARTY : overrides.FRIENDLY;
                     } else if (d === disPath.NEUTRAL) {
                         borderColor = overrides.NEUTRAL;
                     } else if (d === disPath.HOSTILE) {
@@ -890,4 +938,36 @@ export class BorderFrame {
     //   }
     //   return wrapped(...args);
     // }
+
+    static refreshTokens() {
+        canvas.tokens.placeables.filter((t) => t.border.visible).forEach((t) => BorderFrame.refreshBorder(t));
+    }
+
+    static refreshBorder(token) {
+        BorderFrame.newBorder(token);
+        /*
+        if (!token.border.visible) {
+            return;
+        }
+        let thickness = game.settings.get(CONSTANTS.MODULE_ID, "borderWidth");
+        if (game.settings.get(CONSTANTS.MODULE_ID, "zoomScaling")) {
+            thickness /= Math.min(1, canvas.stage.scale.x);
+        }
+        const circleBorders = game.settings.get(CONSTANTS.MODULE_ID, "circleBorders");
+        const radius = (Math.min(token.w, token.h) / 2);
+        const draw = () => {
+            if (circleBorders) {
+                token.border.drawCircle(token.w / 2, token.h / 2, radius);
+            }
+            else {
+                token.border.drawShape(token.shape);
+            }
+        };
+        token.border.clear();
+        token.border.lineStyle({width: thickness, color: 0x000000, alignment: 0.75, join: PIXI.LINE_JOIN.ROUND});
+        draw();
+        token.border.lineStyle({width: thickness / 2, color: 0xFFFFFF, alignment: 1, join: PIXI.LINE_JOIN.ROUND});
+        draw();
+        */
+    }
 }

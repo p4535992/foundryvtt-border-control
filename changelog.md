@@ -1,3 +1,7 @@
+### 12.0.2
+
+- Add zoomScaling feature https://github.com/p4535992/foundryvtt-border-control
+
 ### 12.0.0-1
 
 - Update for v12: https://github.com/p4535992/foundryvtt-border-control/issues/11 ty to @LeRatierBretonnien

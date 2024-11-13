@@ -169,5 +169,9 @@ export const readyHooks = () => {
         //     t.cursor = "default";
         //   }
         // });
+
+        if (game.settings.get(CONSTANTS.MODULE_ID, "zoomScaling")) {
+            Hooks.on("canvasPan", BorderFrame.refreshTokens);
+        }
     }
 };

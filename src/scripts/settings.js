@@ -1,3 +1,4 @@
+import { BorderFrame } from "./BorderControl.js";
 import CONSTANTS from "./constants.js";
 import Logger from "./lib/Logger.js";
 
@@ -50,34 +51,45 @@ export const registerSettings = function () {
     game.settings.register(CONSTANTS.MODULE_ID, "permanentBorder", {
         name: `${CONSTANTS.MODULE_ID}.setting.permanentBorder.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.permanentBorder.hint`,
-        scope: "client",
+        scope: "world",
         type: Boolean,
         default: false,
         config: true,
     });
 
-    game.settings.register(CONSTANTS.MODULE_ID, "stepLevel", {
-        name: `${CONSTANTS.MODULE_ID}.setting.stepLevel.name`,
-        hint: `${CONSTANTS.MODULE_ID}.setting.stepLevel.hint`,
-        scope: "world",
-        type: Number,
-        default: 10,
-        config: possibleSystems.includes(game.system.id),
-    });
+    // game.settings.register(CONSTANTS.MODULE_ID, "stepLevel", {
+    //     name: `${CONSTANTS.MODULE_ID}.setting.stepLevel.name`,
+    //     hint: `${CONSTANTS.MODULE_ID}.setting.stepLevel.hint`,
+    //     scope: "world",
+    //     type: Number,
+    //     default: 10,
+    //     config: possibleSystems.includes(game.system.id),
+    // });
 
     game.settings.register(CONSTANTS.MODULE_ID, "borderWidth", {
         name: `${CONSTANTS.MODULE_ID}.setting.borderWidth.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.borderWidth.hint`,
-        scope: "client",
-        type: Number,
-        default: 4, // CONFIG.Canvas.objectBorderThickness
+        scope: "world", // it was client before
+        //type: Number,
+        //default: 4, // CONFIG.Canvas.objectBorderThickness
         config: true,
+        type: new foundry.data.fields.NumberField({
+            required: true,
+            initial: CONFIG.Canvas.objectBorderThickness,
+            nullable: false,
+            min: 1,
+            max: CONFIG.Canvas.objectBorderThickness * 6,
+            step: 1,
+            integer: true,
+            positive: true,
+        }),
+        onChange: BorderFrame.refreshTokens,
     });
 
     game.settings.register(CONSTANTS.MODULE_ID, "borderGridScale", {
         name: `${CONSTANTS.MODULE_ID}.setting.borderGridScale.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.borderGridScale.hint`,
-        scope: "client",
+        scope: "world",
         type: Boolean,
         default: false,
         config: true,
@@ -86,7 +98,7 @@ export const registerSettings = function () {
     game.settings.register(CONSTANTS.MODULE_ID, "borderOffset", {
         name: `${CONSTANTS.MODULE_ID}.setting.borderOffset.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.borderOffset.hint`,
-        scope: "client",
+        scope: "world",
         type: Number,
         default: 0,
         config: true,
@@ -95,11 +107,30 @@ export const registerSettings = function () {
     game.settings.register(CONSTANTS.MODULE_ID, "circleBorders", {
         name: `${CONSTANTS.MODULE_ID}.setting.circleBorders.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.circleBorders.hint`,
-        scope: "client",
+        scope: "world", // it was client before
         type: Boolean,
         default: false,
         config: true,
+        onChange: BorderFrame.refreshTokens,
     });
+
+    game.settings.register(CONSTANTS.MODULE_ID, "zoomScaling", {
+        name: `${CONSTANTS.MODULE_ID}.setting.zoomScaling.name`,
+        hint: `${CONSTANTS.MODULE_ID}.setting.zoomScaling.hint`,
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+        onChange: (value) => {
+            if (value) {
+                Hooks.on("canvasPan", BorderFrame.refreshTokens);
+            } else {
+                Hooks.off("canvasPan", BorderFrame.refreshTokens);
+            }
+            BorderFrame.refreshTokens();
+        },
+    });
+
     game.settings.register(CONSTANTS.MODULE_ID, "scaleBorder", {
         name: `${CONSTANTS.MODULE_ID}.setting.scaleBorder.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.scaleBorder.hint`,
@@ -107,6 +138,7 @@ export const registerSettings = function () {
         type: Boolean,
         default: false,
         config: true,
+        onChange: BorderFrame.refreshTokens,
     });
 
     game.settings.register(CONSTANTS.MODULE_ID, "hudEnable", {
@@ -154,6 +186,7 @@ export const registerSettings = function () {
         default: Color.from(colors.CONTROLLED).css ?? "#FF9829",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "controlledColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.controlledColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.controlledColorEx.hint`,
@@ -162,6 +195,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "hostileColor", {
         name: `${CONSTANTS.MODULE_ID}.setting.hostileColor.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.hostileColor.hint`,
@@ -170,6 +204,7 @@ export const registerSettings = function () {
         default: Color.from(colors.HOSTILE).css ?? "#E72124",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "hostileColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.hostileColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.hostileColorEx.hint`,
@@ -178,6 +213,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "friendlyColor", {
         name: `${CONSTANTS.MODULE_ID}.setting.friendlyColor.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.friendlyColor.hint`,
@@ -186,6 +222,7 @@ export const registerSettings = function () {
         default: Color.from(colors.FRIENDLY).css ?? "#43DFDF",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "friendlyColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.friendlyColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.friendlyColorEx.hint`,
@@ -194,6 +231,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "neutralColor", {
         name: `${CONSTANTS.MODULE_ID}.setting.neutralColor.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.neutralColor.hint`,
@@ -202,6 +240,7 @@ export const registerSettings = function () {
         default: Color.from(colors.NEUTRAL).css ?? "#F1D836",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "neutralColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.neutralColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.neutralColorEx.hint`,
@@ -210,6 +249,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "partyColor", {
         name: `${CONSTANTS.MODULE_ID}.setting.partyColor.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.partyColor.hint`,
@@ -218,6 +258,7 @@ export const registerSettings = function () {
         default: Color.from(colors.PARTY).css ?? "#33BC4E",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "partyColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.partyColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.partyColorEx.hint`,
@@ -226,6 +267,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "secretColor", {
         name: `${CONSTANTS.MODULE_ID}.setting.secretColor.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.secretColor.hint`,
@@ -234,6 +276,7 @@ export const registerSettings = function () {
         default: Color.from(colors.SECRET).css ?? "#A612D4",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "secretColorEx", {
         name: `${CONSTANTS.MODULE_ID}.setting.secretColorEx.name`,
         hint: `${CONSTANTS.MODULE_ID}.setting.secretColorEx.hint`,
@@ -242,6 +285,7 @@ export const registerSettings = function () {
         default: "#000000",
         config: true,
     });
+
     game.settings.register(CONSTANTS.MODULE_ID, "actorFolderColorEx", {
         name: CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.name",
         hint: CONSTANTS.MODULE_ID + ".setting.actorFolderColorEx.hint",

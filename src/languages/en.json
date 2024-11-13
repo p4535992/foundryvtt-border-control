@@ -8,8 +8,8 @@
     "Border-Control.setting.permanentBorder.name": "Permanent Border",
     "Border-Control.setting.permanentBorder.hint": "Permanently shows token borders unless directly hidden, selected tokens have double width borders",
 
-    "Border-Control.setting.borderWidth.name": "Border Width",
-    "Border-Control.setting.borderWidth.hint": "Override border width",
+    "Border-Control.setting.borderWidth.name": "Override Default Border Width",
+    "Border-Control.setting.borderWidth.hint": "The default value for the border width.",
 
     "Border-Control.setting.borderGridScale.name": "Grid Scaling",
     "Border-Control.setting.borderGridScale.hint": "Scale border width to grid size, based on 100px grid",
@@ -18,7 +18,7 @@
     "Border-Control.setting.borderOffset.hint": "Customize border offset",
 
     "Border-Control.setting.circleBorders.name": "Circular Borders",
-    "Border-Control.setting.circleBorders.hint": " ",
+    "Border-Control.setting.circleBorders.hint": "Draw borders as a circle instead of following the grid's shape",
 
     "Border-Control.setting.scaleBorder.name": "Scale Borders",
     "Border-Control.setting.scaleBorder.hint": "Scales token border according to the 'scale' token setting",
@@ -80,6 +80,9 @@
     "Border-Control.setting.color-from.opt.token-disposition": "Default: A Token's Disposition",
     "Border-Control.setting.color-from.opt.actor-folder-color": "An Actor's Folder Color",
     "Border-Control.setting.color-from.opt.custom-disposition": "A Custom Color Set For Token Disposition",
+
+    "Border-Control.setting.zoomScaling.name": "Zoom Scaling",
+    "Border-Control.setting.zoomScaling.hint": "Scales the border width to the zoom scaling.",
 
     "Border-Control.setting.healthGradient.name": "FEATURE: Enable HP Gradient",
     "Border-Control.setting.healthGradient.hint": "[NOT RECOMMENDED] It's advisable to let this check UNCHECKED . Use instead other modules like 'Arbron s Improved HP Bar' and 'FoundryVTT Bar Brawl' for customize the token hp.",

@@ -2,7 +2,7 @@
     "id": "Border-Control",
     "title": "Border Control",
     "description": "Control your tokens borders. Player side configuration of the tokens borders, color and scale. Can prevent borders from showing on player clients for non-owned tokens; no longer hide your mimics behind tiles! Increased accessability for those with visibility impairments",
-    "version": "12.0.1",
+    "version": "12.0.2",
     "authors": [
         {
             "name": "Kandashi",
@@ -54,8 +54,8 @@
         "maximum": 12
     },
     "url": "https://github.com/p4535992/foundryvtt-border-control",
-    "manifest": "https://github.com/p4535992/foundryvtt-border-control/releases/download/12.0.1/module.json",
-    "download": "https://github.com/p4535992/foundryvtt-border-control/releases/download/12.0.1/module.zip",
+    "manifest": "https://github.com/p4535992/foundryvtt-border-control/releases/download/12.0.2/module.json",
+    "download": "https://github.com/p4535992/foundryvtt-border-control/releases/download/12.0.2/module.zip",
     "readme": "https://github.com/p4535992/foundryvtt-border-control/blob/master/README.md",
     "changelog": "https://github.com/p4535992/foundryvtt-border-control/blob/master/changelog.md",
     "bugs": "https://github.com/p4535992/foundryvtt-border-control/issues",
