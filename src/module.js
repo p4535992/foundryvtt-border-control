@@ -22,53 +22,53 @@ import Logger from "./scripts/lib/Logger.js";
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once("init", () => {
-  // Do anything once the module is ready
-  if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
-    let word = "install and activate";
-    if (game.modules.get("lib-wrapper")) word = "activate";
-    throw Logger.error(`Requires the 'libWrapper' module. Please ${word} it.`);
-  }
+    // Do anything once the module is ready
+    if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
+        let word = "install and activate";
+        if (game.modules.get("lib-wrapper")) word = "activate";
+        throw Logger.error(`Requires the 'libWrapper' module. Please ${word} it.`);
+    }
 
-  // Register custom module settings
-  registerSettings();
+    // Register custom module settings
+    registerSettings();
 
-  initHooks();
-  //readyHooks();
+    initHooks();
+    //readyHooks();
 
-  // Assign custom classes and constants here
+    // Assign custom classes and constants here
 
-  // Register custom module settings
-  //registerSettings();
-  //fetchParams();
+    // Register custom module settings
+    //registerSettings();
+    //fetchParams();
 
-  // Preload Handlebars templates
-  // await preloadTemplates();
-  // Register custom sheets (if any)
+    // Preload Handlebars templates
+    // await preloadTemplates();
+    // Register custom sheets (if any)
 });
 
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
 Hooks.once("setup", function () {
-  // Do anything after initialization but before ready
-  //setupModules();
+    // Do anything after initialization but before ready
+    //setupModules();
 
-  setupHooks();
+    setupHooks();
 
-  //registerSettings();
+    //registerSettings();
 });
 
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
 Hooks.once("ready", () => {
-  // if (!game.modules.get("socketLib")?.active && game.user?.isGM) {
-  // 	let word = "install and activate";
-  // 	if (game.modules.get("socketLib")) word = "activate";
-  // 	throw error(`Requires the 'socketLib' module. Please ${word} it.`);
-  // }
-  // Do anything once the module is ready
-  readyHooks();
+    // if (!game.modules.get("socketLib")?.active && game.user?.isGM) {
+    // 	let word = "install and activate";
+    // 	if (game.modules.get("socketLib")) word = "activate";
+    // 	throw error(`Requires the 'socketLib' module. Please ${word} it.`);
+    // }
+    // Do anything once the module is ready
+    readyHooks();
 });
 
 // Add any additional hooks if necessary
